@@ -5,6 +5,14 @@ export type SalesOrderStatus =
   | "EM_TRANSPORTE"
   | "ENTREGUE";
 
+export const STATUS_LABEL: Record<SalesOrderStatus, string> = {
+  CRIADA: "Criada",
+  PLANEJADA: "Planejada",
+  AGENDADA: "Agendada",
+  EM_TRANSPORTE: "Em Transporte",
+  ENTREGUE: "Entregue",
+};
+
 export interface SalesOrderItem {
   itemId: string;
   quantity: number;

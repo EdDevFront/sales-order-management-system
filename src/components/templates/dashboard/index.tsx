@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { RootState } from "@/stores";
 import { setFilter, resetFilters } from "@/stores/uiSlice";
 import { fetchSalesOrders, fetchCustomers, fetchTransportTypes } from "@/infrastructure/repositories/mockRepositories";
-import { SalesOrder } from "@/types/SalesOrder";
+import { SalesOrder, SalesOrderStatus, STATUS_LABEL } from "@/types/SalesOrder";
 import { BarChart3, Clock, AlertTriangle, CheckCircle, Filter } from "lucide-react";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { DataTable } from "@/components/ui/DataTable";
@@ -49,12 +49,11 @@ export default function Dashboard() {
   );
 
   const statusOptions = React.useMemo<SelectOption[]>(() => [
-    { value: "ALL", label: "Todos os Statuses" },
-    { value: "CRIADA", label: "CRIADA (Criada)" },
-    { value: "PLANEJADA", label: "PLANEJADA (Planejada)" },
-    { value: "AGENDADA", label: "AGENDADA (Agendada)" },
-    { value: "EM_TRANSPORTE", label: "EM_TRANSPORTE (Em Trânsito)" },
-    { value: "ENTREGUE", label: "ENTREGUE (Entregue)" },
+    { value: "ALL", label: "Todos os Status" },
+    ...(Object.keys(STATUS_LABEL) as SalesOrderStatus[]).map((key) => ({
+      value: key,
+      label: STATUS_LABEL[key],
+    })),
   ], []);
 
   const clientOptions = React.useMemo<SelectOption[]>(() => [

@@ -1,4 +1,4 @@
-﻿import { SalesOrderStatus } from "@/types/SalesOrder";
+﻿import { SalesOrderStatus, STATUS_LABEL } from "@/types/SalesOrder";
 
 const STATUS_VARIANT_MAP: Record<SalesOrderStatus, string> = {
   CRIADA: "bg-zinc-100 text-zinc-700 border-zinc-200 dark:bg-zinc-800",
@@ -19,7 +19,7 @@ interface OrderStatusBadgeProps {
 export function OrderStatusBadge({ status }: OrderStatusBadgeProps) {
   return (
     <span className={`rounded-full px-2.5 py-1 text-xs font-semibold border ${orderStatusVariant(status)}`}>
-      {status}
+      {STATUS_LABEL[status] || status}
     </span>
   );
 }

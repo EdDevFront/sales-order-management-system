@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { fetchItems, saveItem } from "@/infrastructure/repositories/mockRepositories";
-import { Item } from "@/domain/entities/Item";
+import { Item } from "@/types/Item";
 import { Plus, Loader2 } from "lucide-react";
 
 const itemSchema = z.object({

@@ -1,4 +1,4 @@
-import Transports from "@/presentation/pages/transports";
+import Transports from "@/components/templates/transports";
 
 export default function TransportsRoute() {
   return <Transports />;

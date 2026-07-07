@@ -3,10 +3,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
-import { RootState } from "@/application/store";
-import { setFilter } from "@/application/store/uiSlice";
+import { RootState } from "@/stores";
+import { setFilter } from "@/stores/uiSlice";
 import { fetchSalesOrders, fetchCustomers, fetchTransportTypes } from "@/infrastructure/repositories/mockRepositories";
-import { SalesOrder } from "@/domain/entities/SalesOrder";
+import { SalesOrder } from "@/types/SalesOrder";
 import { BarChart3, Clock, AlertTriangle, CheckCircle, Filter } from "lucide-react";
 
 export default function Dashboard() {

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { fetchCustomers, saveCustomer, fetchTransportTypes } from "@/infrastructure/repositories/mockRepositories";
-import { Customer } from "@/domain/entities/Customer";
+import { Customer } from "@/types/Customer";
 import { Plus, Check, Loader2 } from "lucide-react";
 
 const customerSchema = z.object({

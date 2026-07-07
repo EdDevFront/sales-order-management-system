@@ -2,8 +2,8 @@
 
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/application/store";
-import { clearNotification } from "@/application/store/ordersSlice";
+import { RootState } from "@/stores";
+import { clearNotification } from "@/stores/ordersSlice";
 import { AlertCircle, CheckCircle2, X } from "lucide-react";
 
 export default function Toast() {

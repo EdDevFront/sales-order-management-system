@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAuditLogs } from "@/infrastructure/repositories/mockRepositories";
-import { AuditLog } from "@/domain/entities/AuditLog";
+import { AuditLog } from "@/types/AuditLog";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function AuditLogs() {

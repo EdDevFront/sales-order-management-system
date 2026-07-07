@@ -1,6 +1,6 @@
 import { runSaga } from "redux-saga";
 import { updateStatusWorker } from "./orderSaga";
-import * as actions from "../store/ordersActions";
+import * as actions from "../ordersActions";
 import * as mockDb from "@/infrastructure/mock/mockDatabase";
 
 jest.mock("@/infrastructure/mock/mockDatabase", () => ({

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { store } from "@/application/store";
+import { store } from "@/stores";
 
 interface AppProvidersProps {
   children: React.ReactNode;

@@ -1,9 +1,9 @@
 import { call, put, takeLatest } from "redux-saga/effects";
-import * as actions from "../store/ordersActions";
+import * as actions from "../ordersActions";
 import { loadDatabase, saveDatabase } from "@/infrastructure/mock/mockDatabase";
-import { SalesOrder, isValidStatusTransition } from "@/domain/entities/SalesOrder";
-import { AuditLog } from "@/domain/entities/AuditLog";
-import { isTransportTypeAuthorizedForCustomer } from "@/domain/entities/Customer";
+import { SalesOrder, isValidStatusTransition } from "@/types/SalesOrder";
+import { AuditLog } from "@/types/AuditLog";
+import { isTransportTypeAuthorizedForCustomer } from "@/types/Customer";
 
 function generateId(prefix: string): string {
   return `${prefix}-${Math.random().toString(36).substring(2, 9)}`;

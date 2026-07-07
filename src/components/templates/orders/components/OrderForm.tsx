@@ -7,7 +7,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { fetchCustomers, fetchTransportTypes, fetchItems } from "@/infrastructure/repositories/mockRepositories";
-import { createOrderRequest } from "@/application/store/ordersActions";
+import { createOrderRequest } from "@/stores/ordersActions";
 import { Plus, Trash2, X } from "lucide-react";
 
 const orderFormSchema = z.object({

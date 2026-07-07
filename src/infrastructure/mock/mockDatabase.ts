@@ -1,8 +1,8 @@
-import { Customer } from "@/domain/entities/Customer";
-import { TransportType } from "@/domain/entities/TransportType";
-import { Item } from "@/domain/entities/Item";
-import { SalesOrder } from "@/domain/entities/SalesOrder";
-import { AuditLog } from "@/domain/entities/AuditLog";
+import { Customer } from "@/types/Customer";
+import { TransportType } from "@/types/TransportType";
+import { Item } from "@/types/Item";
+import { SalesOrder } from "@/types/SalesOrder";
+import { AuditLog } from "@/types/AuditLog";
 
 const STORAGE_KEY = "ovgs_mock_db";
 

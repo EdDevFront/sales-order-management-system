@@ -1,4 +1,4 @@
-import Items from "@/presentation/pages/items";
+import Items from "@/components/templates/items";
 
 export default function ItemsRoute() {
   return <Items />;

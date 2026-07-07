@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { updateDeliveryRequest } from "@/application/store/ordersActions";
+import { updateDeliveryRequest } from "@/stores/ordersActions";
 import { X } from "lucide-react";
 
 const schedulingSchema = z.object({

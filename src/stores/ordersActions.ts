@@ -1,5 +1,5 @@
 import { createAction } from "@reduxjs/toolkit";
-import { SalesOrder, SalesOrderStatus } from "@/domain/entities/SalesOrder";
+import { SalesOrder, SalesOrderStatus } from "@/types/SalesOrder";
 
 export const createOrderRequest = createAction<Omit<SalesOrder, "id" | "status" | "createdAt">>(
   "orders/createOrderRequest"

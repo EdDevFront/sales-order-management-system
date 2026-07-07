@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { fetchTransportTypes, saveTransportType } from "@/infrastructure/repositories/mockRepositories";
-import { TransportType } from "@/domain/entities/TransportType";
+import { TransportType } from "@/types/TransportType";
 import { Plus, Loader2 } from "lucide-react";
 
 const transportSchema = z.object({

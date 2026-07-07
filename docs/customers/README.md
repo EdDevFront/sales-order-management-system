@@ -1,18 +1,18 @@
-﻿# Customers Page Documentation
+﻿# Documentação da Página de Clientes
 
-Profiles and logistics authorization management.
+Gerenciamento de perfis e autorizações de logística.
 
-## Components & Structure
-- **New Customer Button**: Toggles `CustomerForm` for creation.
-- **CustomerForm**: Collapsible form for customer details (Name, Document Type, Document number, and multi-select tags of Authorized Transports).
-- **DataTable**: Lists customers with details and Edit action button.
+## Componentes e Estrutura
+- **Botão de Novo Cliente**: Abre o `CustomerForm` para criação.
+- **CustomerForm**: Formulário retrátil para dados do cliente (Nome, Tipo de Documento, Número do Documento e tags multi-seleção de Transportes Autorizados).
+- **DataTable**: Lista clientes com detalhes e ação de Editar.
 
-## Flow Diagram
+## Diagrama de Fluxo
 ```mermaid
 graph TD
-    A[Customers View] --> B[DataTable Lists Customers]
-    B --> C[Click New Customer / Edit]
-    C --> D[Open CustomerForm]
-    D --> E[User enters name, doc, and selects transport badges]
-    E --> F[Click Save -> Mutation trigger -> Invalidate customers query -> Close Form]
+    A[Visualização de Clientes] --> B[DataTable Lista Clientes]
+    B --> C[Clique em Novo Cliente / Editar]
+    C --> D[Abre CustomerForm]
+    D --> E[Usuário insere nome, documento e seleciona badges de transporte]
+    E --> F[Clique em Salvar -> Dispara Mutação -> Invalida query de clientes -> Fecha Formulário]
 ```

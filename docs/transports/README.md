@@ -1,18 +1,18 @@
-﻿# Transports Page Documentation
+﻿# Documentação da Página de Transportes
 
-Logistics transport mode configurations.
+Configurações de modos de transporte logístico.
 
-## Components & Structure
-- **New Transport Type Button**: Opens `TransportForm`.
-- **TransportForm**: Collapsible form for details (Name, Description).
-- **DataTable**: Lists transport modes with Edit action.
+## Componentes e Estrutura
+- **Botão de Novo Tipo de Transporte**: Abre o `TransportForm`.
+- **TransportForm**: Formulário retrátil para detalhes (Nome, Descrição).
+- **DataTable**: Lista modos de transporte com ação de Editar.
 
-## Flow Diagram
+## Diagrama de Fluxo
 ```mermaid
 graph TD
-    A[Transports View] --> B[DataTable Lists Transport Modes]
-    B --> C[Click New Transport Type / Edit]
-    C --> D[Open TransportForm]
-    D --> E[User enters name and description]
-    E --> F[Click Save -> Mutation trigger -> Invalidate transports/customers query -> Close Form]
+    A[Visualização de Transportes] --> B[DataTable Lista Modos de Transporte]
+    B --> C[Clique em Novo Tipo de Transporte / Editar]
+    C --> D[Abre TransportForm]
+    D --> E[Usuário insere nome e descrição]
+    E --> F[Clique em Salvar -> Dispara Mutação -> Invalida query de transportes/clientes -> Fecha Formulário]
 ```

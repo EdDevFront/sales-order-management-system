@@ -1,28 +1,28 @@
-﻿# Dashboard Page Documentation
+﻿# Documentação da Página de Dashboard
 
-Operational monitoring dashboard containing metrics, active filter controls, and paginated Sales Orders table.
+Painel de monitoramento operacional contendo métricas, controles de filtro ativos e tabela paginada de Pedidos de Venda.
 
-## Components & Structure
-- **Metric Cards**: Total Sales Orders, Needs Scheduling (PLANEJADA), In Transit (EM_TRANSPORTE), and Delivered (ENTREGUE).
-- **Filter Controls**: Select dropdowns for Status, Customer, Transport Mode, and DatePicker for Creation Date.
-- **DataTable**: Lists orders filtered by the selection, showing Order ID, Customer, Transport Type, Delivery details, and Status.
-- **Pagination Footer**: Default 8 items per page pagination controller.
+## Componentes e Estrutura
+- **Cards de Métrica**: Total de Pedidos, Necessita Agendamento (PLANEJADA), Em Transporte (EM_TRANSPORTE) e Entregues (ENTREGUE).
+- **Controles de Filtro**: Seleções para Status, Cliente, Modo de Transporte e DatePicker para Data de Criação.
+- **DataTable**: Lista pedidos filtrados pela seleção, mostrando ID do Pedido, Cliente, Tipo de Transporte, Detalhes de Entrega e Status.
+- **Rodapé de Paginação**: Controlador de paginação padrão com 8 itens por página.
 
-## Flow Diagram
+## Diagrama de Fluxo
 ```mermaid
 graph TD
-    A[User visits Dashboard] --> B[React Query loads Orders, Customers, Transports]
-    B --> C{Is loading?}
-    C -- Yes --> D[Render Skeleton cards & Skeleton rows]
-    C -- No --> E[Render Metrics & Filter controls]
-    E --> F[User updates Filters]
-    F --> G[Filter criteria updated in Redux Store]
-    G --> H[Derive filteredOrders via useMemo]
-    H --> I[Slice filteredOrders to paginatedOrders]
-    I --> J{Are there matches?}
-    J -- No and filters active --> K[Render Filtered-Empty State with Clear Filters button]
-    J -- No and no filters active --> L[Render Empty State]
-    J -- Yes --> M[Render DataTable rows + pagination controls]
-    K -- Click Clear --> N[Reset Redux Filters & currentpage = 1]
+    A[Usuário acessa o Dashboard] --> B[React Query carrega Pedidos, Clientes, Transportes]
+    B --> C{Está carregando?}
+    C -- Sim --> D[Renderiza Cards de Skeleton & Linhas de Skeleton]
+    C -- Não --> E[Renderiza Métricas & Controles de Filtro]
+    E --> F[Usuário altera os Filtros]
+    F --> G[Critérios de filtro atualizados na Store do Redux]
+    G --> H[Deriva filteredOrders via useMemo]
+    H --> I[Divide filteredOrders em paginatedOrders]
+    I --> J{Existem correspondências?}
+    J -- Não e filtros ativos --> K[Renderiza Estado Filtrado-Vazio com botão de Limpar Filtros]
+    J -- Não e sem filtros ativos --> L[Renderiza Estado Vazio]
+    J -- Sim --> M[Renderiza linhas da DataTable + controles de paginação]
+    K -- Clique em Limpar --> N[Reseta Filtros no Redux & currentPage = 1]
     N --> G
 ```

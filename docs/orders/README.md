@@ -1,29 +1,29 @@
-﻿# Orders Page Documentation
+﻿# Documentação da Página de Pedidos
 
-Lifecycle management for Sales Orders, scheduling operations, and details inspections.
+Gerenciamento de ciclo de vida para Pedidos de Venda, operações de agendamento e inspeções de detalhes.
 
-## Components & Structure
-- **New Order Button**: Opens `OrderForm` to create orders.
-- **DataTable**: Lists orders, displaying Order ID, Customer, Status, Order Total, and Inspect button.
-- **OrderDetailPanel**: Appears side-by-side when an order is selected, displaying customer data, transport type selectors (for mutable states), items breakdown, and status transition controls.
-- **SchedulingModal**: Modal form to specify delivery date and windows (morning/afternoon/night) for planned orders.
+## Componentes e Estrutura
+- **Botão de Novo Pedido**: Abre o modal `OrderForm` para criar pedidos.
+- **DataTable**: Lista pedidos, exibindo ID do Pedido, Cliente, Status, Total do Pedido e botão de Inspecionar.
+- **OrderDetailPanel**: Painel lateral que aparece quando um pedido é selecionado, exibindo dados do cliente, seleção de tipo de transporte (para estados mutáveis), detalhamento de itens e controles de transição de status.
+- **SchedulingModal**: Modal para especificar a data de entrega e períodos (manhã/tarde/noite) para pedidos planejados.
 
-## Flow Diagram
+## Diagrama de Fluxo
 ```mermaid
 graph TD
-    A[Orders Hub] --> B[DataTable Lists Orders]
-    B --> C[Click New Order]
-    C --> D[Render OrderForm Modal]
-    D --> E[User Selects Customer, Transport & Items]
-    E --> F[Submit Order -> Dispatch createOrderRequest -> Invalidate Query]
-    B --> G[Click Inspect on Row]
-    G --> H[Open OrderDetailPanel]
-    H --> I{Is Order in CRIADA / PLANEJADA?}
-    I -- Yes --> J[Enable Transport Type edit dropdown]
-    I -- No --> K[Transport Type read-only]
-    H --> L[Click Transition Status]
-    L --> M[Dispatch updateStatusRequest]
-    H --> N[Click Schedule / Reschedule]
-    N --> O[Open SchedulingModal]
-    O --> P[Submit Schedule Details -> Dispatch updateStatusRequest with scheduling payload]
+    A[Central de Pedidos] --> B[DataTable Lista Pedidos]
+    B --> C[Clique em Novo Pedido]
+    C --> D[Renderiza Modal do OrderForm]
+    D --> E[Usuário Seleciona Cliente, Transporte & Itens]
+    E --> F[Enviar Pedido -> Dispara createOrderRequest -> Invalida Query]
+    B --> G[Clique em Inspecionar na Linha]
+    G --> H[Abre OrderDetailPanel]
+    H --> I{Pedido está em CRIADA / PLANEJADA?}
+    I -- Sim --> J[Habilita dropdown de edição do Tipo de Transporte]
+    I -- Não --> K[Tipo de Transporte apenas leitura]
+    H --> L[Clique em Transicionar Status]
+    L --> M[Dispara updateStatusRequest]
+    H --> N[Clique em Agendar / Reagendar]
+    N --> O[Abre SchedulingModal]
+    O --> P[Enviar Detalhes do Agendamento -> Dispara updateStatusRequest com dados de agendamento]
 ```

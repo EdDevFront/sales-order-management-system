@@ -1,18 +1,18 @@
-﻿# Items Page Documentation
+﻿# Documentação da Página de Itens
 
-Order inventory items configurations.
+Configurações de itens do inventário de mercadorias.
 
-## Components & Structure
-- **New Item Button**: Opens `ItemForm`.
-- **ItemForm**: Collapsible form for item details (Name, SKU, Price).
-- **DataTable**: Lists items.
+## Componentes e Estrutura
+- **Botão de Novo Item**: Abre o `ItemForm`.
+- **ItemForm**: Formulário retrátil para detalhes do item (Nome, SKU, Preço).
+- **DataTable**: Lista itens.
 
-## Flow Diagram
+## Diagrama de Fluxo
 ```mermaid
 graph TD
-    A[Items View] --> B[DataTable Lists Items]
-    B --> C[Click New Item]
-    C --> D[Open ItemForm]
-    D --> E[User enters name, SKU, price]
-    E --> F[Click Create -> Mutation trigger -> Invalidate items query -> Close Form]
+    A[Visualização de Itens] --> B[DataTable Lista Itens]
+    B --> C[Clique em Novo Item]
+    C --> D[Abre ItemForm]
+    D --> E[Usuário insere nome, SKU, preço]
+    E --> F[Clique em Criar -> Dispara Mutação -> Invalida query de itens -> Fecha Formulário]
 ```

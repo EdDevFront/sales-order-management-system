@@ -1,19 +1,19 @@
-﻿# Audit Page Documentation
+﻿# Documentação da Página de Auditoria
 
-System Audit Trail log viewer.
+Visualizador de registros da trilha de auditoria do sistema.
 
-## Components & Structure
-- **DataTable**: Lists logs, displaying Timestamp, Action Type, Entity Affected, ID, and Details inspection action.
-- **Inspect Action**: Toggles an expandable row beneath the entry, rendering raw `previousState` and `nextState` JSON payloads side-by-side.
+## Componentes e Estrutura
+- **DataTable**: Lista logs, exibindo Data e Hora, Tipo de Ação, Entidade Afetada, ID e ação de Inspeção de Detalhes.
+- **Ação de Inspeção**: Abre uma linha expansível abaixo do registro, renderizando os payloads JSON brutos do `previousState` (estado anterior) e `nextState` (próximo estado) lado a lado.
 
-## Flow Diagram
+## Diagrama de Fluxo
 ```mermaid
 graph TD
-    A[Audit Trail View] --> B[DataTable Lists Audit Logs]
-    B --> C[Click Inspect on Log entry]
-    C --> D{Is Expanded?}
-    D -- No --> E[Open expandable row details pane]
-    E --> F[Parse previousState & nextState JSONs]
-    F --> G[Render JSON pre blocks side-by-side]
-    D -- Yes --> H[Close expandable row details pane]
+    A[Visualização de Auditoria] --> B[DataTable Lista Logs de Auditoria]
+    B --> C[Clique em Inspecionar no log]
+    C --> D{Está Expandido?}
+    D -- Não --> E[Abre painel de detalhes na linha expansível]
+    E --> F[Analisa os JSONs de previousState & nextState]
+    F --> G[Renderiza blocos pre formatados do JSON lado a lado]
+    D -- Sim --> H[Fecha painel de detalhes na linha expansível]
 ```

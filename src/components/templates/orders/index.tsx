@@ -13,10 +13,7 @@ import { Plus, Calendar, ArrowRight, Info, Loader2 } from "lucide-react";
 
 import { DataTable } from "@/components/ui/DataTable";
 import { OrderStatusBadge } from "@/components/ui/OrderStatusBadge";
-
-const ORDER_COLUMNS = ["Order ID", "Customer", "Status", "Total", "Details"];
-const ORDER_SKELETON_WIDTHS = ["w-24", "w-32", "w-20", "w-16", "w-12"];
-const ITEMS_PER_PAGE = 8;
+import { ORDER_COLUMNS, ORDER_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
 
 export default function Orders() {
   const dispatch = useDispatch();

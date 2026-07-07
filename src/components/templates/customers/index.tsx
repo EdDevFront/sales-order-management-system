@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Select } from "@/components/ui/Select";
@@ -6,23 +6,12 @@ import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { fetchCustomers, saveCustomer, fetchTransportTypes } from "@/infrastructure/repositories/mockRepositories";
 import { Customer } from "@/types/Customer";
 import { Plus, Check, Loader2 } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-
-const CUSTOMER_COLUMNS = ["Name", "Type", "Document", "Authorized Transport", "Actions"];
-const CUSTOMER_SKELETON_WIDTHS = ["w-32", "w-12", "w-28", "w-40", "w-12"];
-const ITEMS_PER_PAGE = 8;
-
-const customerSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().min(3, "Name must be at least 3 characters"),
-  document: z.string().min(11, "Document is too short"),
-  documentType: z.enum(["CPF", "CNPJ"]),
-  authorizedTransportTypeIds: z.array(z.string()).min(1, "Authorize at least one transport type"),
-});
+import { CUSTOMER_COLUMNS, CUSTOMER_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
+import { customerSchema, CustomerFormData } from "./schemas/customerSchema";
 
 export default function Customers() {
   const queryClient = useQueryClient();
@@ -43,7 +32,7 @@ export default function Customers() {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["customers"] }); setIsFormOpen(false); reset(); },
   });
 
-  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<z.infer<typeof customerSchema>>({
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm<CustomerFormData>({
     resolver: zodResolver(customerSchema),
     defaultValues: { name: "", document: "", documentType: "CNPJ", authorizedTransportTypeIds: [] },
   });
@@ -59,7 +48,7 @@ export default function Customers() {
 
   const handleEdit = (customer: Customer) => { reset(customer); setIsFormOpen(true); };
 
-  const onSubmit = (data: z.infer<typeof customerSchema>) => {
+  const onSubmit = (data: CustomerFormData) => {
     const id = data.id || `cust-${Math.random().toString(36).substring(2, 9)}`;
     mutation.mutate({ ...data, id });
   };

@@ -7,21 +7,10 @@ import { useDispatch } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { fetchCustomers, fetchTransportTypes, fetchItems } from "@/infrastructure/repositories/mockRepositories";
 import { createOrderRequest } from "@/stores/ordersActions";
 import { Plus, Trash2, X } from "lucide-react";
-
-const orderFormSchema = z.object({
-  customerId: z.string().min(1, "Select a customer"),
-  transportTypeId: z.string().min(1, "Select a transport type"),
-  items: z.array(
-    z.object({
-      itemId: z.string().min(1, "Select an item"),
-      quantity: z.number().min(1, "Quantity must be at least 1"),
-    })
-  ).min(1, "Add at least one item"),
-});
+import { orderFormSchema, OrderFormData } from "../schemas/orderFormSchema";
 
 interface OrderFormProps {
   onClose: () => void;
@@ -33,7 +22,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
   const { data: transports = [] } = useQuery({ queryKey: ["transports"], queryFn: fetchTransportTypes });
   const { data: allItems = [] } = useQuery({ queryKey: ["items"], queryFn: fetchItems });
 
-  const { register, control, handleSubmit, watch, formState: { errors } } = useForm<z.infer<typeof orderFormSchema>>({
+  const { register, control, handleSubmit, watch, formState: { errors } } = useForm<OrderFormData>({
     resolver: zodResolver(orderFormSchema),
     defaultValues: { customerId: "", transportTypeId: "", items: [{ itemId: "", quantity: 1 }] },
   });
@@ -47,7 +36,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
     selectedCustomer?.authorizedTransportTypeIds.includes(t.id)
   );
 
-  const onSubmit = (data: z.infer<typeof orderFormSchema>) => {
+  const onSubmit = (data: OrderFormData) => {
     dispatch(createOrderRequest(data));
     onClose();
   };

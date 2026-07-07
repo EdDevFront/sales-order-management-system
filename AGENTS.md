@@ -51,7 +51,7 @@ All coding agents working on this project must strictly adhere to the following 
 ## 9. File Structure
 ```
 src/
-├── app/               # Next.js routes — page.tsx files only, always "use client"
+├── app/               # Next.js routes — page.tsx files only, 
 ├── components/
 │   ├── ui/            # Reusable, generic UI primitives (Button, Input, DataTable, etc.)
 │   └── templates/     # Domain/page-level components

@@ -1,23 +1,12 @@
-﻿"use client";
+"use client";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAuditLogs } from "@/infrastructure/repositories/mockRepositories";
 import { AuditLog } from "@/types/AuditLog";
 import { Eye, EyeOff } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-
-const AUDIT_COLUMNS = ["Date & Time", "Action", "Entity", "ID", "Details"];
-const AUDIT_SKELETON_WIDTHS = ["w-36", "w-24", "w-28", "w-20", "w-12"];
-const ITEMS_PER_PAGE = 8;
-
-const AUDIT_ACTION_VARIANT: Record<string, string> = {
-  CREATE_ORDER: "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/30 dark:text-emerald-400",
-  UPDATE_STATUS: "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/30 dark:text-blue-400",
-};
-
-function auditActionVariant(actionType: string): string {
-  return AUDIT_ACTION_VARIANT[actionType] ?? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/30 dark:text-amber-400";
-}
+import { AUDIT_COLUMNS, AUDIT_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
+import { auditActionVariant } from "./utils/auditActionVariant";
 
 export default function AuditLogs() {
   const { data: logs = [], isLoading } = useQuery({ queryKey: ["auditLogs"], queryFn: fetchAuditLogs });

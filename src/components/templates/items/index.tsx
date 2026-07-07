@@ -1,25 +1,16 @@
-﻿"use client";
+"use client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { fetchItems, saveItem } from "@/infrastructure/repositories/mockRepositories";
 import { Item } from "@/types/Item";
 import { Plus, Loader2 } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-
-const ITEM_COLUMNS = ["Name", "SKU", "Price"];
-const ITEM_SKELETON_WIDTHS = ["w-32", "w-24", "w-16"];
-const ITEMS_PER_PAGE = 8;
-
-const itemSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  sku: z.string().min(3, "SKU must be at least 3 characters"),
-  price: z.number().min(0.01, "Price must be positive"),
-});
+import { ITEM_COLUMNS, ITEM_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
+import { itemSchema, ItemFormData } from "./schemas/itemSchema";
 
 export default function Items() {
   const queryClient = useQueryClient();
@@ -39,12 +30,12 @@ export default function Items() {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["items"] }); setIsFormOpen(false); reset(); },
   });
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<z.infer<typeof itemSchema>>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<ItemFormData>({
     resolver: zodResolver(itemSchema),
     defaultValues: { name: "", sku: "", price: 0 },
   });
 
-  const onSubmit = (data: z.infer<typeof itemSchema>) => {
+  const onSubmit = (data: ItemFormData) => {
     const id = `item-${Math.random().toString(36).substring(2, 9)}`;
     mutation.mutate({ ...data, id });
   };

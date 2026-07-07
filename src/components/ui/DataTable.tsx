@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import React from "react";
 import { SearchX, Inbox } from "lucide-react";
 import { Skeleton } from "./Skeleton";
@@ -12,7 +12,7 @@ interface TableRootProps {
 }
 
 interface TableHeadProps {
-  columns: string[];
+  columns: readonly string[];
   lastAlignRight?: boolean;
 }
 
@@ -159,7 +159,7 @@ function TableCell({ children, className = "", alignRight = false }: TableCellPr
 
 // ─── Skeleton helpers ─────────────────────────────────────────────────────────
 
-function SkeletonRows({ widths, count = 5 }: { widths: string[]; count?: number }) {
+function SkeletonRows({ widths, count = 5 }: { widths: readonly string[]; count?: number }) {
   return (
     <>
       {Array.from({ length: count }).map((_, idx) => (

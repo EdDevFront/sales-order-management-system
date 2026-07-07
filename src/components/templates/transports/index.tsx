@@ -1,25 +1,16 @@
-﻿"use client";
+"use client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import { fetchTransportTypes, saveTransportType } from "@/infrastructure/repositories/mockRepositories";
 import { TransportType } from "@/types/TransportType";
 import { Plus, Loader2 } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-
-const TRANSPORT_COLUMNS = ["Name", "Description", "Actions"];
-const TRANSPORT_SKELETON_WIDTHS = ["w-24", "w-40", "w-12"];
-const ITEMS_PER_PAGE = 8;
-
-const transportSchema = z.object({
-  id: z.string().optional(),
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  description: z.string().min(5, "Description must be at least 5 characters"),
-});
+import { TRANSPORT_COLUMNS, TRANSPORT_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
+import { transportSchema, TransportFormData } from "./schemas/transportSchema";
 
 export default function Transports() {
   const queryClient = useQueryClient();
@@ -44,14 +35,14 @@ export default function Transports() {
     },
   });
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<z.infer<typeof transportSchema>>({
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<TransportFormData>({
     resolver: zodResolver(transportSchema),
     defaultValues: { name: "", description: "" },
   });
 
   const handleEdit = (transport: TransportType) => { reset(transport); setIsFormOpen(true); };
 
-  const onSubmit = (data: z.infer<typeof transportSchema>) => {
+  const onSubmit = (data: TransportFormData) => {
     const id = data.id || `trans-${Math.random().toString(36).substring(2, 9)}`;
     mutation.mutate({ ...data, id });
   };

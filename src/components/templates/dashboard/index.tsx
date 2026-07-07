@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { Select, SelectOption } from "@/components/ui/Select";
 import React from "react";
@@ -12,10 +12,7 @@ import { BarChart3, Clock, AlertTriangle, CheckCircle, Filter } from "lucide-rea
 import { Skeleton } from "@/components/ui/Skeleton";
 import { DataTable } from "@/components/ui/DataTable";
 import { orderStatusVariant } from "@/components/ui/OrderStatusBadge";
-
-const DASHBOARD_COLUMNS = ["Order ID", "Client", "Transport", "Delivery details", "Status"];
-const DASHBOARD_SKELETON_WIDTHS = ["w-24", "w-32", "w-28", "w-36", "w-16"];
-const ITEMS_PER_PAGE = 8;
+import { DASHBOARD_COLUMNS, DASHBOARD_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
 
 export default function Dashboard() {
   const dispatch = useDispatch();

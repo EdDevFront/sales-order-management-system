@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import { Select } from "@/components/ui/Select";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,7 +8,8 @@ import { updateStatusRequest, updateTransportRequest } from "@/stores/ordersActi
 import { SalesOrder, SalesOrderStatus } from "@/types/SalesOrder";
 import OrderForm from "./components/OrderForm";
 import SchedulingModal from "./components/SchedulingModal";
-import { Plus, Calendar, ArrowRight, Info, Loader2 } from "lucide-react";
+import OrderDetailPanel from "./components/OrderDetailPanel";
+import { Plus, Info, Loader2 } from "lucide-react";
 
 import { DataTable } from "@/components/ui/DataTable";
 import { OrderStatusBadge } from "@/components/ui/OrderStatusBadge";
@@ -113,86 +113,17 @@ export default function Orders() {
         </DataTable>
 
         {selectedOrder && (
-          <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
-            <div className="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
-              <h3 className="font-bold text-lg">Order Details ({selectedOrder.id})</h3>
-              <Button onClick={() => setSelectedOrder(null)} className="text-zinc-400 hover:text-zinc-500 text-xs">Close</Button>
-            </div>
-            
-            <div className="space-y-4">
-              <div>
-                <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Customer Details</span>
-                <p className="text-sm font-medium mt-1">{customers.find((c) => c.id === selectedOrder.customerId)?.name}</p>
-                <p className="text-xs text-zinc-500">Doc: {customers.find((c) => c.id === selectedOrder.customerId)?.document}</p>
-              </div>
-
-              <div>
-                <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Transport Type</span>
-                {["CRIADA", "PLANEJADA"].includes(selectedOrder.status) ? (
-                  <Select
-                    value={selectedOrder.transportTypeId}
-                    onValueChange={(val) => handleTransportChange(selectedOrder.id, val)}
-                    options={transports
-                      .filter((t) => customers.find((c) => c.id === selectedOrder.customerId)?.authorizedTransportTypeIds.includes(t.id))
-                      .map((t) => ({ value: t.id, label: t.name }))}
-                  />
-                ) : (
-                  <p className="text-sm font-medium mt-1">{transports.find((t) => t.id === selectedOrder.transportTypeId)?.name}</p>
-                )}
-              </div>
-
-              {selectedOrder.deliveryDate && (
-                <div>
-                  <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Delivery Details</span>
-                  <p className="text-sm font-medium mt-1">{selectedOrder.deliveryDate}</p>
-                  <p className="text-xs text-zinc-500">{selectedOrder.deliveryWindow}</p>
-                </div>
-              )}
-
-              <div>
-                <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Items Checklist</span>
-                <div className="mt-2 space-y-1 bg-zinc-50 p-3 rounded-lg dark:bg-zinc-800/40">
-                  {selectedOrder.items.map((it) => (
-                    <div key={it.itemId} className="flex justify-between text-xs text-zinc-600 dark:text-zinc-300">
-                      <span>{items.find((i) => i.id === it.itemId)?.name} x {it.quantity}</span>
-                      <span className="font-semibold">${((items.find((i) => i.id === it.itemId)?.price || 0) * it.quantity).toFixed(2)}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
-                <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Available Lifecycle Transition</span>
-                {getNextStatus(selectedOrder.status) && (
-                  <Button
-                    onClick={() => handleStatusChange(selectedOrder.id, getNextStatus(selectedOrder.status)!)}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
-                  >
-                    Transition to {getNextStatus(selectedOrder.status)} <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                )}
-                {selectedOrder.status === "PLANEJADA" && (
-                  <Button
-                    onClick={() => setSchedulingOrderId(selectedOrder.id)}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
-                  >
-                    Schedule Delivery <Calendar className="h-3.5 w-3.5" />
-                  </Button>
-                )}
-                {["AGENDADA", "EM_TRANSPORTE"].includes(selectedOrder.status) && selectedOrder.deliveryDate && (
-                  <Button
-                    onClick={() => setSchedulingOrderId(selectedOrder.id)}
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-300 py-2 text-xs font-bold hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 transition-all"
-                  >
-                    Reschedule Delivery
-                  </Button>
-                )}
-                {!getNextStatus(selectedOrder.status) && selectedOrder.status !== "PLANEJADA" && (
-                  <p className="text-xs text-zinc-400 italic text-center">Lifecycle completed for this order.</p>
-                )}
-              </div>
-            </div>
-          </div>
+          <OrderDetailPanel
+            selectedOrder={selectedOrder}
+            customers={customers}
+            transports={transports}
+            items={items}
+            onClose={() => setSelectedOrder(null)}
+            handleTransportChange={handleTransportChange}
+            handleStatusChange={handleStatusChange}
+            setSchedulingOrderId={setSchedulingOrderId}
+            getNextStatus={getNextStatus}
+          />
         )}
       </div>
 

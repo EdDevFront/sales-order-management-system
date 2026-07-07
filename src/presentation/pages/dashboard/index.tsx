@@ -4,10 +4,10 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
 import { RootState } from "@/application/store";
-import { setFilter, resetFilters } from "@/application/store/uiSlice";
+import { setFilter } from "@/application/store/uiSlice";
 import { fetchSalesOrders, fetchCustomers, fetchTransportTypes } from "@/infrastructure/repositories/mockRepositories";
-import { SalesOrder, SalesOrderStatus } from "@/domain/entities/SalesOrder";
-import { BarChart3, Clock, AlertTriangle, CheckCircle, Search, Filter } from "lucide-react";
+import { SalesOrder } from "@/domain/entities/SalesOrder";
+import { BarChart3, Clock, AlertTriangle, CheckCircle, Filter } from "lucide-react";
 
 export default function Dashboard() {
   const dispatch = useDispatch();

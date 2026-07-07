@@ -4,12 +4,12 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "@/application/store";
 import Layout from "@/presentation/components/Layout";
-import Dashboard from "@/presentation/components/Dashboard";
-import Orders from "@/presentation/components/Orders";
-import Customers from "@/presentation/components/Customers";
-import Transports from "@/presentation/components/Transports";
-import Items from "@/presentation/components/Items";
-import AuditLogs from "@/presentation/components/AuditLogs";
+import Dashboard from "@/presentation/pages/dashboard";
+import Orders from "@/presentation/pages/orders";
+import Customers from "@/presentation/pages/customers";
+import Transports from "@/presentation/pages/transports";
+import Items from "@/presentation/pages/items";
+import AuditLogs from "@/presentation/pages/audit";
 import Toast from "@/presentation/components/Toast";
 
 export default function Home() {

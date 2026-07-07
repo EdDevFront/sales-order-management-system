@@ -1,15 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { RootState } from "@/application/store";
 import { fetchSalesOrders, fetchCustomers, fetchTransportTypes, fetchItems } from "@/infrastructure/repositories/mockRepositories";
-import { updateStatusRequest, updateTransportRequest, refreshOrders } from "@/application/store/ordersActions";
+import { updateStatusRequest, updateTransportRequest } from "@/application/store/ordersActions";
 import { SalesOrder, SalesOrderStatus } from "@/domain/entities/SalesOrder";
-import OrderForm from "./OrderForm";
-import SchedulingModal from "./SchedulingModal";
-import { Plus, Calendar, ArrowRight, Truck, Info, Loader2 } from "lucide-react";
+import OrderForm from "./components/OrderForm";
+import SchedulingModal from "./components/SchedulingModal";
+import { Plus, Calendar, ArrowRight, Info, Loader2 } from "lucide-react";
 
 export default function Orders() {
   const dispatch = useDispatch();
@@ -23,7 +22,6 @@ export default function Orders() {
   const { data: transports = [] } = useQuery({ queryKey: ["transports"], queryFn: fetchTransportTypes });
   const { data: items = [] } = useQuery({ queryKey: ["items"], queryFn: fetchItems });
 
-  // Update query cache when saga updates orders
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["orders"] });
     queryClient.invalidateQueries({ queryKey: ["auditLogs"] });
@@ -43,7 +41,7 @@ export default function Orders() {
 
   const getNextStatus = (status: SalesOrderStatus): SalesOrderStatus | null => {
     if (status === "CRIADA") return "PLANEJADA";
-    if (status === "PLANEJADA") return null; // Needs scheduling
+    if (status === "PLANEJADA") return null;
     if (status === "AGENDADA") return "EM_TRANSPORTE";
     if (status === "EM_TRANSPORTE") return "ENTREGUE";
     return null;

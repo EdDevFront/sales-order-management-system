@@ -1,27 +1,27 @@
 "use client";
 
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/application/store";
-import { setActiveTab } from "@/application/store/uiSlice";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LayoutDashboard, Users, Truck, Package, ShoppingCart, History } from "lucide-react";
+
+import Toast from "./Toast";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 const navItems = [
-  { id: "dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "orders", label: "Sales Orders", icon: ShoppingCart },
-  { id: "customers", label: "Customers", icon: Users },
-  { id: "transports", label: "Transport Types", icon: Truck },
-  { id: "items", label: "Items", icon: Package },
-  { id: "audit", label: "Audits", icon: History },
+  { id: "dashboard", href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { id: "orders", href: "/orders", label: "Sales Orders", icon: ShoppingCart },
+  { id: "customers", href: "/customers", label: "Customers", icon: Users },
+  { id: "transports", href: "/transports", label: "Transport Types", icon: Truck },
+  { id: "items", href: "/items", label: "Items", icon: Package },
+  { id: "audit", href: "/audit", label: "Audits", icon: History },
 ];
 
 export default function Layout({ children }: LayoutProps) {
-  const dispatch = useDispatch();
-  const activeTab = useSelector((state: RootState) => state.ui.activeTab);
+  const pathname = usePathname();
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-zinc-950 font-sans">
@@ -39,11 +39,11 @@ export default function Layout({ children }: LayoutProps) {
           <nav className="flex gap-1.5 max-sm:hidden">
             {navItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeTab === item.id;
+              const isActive = pathname.startsWith(item.href);
               return (
-                <button
+                <Link
                   key={item.id}
-                  onClick={() => dispatch(setActiveTab(item.id))}
+                  href={item.href}
                   className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium transition-all ${
                     isActive
                       ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400"
@@ -52,7 +52,7 @@ export default function Layout({ children }: LayoutProps) {
                 >
                   <Icon className="h-4.5 w-4.5" />
                   {item.label}
-                </button>
+                </Link>
               );
             })}
           </nav>
@@ -61,6 +61,7 @@ export default function Layout({ children }: LayoutProps) {
 
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
         {children}
+        <Toast />
       </main>
 
       <footer className="border-t border-zinc-200/50 py-6 text-center text-xs text-zinc-500 dark:border-zinc-800/50 dark:text-zinc-400">

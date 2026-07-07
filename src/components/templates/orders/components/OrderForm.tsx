@@ -74,14 +74,21 @@ export default function OrderForm({ onClose }: OrderFormProps) {
     label: t.name,
   }));
 
-  const selectedItemIds = watch("items").map((i) => i.itemId).filter(Boolean);
+  const selectedItemIds = watch("items")
+    .map((i) => i.itemId)
+    .filter(Boolean);
 
-  const itemOptions = allItems
-    .filter((i) => !selectedItemIds.includes(i.id))
-    .map((i) => ({
-      value: i.id,
-      label: `${i.name} - SKU: ${i.sku} ($${i.price.toFixed(2)})`,
-    }));
+  const getItemOptions = (currentIndex: number) => {
+    const takenIds = selectedItemIds.filter(
+      (_, idx) => idx !== currentIndex,
+    );
+    return allItems
+      .filter((i) => !takenIds.includes(i.id))
+      .map((i) => ({
+        value: i.id,
+        label: `${i.name} - SKU: ${i.sku} ($${i.price.toFixed(2)})`,
+      }));
+  };
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -162,7 +169,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
                 <div className="flex-1 min-w-0">
                   <Select
                     {...register(`items.${index}.itemId`)}
-                    options={itemOptions}
+                    options={getItemOptions(index)}
                     placeholder="Selecione o Item"
                   />
                 </div>

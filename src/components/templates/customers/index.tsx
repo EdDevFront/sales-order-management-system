@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/Button";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { setNotification } from "@/stores/ordersSlice";
 import { fetchCustomers, saveCustomer, fetchTransportTypes } from "@/infrastructure/repositories/mockRepositories";
 import { Customer } from "@/types/Customer";
 import { Plus } from "lucide-react";
@@ -11,6 +13,7 @@ import { CustomerFormData } from "./schemas/customerSchema";
 import CustomerForm from "./components/CustomerForm";
 
 export default function Customers() {
+  const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingCustomer, setEditingCustomer] = useState<CustomerFormData | null>(null);
@@ -27,8 +30,10 @@ export default function Customers() {
 
   const mutation = useMutation({
     mutationFn: saveCustomer,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["customers"] });
+      const message = editingCustomer?.id ? "Cliente atualizado com sucesso!" : "Cliente criado com sucesso!";
+      dispatch(setNotification({ success: message }));
       setIsFormOpen(false);
       setEditingCustomer(null);
     },

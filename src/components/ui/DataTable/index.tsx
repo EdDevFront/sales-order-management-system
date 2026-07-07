@@ -144,7 +144,7 @@ function TableBody({
 
 function TableRow({ children, className = "" }: TableRowProps) {
   return (
-    <tr className={`block md:table-row border-b border-zinc-150 dark:border-zinc-800 p-4 md:p-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors ${className}`}>
+    <tr className={`block md:table-row border-b last:border-b-0 border-zinc-150 dark:border-zinc-800 p-4 md:p-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors ${className}`}>
       {children}
     </tr>
   );

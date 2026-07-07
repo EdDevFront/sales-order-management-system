@@ -31,7 +31,7 @@ export default function ItemForm({
           <h3 className="text-lg font-bold">Cadastrar Novo Item</h3>
           <Button onClick={onClose} className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"><X className="h-5 w-5" /></Button>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 max-h-[75vh] overflow-y-auto pb-36">
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Nome <span className="text-red-500">*</span></label>

@@ -13,8 +13,8 @@ import { X } from "lucide-react";
 import { DatePicker } from "@/components/ui/DatePicker";
 
 const schedulingSchema = z.object({
-  deliveryDate: z.string().min(1, "Select a delivery date"),
-  deliveryWindow: z.string().min(1, "Select a delivery window"),
+  deliveryDate: z.string().min(1, "Selecione uma data de entrega"),
+  deliveryWindow: z.string().min(1, "Selecione uma janela de entrega"),
 });
 
 interface SchedulingModalProps {
@@ -47,7 +47,7 @@ export default function SchedulingModal({ orderId, onClose }: SchedulingModalPro
           <h3 className="text-lg font-bold">Agendar Entrega</h3>
           <Button onClick={onClose} className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"><X className="h-5 w-5" /></Button>
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4 max-h-[75vh] overflow-y-auto pb-36">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Data de Entrega <span className="text-red-500">*</span></label>
             <div className="mt-1">

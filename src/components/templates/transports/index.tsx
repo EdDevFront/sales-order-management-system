@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/Button";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { setNotification } from "@/stores/ordersSlice";
 import { fetchTransportTypes, saveTransportType } from "@/infrastructure/repositories/mockRepositories";
 import { TransportType } from "@/types/TransportType";
 import { Plus } from "lucide-react";
@@ -11,6 +13,7 @@ import { TransportFormData } from "./schemas/transportSchema";
 import TransportForm from "./components/TransportForm";
 
 export default function Transports() {
+  const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingTransport, setEditingTransport] = useState<TransportFormData | null>(null);
@@ -29,6 +32,8 @@ export default function Transports() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["transports"] });
       queryClient.invalidateQueries({ queryKey: ["customers"] });
+      const message = editingTransport?.id ? "Tipo de transporte atualizado com sucesso!" : "Tipo de transporte criado com sucesso!";
+      dispatch(setNotification({ success: message }));
       setIsFormOpen(false);
       setEditingTransport(null);
     },

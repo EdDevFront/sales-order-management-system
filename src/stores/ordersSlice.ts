@@ -21,6 +21,10 @@ const ordersSlice = createSlice({
       state.error = null;
       state.successMessage = null;
     },
+    setNotification(state, action: PayloadAction<{ success?: string | null; error?: string | null }>) {
+      state.error = action.payload.error || null;
+      state.successMessage = action.payload.success || null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -40,13 +44,13 @@ const ordersSlice = createSlice({
           state.loading = false;
           state.error = null;
           if (action.type.includes("createOrder")) {
-            state.successMessage = "Sales Order created successfully!";
+            state.successMessage = "Pedido de Venda criado com sucesso!";
           } else if (action.type.includes("updateStatus")) {
-            state.successMessage = "Order status updated successfully!";
+            state.successMessage = "Status do pedido atualizado com sucesso!";
           } else if (action.type.includes("updateDelivery")) {
-            state.successMessage = "Delivery scheduled successfully!";
+            state.successMessage = "Entrega agendada com sucesso!";
           } else if (action.type.includes("updateTransport")) {
-            state.successMessage = "Transport type updated successfully!";
+            state.successMessage = "Tipo de transporte atualizado com sucesso!";
           }
         }
       )
@@ -62,5 +66,5 @@ const ordersSlice = createSlice({
   },
 });
 
-export const { clearNotification } = ordersSlice.actions;
+export const { clearNotification, setNotification } = ordersSlice.actions;
 export default ordersSlice.reducer;

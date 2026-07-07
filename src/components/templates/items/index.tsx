@@ -2,6 +2,8 @@
 import { Button } from "@/components/ui/Button";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { setNotification } from "@/stores/ordersSlice";
 import { fetchItems, saveItem } from "@/infrastructure/repositories/mockRepositories";
 import { Item } from "@/types/Item";
 import { Plus } from "lucide-react";
@@ -11,6 +13,7 @@ import { ItemFormData } from "./schemas/itemSchema";
 import ItemForm from "./components/ItemForm";
 
 export default function Items() {
+  const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<ItemFormData | null>(null);
@@ -28,6 +31,7 @@ export default function Items() {
     mutationFn: saveItem,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["items"] });
+      dispatch(setNotification({ success: "Item criado com sucesso!" }));
       setIsFormOpen(false);
       setEditingItem(null);
     },

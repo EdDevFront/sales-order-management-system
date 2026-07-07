@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAuditLogs } from "@/infrastructure/repositories/mockRepositories";
 import { AuditLog } from "@/types/AuditLog";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Copy } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
 import { AUDIT_COLUMNS, AUDIT_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
 import { auditActionVariant } from "./utils/auditActionVariant";
@@ -12,6 +12,13 @@ export default function AuditLogs() {
   const { data: logs = [], isLoading } = useQuery({ queryKey: ["auditLogs"], queryFn: fetchAuditLogs });
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (text: string, id: string) => {
+    navigator.clipboard.writeText(text);
+    setCopiedId(id);
+    setTimeout(() => setCopiedId(null), 1500);
+  };
 
   const totalPages = Math.ceil(logs.length / ITEMS_PER_PAGE);
   const paginatedLogs = React.useMemo(() =>
@@ -64,13 +71,37 @@ export default function AuditLogs() {
                     <td colSpan={5} className="block md:table-cell bg-zinc-50 p-4 md:p-6 dark:bg-zinc-800/20">
                       <div className="grid gap-4 md:grid-cols-2 text-xs font-mono">
                         <div>
-                          <span className="block font-semibold uppercase tracking-wider text-zinc-400 mb-2">Estado Anterior</span>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="block font-semibold uppercase tracking-wider text-zinc-400">Estado Anterior</span>
+                            {log.previousState && (
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(JSON.stringify(JSON.parse(log.previousState!), null, 2), `${log.id}-prev`)}
+                                className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline uppercase tracking-wider"
+                              >
+                                <Copy className="h-3 w-3" />
+                                {copiedId === `${log.id}-prev` ? "Copiado!" : "Copiar"}
+                              </button>
+                            )}
+                          </div>
                           <pre className="rounded-lg border border-zinc-200 bg-white p-3 overflow-auto dark:border-zinc-800 dark:bg-zinc-950 max-h-48">
                             {log.previousState ? JSON.stringify(JSON.parse(log.previousState), null, 2) : "NULL"}
                           </pre>
                         </div>
                         <div>
-                          <span className="block font-semibold uppercase tracking-wider text-zinc-400 mb-2">Próximo Estado</span>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="block font-semibold uppercase tracking-wider text-zinc-400">Próximo Estado</span>
+                            {log.nextState && (
+                              <button
+                                type="button"
+                                onClick={() => handleCopy(JSON.stringify(JSON.parse(log.nextState!), null, 2), `${log.id}-next`)}
+                                className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline uppercase tracking-wider"
+                              >
+                                <Copy className="h-3 w-3" />
+                                {copiedId === `${log.id}-next` ? "Copiado!" : "Copiar"}
+                              </button>
+                            )}
+                          </div>
                           <pre className="rounded-lg border border-zinc-200 bg-white p-3 overflow-auto dark:border-zinc-800 dark:bg-zinc-950 max-h-48">
                             {log.nextState ? JSON.stringify(JSON.parse(log.nextState), null, 2) : "NULL"}
                           </pre>

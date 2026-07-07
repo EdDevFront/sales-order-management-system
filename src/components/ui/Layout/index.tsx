@@ -68,27 +68,46 @@ export default function Layout({ children }: LayoutProps) {
 
         {/* Collapsible Mobile Menu panel */}
         {isMobileMenuOpen && (
-          <div className="border-t border-zinc-200/50 bg-white/95 backdrop-blur-md px-4 py-3 space-y-1 md:hidden dark:border-zinc-800/50 dark:bg-zinc-900/95">
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = pathname.startsWith(item.href);
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm md:hidden"
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+            {/* Sidebar drawer panel */}
+            <div className="fixed inset-y-0 right-0 z-50 w-64 bg-white p-6 shadow-2xl dark:bg-zinc-900 border-l border-zinc-200 dark:border-zinc-800 flex flex-col md:hidden">
+              <div className="flex items-center justify-between pb-4 border-b border-zinc-100 dark:border-zinc-800">
+                <span className="text-sm font-bold uppercase tracking-wider text-zinc-400">Navegação</span>
+                <button
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
-                    isActive
-                      ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400"
-                      : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"
-                  }`}
+                  className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800 text-zinc-500"
                 >
-                  <Icon className="h-5 w-5" />
-                  {item.label}
-                </Link>
-              );
-            })}
-          </div>
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <nav className="mt-6 flex flex-col gap-2">
+                {navItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = pathname.startsWith(item.href);
+                  return (
+                    <Link
+                      key={item.id}
+                      href={item.href}
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className={`flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all ${
+                        isActive
+                          ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400"
+                          : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100"
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" />
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </nav>
+            </div>
+          </>
         )}
       </header>
 

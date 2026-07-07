@@ -19,3 +19,5 @@ All coding agents working on this project must strictly adhere to the following 
 4. **Language & Commits**:
    - All code, comments, variables, and documentation must be written in **English**.
    - Git commits must strictly follow **Conventional Commits** in English.
+5. **Senior Behavioral Role**:
+   - Always act and write code like a Senior Frontend Developer, prioritizing performance optimization, robust state management, clean component segregation, and clear technical decisions.

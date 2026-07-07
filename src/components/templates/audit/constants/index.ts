@@ -1,4 +1,4 @@
-﻿export const AUDIT_COLUMNS = ["Date & Time", "Action", "Entity", "ID", "Details"] as const;
+export const AUDIT_COLUMNS = ["Data e Hora", "Ação", "Entidade", "ID", "Detalhes"] as const;
 
 export const AUDIT_SKELETON_WIDTHS = ["w-36", "w-24", "w-28", "w-20", "w-12"] as const;
 

@@ -60,30 +60,30 @@ export default function OrderForm({ onClose }: OrderFormProps) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-2xl rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
         <div className="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
-          <h3 className="text-lg font-bold">Create Sales Order</h3>
+          <h3 className="text-lg font-bold">Criar Pedido de Venda</h3>
           <Button onClick={onClose} className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"><X className="h-5 w-5" /></Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Customer</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Cliente</label>
               <div className="mt-1">
                 <Select
                   {...register("customerId")}
                   options={customerOptions}
-                  placeholder="Select Customer"
+                  placeholder="Selecione o Cliente"
                 />
               </div>
               {errors.customerId && <p className="mt-1 text-xs text-red-500">{errors.customerId.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Transport Type</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Tipo de Transporte</label>
               <div className="mt-1">
                 <Select
                   {...register("transportTypeId")}
                   disabled={!selectedCustomerId}
                   options={transportOptions}
-                  placeholder="Select Transport Type"
+                  placeholder="Selecione o Tipo de Transporte"
                 />
               </div>
               {errors.transportTypeId && <p className="mt-1 text-xs text-red-500">{errors.transportTypeId.message}</p>}
@@ -92,8 +92,8 @@ export default function OrderForm({ onClose }: OrderFormProps) {
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Items</label>
-              <Button type="button" onClick={() => append({ itemId: "", quantity: 1 })} className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-500"><Plus className="h-3.5 w-3.5" /> Add Item</Button>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Itens</label>
+              <Button type="button" onClick={() => append({ itemId: "", quantity: 1 })} className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-500"><Plus className="h-3.5 w-3.5" /> Adicionar Item</Button>
             </div>
             {fields.map((field, index) => (
               <div key={field.id} className="flex gap-3 items-end">
@@ -101,7 +101,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
                   <Select
                     {...register(`items.${index}.itemId`)}
                     options={itemOptions}
-                    placeholder="Select Item"
+                    placeholder="Selecione o Item"
                   />
                 </div>
                 <div className="w-24">
@@ -114,8 +114,8 @@ export default function OrderForm({ onClose }: OrderFormProps) {
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-            <Button type="button" onClick={onClose} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancel</Button>
-            <Button type="submit" className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Create Order</Button>
+            <Button type="button" onClick={onClose} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancelar</Button>
+            <Button type="submit" className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Criar Pedido</Button>
           </div>
         </form>
       </div>

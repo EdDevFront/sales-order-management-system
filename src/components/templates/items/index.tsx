@@ -42,8 +42,8 @@ export default function Items() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Items</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Manage order items inventory and pricing</p>
+          <h2 className="text-2xl font-bold tracking-tight">Itens</h2>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Gerencie o inventário de itens e precificação dos pedidos de venda</p>
         </div>
         <Button
           onClick={() => {
@@ -52,7 +52,7 @@ export default function Items() {
           }}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
         >
-          <Plus className="h-4 w-4" /> New Item
+          <Plus className="h-4 w-4" /> Novo Item
         </Button>
       </div>
 

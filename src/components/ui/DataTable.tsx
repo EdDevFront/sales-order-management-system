@@ -109,7 +109,7 @@ function TableBody({
       return (
         <InlineEmptyState
           colSpan={colSpan}
-          message="No results match your active filters."
+          message="Nenhum resultado corresponde aos filtros ativos."
           icon={SearchX}
           action={
             onClearFilters && (
@@ -117,7 +117,7 @@ function TableBody({
                 onClick={onClearFilters}
                 className="text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-400"
               >
-                Clear all filters
+                Limpar todos os filtros
               </button>
             )
           }
@@ -125,7 +125,7 @@ function TableBody({
       );
     }
     if (isEmpty) {
-      return <InlineEmptyState colSpan={colSpan} message="No records found." icon={Inbox} />;
+      return <InlineEmptyState colSpan={colSpan} message="Nenhum registro encontrado." icon={Inbox} />;
     }
     return children;
   };

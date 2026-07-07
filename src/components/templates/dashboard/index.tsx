@@ -43,21 +43,21 @@ export default function Dashboard() {
   );
 
   const statusOptions = React.useMemo<SelectOption[]>(() => [
-    { value: "ALL", label: "All Statuses" },
-    { value: "CRIADA", label: "CRIADA (Created)" },
-    { value: "PLANEJADA", label: "PLANEJADA (Planned)" },
-    { value: "AGENDADA", label: "AGENDADA (Scheduled)" },
-    { value: "EM_TRANSPORTE", label: "EM_TRANSPORTE (In Transit)" },
-    { value: "ENTREGUE", label: "ENTREGUE (Delivered)" },
+    { value: "ALL", label: "Todos os Statuses" },
+    { value: "CRIADA", label: "CRIADA (Criada)" },
+    { value: "PLANEJADA", label: "PLANEJADA (Planejada)" },
+    { value: "AGENDADA", label: "AGENDADA (Agendada)" },
+    { value: "EM_TRANSPORTE", label: "EM_TRANSPORTE (Em Trânsito)" },
+    { value: "ENTREGUE", label: "ENTREGUE (Entregue)" },
   ], []);
 
   const clientOptions = React.useMemo<SelectOption[]>(() => [
-    { value: "ALL", label: "All Clients" },
+    { value: "ALL", label: "Todos os Clientes" },
     ...customers.map((c) => ({ value: c.id, label: c.name })),
   ], [customers]);
 
   const transportOptions = React.useMemo<SelectOption[]>(() => [
-    { value: "ALL", label: "All Transports" },
+    { value: "ALL", label: "Todos os Transportes" },
     ...transports.map((t) => ({ value: t.id, label: t.name })),
   ], [transports]);
 
@@ -67,17 +67,17 @@ export default function Dashboard() {
   }, [dispatch]);
 
   const metricCards = React.useMemo(() => [
-    { title: "Total Sales Orders", val: orders.length, icon: BarChart3, bg: "bg-indigo-50 border-indigo-100 dark:bg-indigo-950/20" },
-    { title: "Needs Scheduling", val: orders.filter((o) => o.status === "PLANEJADA").length, icon: Clock, bg: "bg-amber-50 border-amber-100 dark:bg-amber-950/20" },
-    { title: "In Transit", val: orders.filter((o) => o.status === "EM_TRANSPORTE").length, icon: AlertTriangle, bg: "bg-blue-50 border-blue-100 dark:bg-blue-950/20" },
-    { title: "Delivered", val: orders.filter((o) => o.status === "ENTREGUE").length, icon: CheckCircle, bg: "bg-emerald-50 border-emerald-100 dark:bg-emerald-950/20" },
+    { title: "Total de Pedidos", val: orders.length, icon: BarChart3, bg: "bg-indigo-50 border-indigo-100 dark:bg-indigo-950/20" },
+    { title: "Requer Agendamento", val: orders.filter((o) => o.status === "PLANEJADA").length, icon: Clock, bg: "bg-amber-50 border-amber-100 dark:bg-amber-950/20" },
+    { title: "Em Transporte", val: orders.filter((o) => o.status === "EM_TRANSPORTE").length, icon: AlertTriangle, bg: "bg-blue-50 border-blue-100 dark:bg-blue-950/20" },
+    { title: "Entregues", val: orders.filter((o) => o.status === "ENTREGUE").length, icon: CheckCircle, bg: "bg-emerald-50 border-emerald-100 dark:bg-emerald-950/20" },
   ], [orders]);
 
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Operational Monitoring Dashboard</h2>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">Real-time status overview of active sales orders and logistics delivery chains</p>
+        <h2 className="text-2xl font-bold tracking-tight">Painel de Monitoramento Operacional</h2>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">Visão geral em tempo real dos pedidos de venda ativos e cadeia de entregas logísticas</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -99,11 +99,11 @@ export default function Dashboard() {
         <div className="flex items-center justify-between border-b border-zinc-100 pb-3 dark:border-zinc-800">
           <div className="flex items-center gap-2">
             <Filter className="h-4 w-4 text-zinc-500" />
-            <h3 className="font-semibold text-sm">Query Filter Controls</h3>
+            <h3 className="font-semibold text-sm">Controles de Filtros</h3>
           </div>
           {isFiltersActive && (
             <button onClick={handleClearFilters} className="text-xs font-semibold text-indigo-600 hover:underline dark:text-indigo-400">
-              Clear filters
+              Limpar filtros
             </button>
           )}
         </div>
@@ -115,19 +115,19 @@ export default function Dashboard() {
             </div>
           </div>
           <div>
-            <label className="text-xs font-semibold text-zinc-500">Client</label>
+            <label className="text-xs font-semibold text-zinc-500">Cliente</label>
             <div className="mt-1">
               <Select value={filters.clientId} onValueChange={(val) => dispatch(setFilter({ key: "clientId", value: val }))} options={clientOptions} />
             </div>
           </div>
           <div>
-            <label className="text-xs font-semibold text-zinc-500">Transport Mode</label>
+            <label className="text-xs font-semibold text-zinc-500">Modo de Transporte</label>
             <div className="mt-1">
               <Select value={filters.transportType} onValueChange={(val) => dispatch(setFilter({ key: "transportType", value: val }))} options={transportOptions} />
             </div>
           </div>
           <div>
-            <label className="text-xs font-semibold text-zinc-500">Creation Date</label>
+            <label className="text-xs font-semibold text-zinc-500">Data de Criação</label>
             <div className="mt-1">
               <DatePicker value={filters.date} onDateChange={(val) => dispatch(setFilter({ key: "date", value: val }))} />
             </div>
@@ -151,7 +151,7 @@ export default function Dashboard() {
               <DataTable.Cell className="text-zinc-500 dark:text-zinc-400 font-medium">{customers.find((c) => c.id === order.customerId)?.name}</DataTable.Cell>
               <DataTable.Cell className="text-zinc-500">{transports.find((t) => t.id === order.transportTypeId)?.name}</DataTable.Cell>
               <DataTable.Cell className="text-zinc-500 dark:text-zinc-400">
-                {order.deliveryDate ? `${order.deliveryDate} (${order.deliveryWindow})` : <span className="text-zinc-400 italic">Not scheduled</span>}
+                {order.deliveryDate ? `${order.deliveryDate} (${order.deliveryWindow})` : <span className="text-zinc-400 italic">Não agendado</span>}
               </DataTable.Cell>
               <DataTable.Cell>
                 <span className={`rounded-full px-2.5 py-1 text-xs font-semibold border ${orderStatusVariant(order.status)}`}>{order.status}</span>

@@ -72,14 +72,14 @@ export default function Orders() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Sales Orders</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Track and manage lifecycle transitions of sales orders</p>
+          <h2 className="text-2xl font-bold tracking-tight">Pedidos de Venda</h2>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Monitore e gerencie as transições do ciclo de vida dos pedidos de venda</p>
         </div>
         <Button
           onClick={() => setIsFormOpen(true)}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
         >
-          <Plus className="h-4 w-4" /> New Order
+          <Plus className="h-4 w-4" /> Novo Pedido
         </Button>
       </div>
 
@@ -102,7 +102,7 @@ export default function Orders() {
                   <DataTable.Cell alignRight className="font-semibold text-zinc-900 dark:text-white">${calculateOrderTotal(order).toFixed(2)}</DataTable.Cell>
                   <DataTable.Cell alignRight>
                     <Button onClick={() => setSelectedOrder(order)} className="flex items-center gap-1 ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold">
-                      <Info className="h-4 w-4" /> Manage
+                      <Info className="h-4 w-4" /> Gerenciar
                     </Button>
                   </DataTable.Cell>
                 </DataTable.Row>

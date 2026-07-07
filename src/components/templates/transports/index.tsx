@@ -48,8 +48,8 @@ export default function Transports() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Transport Types</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Configure logistics transport modes</p>
+          <h2 className="text-2xl font-bold tracking-tight">Tipos de Transporte</h2>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Configure os modos de transporte logístico autorizados</p>
         </div>
         <Button
           onClick={() => {
@@ -58,7 +58,7 @@ export default function Transports() {
           }}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
         >
-          <Plus className="h-4 w-4" /> New Transport Type
+          <Plus className="h-4 w-4" /> Novo Tipo de Transporte
         </Button>
       </div>
 
@@ -84,7 +84,7 @@ export default function Transports() {
               <DataTable.Cell className="font-medium text-zinc-900 dark:text-white">{t.name}</DataTable.Cell>
               <DataTable.Cell className="text-zinc-500 dark:text-zinc-400">{t.description}</DataTable.Cell>
               <DataTable.Cell alignRight>
-                <Button onClick={() => handleEdit(t)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Edit</Button>
+                <Button onClick={() => handleEdit(t)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Editar</Button>
               </DataTable.Cell>
             </DataTable.Row>
           ))}

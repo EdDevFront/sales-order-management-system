@@ -48,8 +48,8 @@ export default function Customers() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Customers</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Manage client profiles and logistics authorization</p>
+          <h2 className="text-2xl font-bold tracking-tight">Clientes</h2>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Gerencie os perfis dos clientes e autorizações logísticas de transporte</p>
         </div>
         <Button
           onClick={() => {
@@ -58,7 +58,7 @@ export default function Customers() {
           }}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
         >
-          <Plus className="h-4 w-4" /> New Customer
+          <Plus className="h-4 w-4" /> Novo Cliente
         </Button>
       </div>
 
@@ -95,7 +95,7 @@ export default function Customers() {
                 </div>
               </DataTable.Cell>
               <DataTable.Cell alignRight>
-                <Button onClick={() => handleEdit(c)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Edit</Button>
+                <Button onClick={() => handleEdit(c)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Editar</Button>
               </DataTable.Cell>
             </DataTable.Row>
           ))}

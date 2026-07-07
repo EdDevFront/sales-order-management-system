@@ -22,8 +22,8 @@ export default function AuditLogs() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">System Audit Trail</h2>
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">Track operations, logistics state transitions, and authorization changes</p>
+        <h2 className="text-2xl font-bold tracking-tight">Trilha de Auditoria do Sistema</h2>
+        <p className="text-sm text-zinc-500 dark:text-zinc-400">Acompanhe operações, transições de status logísticos e alterações de autorização</p>
       </div>
 
       <DataTable>
@@ -40,7 +40,7 @@ export default function AuditLogs() {
               <React.Fragment key={log.id}>
                 <DataTable.Row>
                   <DataTable.Cell className="font-mono text-zinc-500 dark:text-zinc-400">
-                    {new Date(log.timestamp).toLocaleString("en-US")}
+                    {new Date(log.timestamp).toLocaleString("pt-BR")}
                   </DataTable.Cell>
                   <DataTable.Cell>
                     <span className={`rounded-full px-2.5 py-1 text-xs font-semibold border ${auditActionVariant(log.actionType)}`}>
@@ -55,7 +55,7 @@ export default function AuditLogs() {
                       className="flex items-center gap-1 ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold"
                     >
                       {isExpanded ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                      {isExpanded ? "Hide" : "Inspect"}
+                      {isExpanded ? "Ocultar" : "Inspecionar"}
                     </button>
                   </DataTable.Cell>
                 </DataTable.Row>
@@ -64,13 +64,13 @@ export default function AuditLogs() {
                     <td colSpan={5} className="bg-zinc-50 p-6 dark:bg-zinc-800/20">
                       <div className="grid gap-4 md:grid-cols-2 text-xs font-mono">
                         <div>
-                          <span className="block font-semibold uppercase tracking-wider text-zinc-400 mb-2">Previous State</span>
+                          <span className="block font-semibold uppercase tracking-wider text-zinc-400 mb-2">Estado Anterior</span>
                           <pre className="rounded-lg border border-zinc-200 bg-white p-3 overflow-auto dark:border-zinc-800 dark:bg-zinc-950 max-h-48">
                             {log.previousState ? JSON.stringify(JSON.parse(log.previousState), null, 2) : "NULL"}
                           </pre>
                         </div>
                         <div>
-                          <span className="block font-semibold uppercase tracking-wider text-zinc-400 mb-2">Next State</span>
+                          <span className="block font-semibold uppercase tracking-wider text-zinc-400 mb-2">Próximo Estado</span>
                           <pre className="rounded-lg border border-zinc-200 bg-white p-3 overflow-auto dark:border-zinc-800 dark:bg-zinc-950 max-h-48">
                             {log.nextState ? JSON.stringify(JSON.parse(log.nextState), null, 2) : "NULL"}
                           </pre>

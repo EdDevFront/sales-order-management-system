@@ -13,11 +13,11 @@ interface LayoutProps {
 
 const navItems = [
   { id: "dashboard", href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { id: "orders", href: "/orders", label: "Sales Orders", icon: ShoppingCart },
-  { id: "customers", href: "/customers", label: "Customers", icon: Users },
-  { id: "transports", href: "/transports", label: "Transport Types", icon: Truck },
-  { id: "items", href: "/items", label: "Items", icon: Package },
-  { id: "audit", href: "/audit", label: "Audits", icon: History },
+  { id: "orders", href: "/orders", label: "Pedidos de Venda", icon: ShoppingCart },
+  { id: "customers", href: "/customers", label: "Clientes", icon: Users },
+  { id: "transports", href: "/transports", label: "Tipos de Transporte", icon: Truck },
+  { id: "items", href: "/items", label: "Itens", icon: Package },
+  { id: "audit", href: "/audit", label: "Auditorias", icon: History },
 ];
 
 export default function Layout({ children }: LayoutProps) {
@@ -32,8 +32,8 @@ export default function Layout({ children }: LayoutProps) {
               <ShoppingCart className="h-6 w-6" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">OVGS Portal</h1>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400">Sales Order Management & Logistics</p>
+              <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Portal OVGS</h1>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">Gestão de Pedidos de Venda & Logística</p>
             </div>
           </div>
           <nav className="flex gap-1.5 max-sm:hidden">
@@ -65,7 +65,7 @@ export default function Layout({ children }: LayoutProps) {
       </main>
 
       <footer className="border-t border-zinc-200/50 py-6 text-center text-xs text-zinc-500 dark:border-zinc-800/50 dark:text-zinc-400">
-        © {new Date().getFullYear()} OVGS. All rights reserved. Senior Frontend Challenge.
+        © {new Date().getFullYear()} OVGS. Todos os direitos reservados. Desafio Frontend Senior.
       </footer>
     </div>
   );

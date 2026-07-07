@@ -25,9 +25,9 @@ export function Pagination({
   return (
     <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-800">
       <div className="text-xs text-zinc-500 dark:text-zinc-400">
-        Showing <span className="font-semibold text-zinc-950 dark:text-white">{startItem}</span> to{" "}
-        <span className="font-semibold text-zinc-950 dark:text-white">{endItem}</span> of{" "}
-        <span className="font-semibold text-zinc-950 dark:text-white">{totalItems}</span> entries
+        Exibindo <span className="font-semibold text-zinc-950 dark:text-white">{startItem}</span> a{" "}
+        <span className="font-semibold text-zinc-950 dark:text-white">{endItem}</span> de{" "}
+        <span className="font-semibold text-zinc-950 dark:text-white">{totalItems}</span> registros
       </div>
       <div className="flex items-center gap-2">
         <Button
@@ -36,11 +36,11 @@ export function Pagination({
           disabled={currentPage === 1}
           className="h-8 w-8 p-0"
         >
-          <span className="sr-only">Previous Page</span>
+          <span className="sr-only">Página Anterior</span>
           <ChevronLeft className="h-4 w-4" />
         </Button>
         <div className="text-xs font-medium">
-          Page {currentPage} of {totalPages}
+          Página {currentPage} de {totalPages}
         </div>
         <Button
           variant="outline"
@@ -48,7 +48,7 @@ export function Pagination({
           disabled={currentPage === totalPages}
           className="h-8 w-8 p-0"
         >
-          <span className="sr-only">Next Page</span>
+          <span className="sr-only">Próxima Página</span>
           <ChevronRight className="h-4 w-4" />
         </Button>
       </div>

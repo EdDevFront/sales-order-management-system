@@ -8,7 +8,7 @@ interface DatePickerProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
-  ({ className = "", value, defaultValue, onChange, onDateChange, placeholder = "Pick a date", ...props }, ref) => {
+  ({ className = "", value, defaultValue, onChange, onDateChange, placeholder = "Selecione uma data", ...props }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState<string>((value as string) || (defaultValue as string) || "");
     const [currentMonth, setCurrentMonth] = useState<Date>(new Date());
@@ -56,8 +56,8 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
     };
 
     const { days, startDay } = getDaysInMonth();
-    const monthYearLabel = currentMonth.toLocaleString("en-US", { month: "long", year: "numeric" });
-    const weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+    const monthYearLabel = currentMonth.toLocaleString("pt-BR", { month: "long", year: "numeric" });
+    const weekdays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
     return (
       <div ref={containerRef} className="relative w-full">
@@ -80,7 +80,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
           className={`flex h-10 w-full items-center justify-between rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-left ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 ${className}`}
         >
           <span className={selectedDate ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 dark:text-zinc-400"}>
-            {selectedDate ? new Date(selectedDate + "T00:00:00").toLocaleDateString("en-US", { dateStyle: "medium" }) : placeholder}
+            {selectedDate ? new Date(selectedDate + "T00:00:00").toLocaleDateString("pt-BR", { dateStyle: "medium" }) : placeholder}
           </span>
           <CalendarIcon className="h-4.5 w-4.5 text-zinc-500" />
         </button>
@@ -89,7 +89,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
           <div className="absolute z-50 mt-1 w-64 rounded-md border border-zinc-200 bg-white p-3 shadow-lg dark:border-zinc-850 dark:bg-zinc-900">
             <div className="flex items-center justify-between mb-2">
               <button type="button" onClick={() => handleMonthChange(-1)} className="rounded p-1 hover:bg-zinc-100 dark:hover:bg-zinc-800"><ChevronLeft className="h-4 w-4" /></button>
-              <span className="text-xs font-semibold">{monthYearLabel}</span>
+              <span className="text-xs font-semibold capitalize">{monthYearLabel}</span>
               <button type="button" onClick={() => handleMonthChange(1)} className="rounded p-1 hover:bg-zinc-100 dark:hover:bg-zinc-800"><ChevronRight className="h-4 w-4" /></button>
             </div>
             <div className="grid grid-cols-7 gap-1 text-center text-[10px] font-semibold text-zinc-500 mb-1">

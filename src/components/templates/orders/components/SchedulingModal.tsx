@@ -36,43 +36,43 @@ export default function SchedulingModal({ orderId, onClose }: SchedulingModalPro
   };
 
   const windowOptions = [
-    { value: "Morning (08:00 - 12:00)", label: "Morning (08:00 - 12:00)" },
-    { value: "Afternoon (13:00 - 18:00)", label: "Afternoon (13:00 - 18:00)" }
+    { value: "Manhã (08:00 - 12:00)", label: "Manhã (08:00 - 12:00)" },
+    { value: "Tarde (13:00 - 18:00)", label: "Tarde (13:00 - 18:00)" }
   ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-md rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
         <div className="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
-          <h3 className="text-lg font-bold">Schedule Delivery</h3>
+          <h3 className="text-lg font-bold">Agendar Entrega</h3>
           <Button onClick={onClose} className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800"><X className="h-5 w-5" /></Button>
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Delivery Date</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Data de Entrega</label>
             <div className="mt-1">
               <DatePicker
                 {...register("deliveryDate")}
-                placeholder="Pick delivery date"
+                placeholder="Escolha a data de entrega"
               />
             </div>
             {errors.deliveryDate && <p className="mt-1 text-xs text-red-500">{errors.deliveryDate.message}</p>}
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Time Window</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Janela de Horário</label>
             <div className="mt-1">
               <Select
                 {...register("deliveryWindow")}
                 options={windowOptions}
-                placeholder="Select Time Window"
+                placeholder="Selecione a Janela de Horário"
               />
             </div>
             {errors.deliveryWindow && <p className="mt-1 text-xs text-red-500">{errors.deliveryWindow.message}</p>}
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-            <Button type="button" onClick={onClose} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancel</Button>
-            <Button type="submit" className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Confirm Schedule</Button>
+            <Button type="button" onClick={onClose} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancelar</Button>
+            <Button type="submit" className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">Confirmar Agendamento</Button>
           </div>
         </form>
       </div>

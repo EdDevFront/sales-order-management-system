@@ -1,20 +1,19 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import { Input } from "@/components/ui/Input";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { fetchTransportTypes, saveTransportType } from "@/infrastructure/repositories/mockRepositories";
 import { TransportType } from "@/types/TransportType";
-import { Plus, Loader2 } from "lucide-react";
+import { Plus } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
 import { TRANSPORT_COLUMNS, TRANSPORT_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
-import { transportSchema, TransportFormData } from "./schemas/transportSchema";
+import { TransportFormData } from "./schemas/transportSchema";
+import TransportForm from "./components/TransportForm";
 
 export default function Transports() {
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [editingTransport, setEditingTransport] = useState<TransportFormData | null>(null);
   const [currentPage, setCurrentPage] = React.useState(1);
 
   const { data: transports = [], isLoading } = useQuery({ queryKey: ["transports"], queryFn: fetchTransportTypes });
@@ -31,16 +30,14 @@ export default function Transports() {
       queryClient.invalidateQueries({ queryKey: ["transports"] });
       queryClient.invalidateQueries({ queryKey: ["customers"] });
       setIsFormOpen(false);
-      reset();
+      setEditingTransport(null);
     },
   });
 
-  const { register, handleSubmit, reset, formState: { errors } } = useForm<TransportFormData>({
-    resolver: zodResolver(transportSchema),
-    defaultValues: { name: "", description: "" },
-  });
-
-  const handleEdit = (transport: TransportType) => { reset(transport); setIsFormOpen(true); };
+  const handleEdit = (transport: TransportType) => {
+    setEditingTransport(transport);
+    setIsFormOpen(true);
+  };
 
   const onSubmit = (data: TransportFormData) => {
     const id = data.id || `trans-${Math.random().toString(36).substring(2, 9)}`;
@@ -55,34 +52,23 @@ export default function Transports() {
           <p className="text-sm text-zinc-500 dark:text-zinc-400">Configure logistics transport modes</p>
         </div>
         <Button
-          onClick={() => { reset({ name: "", description: "" }); setIsFormOpen(!isFormOpen); }}
+          onClick={() => {
+            setEditingTransport({ name: "", description: "" });
+            setIsFormOpen(true);
+          }}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
         >
           <Plus className="h-4 w-4" /> New Transport Type
         </Button>
       </div>
 
-      {isFormOpen && (
-        <form onSubmit={handleSubmit(onSubmit)} className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-4">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Name</label>
-              <Input {...register("name")} placeholder="Caminhão, Carreta, Bi-truck" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
-              {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
-            </div>
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Description</label>
-              <Input {...register("description")} placeholder="Details about this transport category" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
-              {errors.description && <p className="mt-1 text-xs text-red-500">{errors.description.message}</p>}
-            </div>
-          </div>
-          <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" onClick={() => setIsFormOpen(false)} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancel</Button>
-            <Button type="submit" disabled={mutation.isPending} className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
-              {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Save Transport"}
-            </Button>
-          </div>
-        </form>
+      {isFormOpen && editingTransport && (
+        <TransportForm
+          onClose={() => setIsFormOpen(false)}
+          onSubmit={onSubmit}
+          defaultValues={editingTransport}
+          isPending={mutation.isPending}
+        />
       )}
 
       <DataTable>

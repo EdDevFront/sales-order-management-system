@@ -83,8 +83,8 @@ export default function Orders() {
         </Button>
       </div>
 
-      <div className={`grid gap-6 ${selectedOrder ? "lg:grid-cols-3" : "grid-cols-1"}`}>
-        <DataTable className={selectedOrder ? "lg:col-span-2" : ""}>
+      <div>
+        <DataTable>
           <DataTable.Head columns={ORDER_COLUMNS} />
           <DataTable.Body
             isLoading={isLoading}
@@ -113,25 +113,17 @@ export default function Orders() {
         </DataTable>
 
         {selectedOrder && (
-          <>
-            {/* Backdrop for mobile and tablet screens */}
-            <div className="fixed inset-0 z-40 bg-black/50 backdrop-blur-xs lg:hidden" onClick={() => setSelectedOrder(null)} />
-            
-            {/* Panel wrapper: slide-over drawer on mobile/tablet, static block on desktop */}
-            <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white dark:bg-zinc-900 shadow-2xl border-l border-zinc-200 dark:border-zinc-800 p-1 lg:static lg:w-auto lg:max-w-none lg:shadow-none lg:border-none lg:bg-transparent overflow-y-auto">
-              <OrderDetailPanel
-                selectedOrder={selectedOrder}
-                customers={customers}
-                transports={transports}
-                items={items}
-                onClose={() => setSelectedOrder(null)}
-                handleTransportChange={handleTransportChange}
-                handleStatusChange={handleStatusChange}
-                setSchedulingOrderId={setSchedulingOrderId}
-                getNextStatus={getNextStatus}
-              />
-            </div>
-          </>
+          <OrderDetailPanel
+            selectedOrder={selectedOrder}
+            customers={customers}
+            transports={transports}
+            items={items}
+            onClose={() => setSelectedOrder(null)}
+            handleTransportChange={handleTransportChange}
+            handleStatusChange={handleStatusChange}
+            setSchedulingOrderId={setSchedulingOrderId}
+            getNextStatus={getNextStatus}
+          />
         )}
       </div>
 

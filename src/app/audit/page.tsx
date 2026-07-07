@@ -1,6 +1,6 @@
 "use client";
-import AuditLogs from "@/components/templates/audit";
+import Audit from "@/components/templates/audit";
 
 export default function AuditRoute() {
-  return <AuditLogs />;
+  return <Audit />;
 }

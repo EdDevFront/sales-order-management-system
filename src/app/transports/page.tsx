@@ -1,3 +1,4 @@
+"use client";
 import Transports from "@/components/templates/transports";
 
 export default function TransportsRoute() {

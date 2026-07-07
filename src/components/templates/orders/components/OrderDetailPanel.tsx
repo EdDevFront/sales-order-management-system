@@ -35,9 +35,18 @@ export default function OrderDetailPanel({
     customer?.authorizedTransportTypeIds.includes(t.id)
   );
 
+  const formatDateBR = (dateStr: string) => {
+    if (!dateStr) return "";
+    const parts = dateStr.split("-");
+    if (parts.length === 3) {
+      return `${parts[2]}/${parts[1]}/${parts[0]}`;
+    }
+    return dateStr;
+  };
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div className="w-full max-w-lg rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
+    <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div className="relative w-full max-w-lg rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 my-8">
         <div className="flex items-center justify-between border-b border-zinc-200 p-4 dark:border-zinc-800">
           <h3 className="font-bold text-lg">Detalhes do Pedido ({selectedOrder.id})</h3>
           <Button onClick={onClose} className="rounded-lg p-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-800">
@@ -45,7 +54,7 @@ export default function OrderDetailPanel({
           </Button>
         </div>
 
-        <div className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
+        <div className="p-6 space-y-6">
           <div className="space-y-4">
             <div>
               <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Detalhes do Cliente</span>
@@ -71,7 +80,7 @@ export default function OrderDetailPanel({
             {selectedOrder.deliveryDate && (
               <div>
                 <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Detalhes da Entrega</span>
-                <p className="text-sm font-medium mt-1">{selectedOrder.deliveryDate}</p>
+                <p className="text-sm font-medium mt-1">{formatDateBR(selectedOrder.deliveryDate)}</p>
                 <p className="text-xs text-zinc-500">{selectedOrder.deliveryWindow}</p>
               </div>
             )}
@@ -93,7 +102,7 @@ export default function OrderDetailPanel({
               </div>
             </div>
 
-            <div className="pt-4 border-t border-zinc-150 dark:border-zinc-800 space-y-2">
+            <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 space-y-2">
               <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Transição de Status Disponível</span>
               {getNextStatus(selectedOrder.status) && (
                 <Button

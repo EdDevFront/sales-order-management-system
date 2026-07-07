@@ -5,7 +5,7 @@ import { Item } from "@/types/Item";
 import { SalesOrder } from "@/types/SalesOrder";
 import { AuditLog } from "@/types/AuditLog";
 
-const simulateDelay = () => new Promise((resolve) => setTimeout(resolve, 300));
+const simulateDelay = () => new Promise((resolve) => setTimeout(resolve, 1000));
 
 export async function fetchCustomers(): Promise<Customer[]> {
   await simulateDelay();

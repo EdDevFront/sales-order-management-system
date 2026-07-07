@@ -1,6 +1,5 @@
-"use client";
-import { Input } from "@/components/ui/Input";
-import { Select } from "@/components/ui/Select";
+import { DatePicker } from "@/components/ui/DatePicker";
+import { Select, SelectOption } from "@/components/ui/Select";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
@@ -34,6 +33,25 @@ export default function Dashboard() {
   const transitCount = orders.filter((o) => o.status === "EM_TRANSPORTE").length;
   const doneCount = orders.filter((o) => o.status === "ENTREGUE").length;
 
+  const statusOptions: SelectOption[] = [
+    { value: "ALL", label: "All Statuses" },
+    { value: "CRIADA", label: "CRIADA (Created)" },
+    { value: "PLANEJADA", label: "PLANEJADA (Planned)" },
+    { value: "AGENDADA", label: "AGENDADA (Scheduled)" },
+    { value: "EM_TRANSPORTE", label: "EM_TRANSPORTE (In Transit)" },
+    { value: "ENTREGUE", label: "ENTREGUE (Delivered)" },
+  ];
+
+  const clientOptions: SelectOption[] = [
+    { value: "ALL", label: "All Clients" },
+    ...customers.map((c) => ({ value: c.id, label: c.name })),
+  ];
+
+  const transportOptions: SelectOption[] = [
+    { value: "ALL", label: "All Transports" },
+    ...transports.map((t) => ({ value: t.id, label: t.name })),
+  ];
+
   return (
     <div className="space-y-8">
       <div>
@@ -66,52 +84,45 @@ export default function Dashboard() {
           <Filter className="h-4 w-4 text-zinc-500" />
           <h3 className="font-semibold text-sm">Query Filter Controls</h3>
         </div>
-        <div className="grid gap-4 sm:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-4 col-span-4 items-end">
           <div>
             <label className="text-xs font-semibold text-zinc-500">Status</label>
-            <Select
-              value={filters.status}
-              onChange={(e) => dispatch(setFilter({ key: "status", value: e.target.value }))}
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-800"
-            >
-              <option value="ALL">All Statuses</option>
-              <option value="CRIADA">CRIADA (Created)</option>
-              <option value="PLANEJADA">PLANEJADA (Planned)</option>
-              <option value="AGENDADA">AGENDADA (Scheduled)</option>
-              <option value="EM_TRANSPORTE">EM_TRANSPORTE (In Transit)</option>
-              <option value="ENTREGUE">ENTREGUE (Delivered)</option>
-            </Select>
+            <div className="mt-1">
+              <Select
+                value={filters.status}
+                onValueChange={(val) => dispatch(setFilter({ key: "status", value: val }))}
+                options={statusOptions}
+              />
+            </div>
           </div>
           <div>
             <label className="text-xs font-semibold text-zinc-500">Client</label>
-            <Select
-              value={filters.clientId}
-              onChange={(e) => dispatch(setFilter({ key: "clientId", value: e.target.value }))}
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-800"
-            >
-              <option value="ALL">All Clients</option>
-              {customers.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-            </Select>
+            <div className="mt-1">
+              <Select
+                value={filters.clientId}
+                onValueChange={(val) => dispatch(setFilter({ key: "clientId", value: val }))}
+                options={clientOptions}
+              />
+            </div>
           </div>
           <div>
             <label className="text-xs font-semibold text-zinc-500">Transport Mode</label>
-            <Select
-              value={filters.transportType}
-              onChange={(e) => dispatch(setFilter({ key: "transportType", value: e.target.value }))}
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-800"
-            >
-              <option value="ALL">All Transports</option>
-              {transports.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-            </Select>
+            <div className="mt-1">
+              <Select
+                value={filters.transportType}
+                onValueChange={(val) => dispatch(setFilter({ key: "transportType", value: val }))}
+                options={transportOptions}
+              />
+            </div>
           </div>
           <div>
             <label className="text-xs font-semibold text-zinc-500">Creation Date</label>
-            <Input
-              type="date"
-              value={filters.date}
-              onChange={(e) => dispatch(setFilter({ key: "date", value: e.target.value }))}
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-1.5 text-xs focus:outline-none dark:border-zinc-700 dark:bg-zinc-800"
-            />
+            <div className="mt-1">
+              <DatePicker
+                value={filters.date}
+                onDateChange={(val) => dispatch(setFilter({ key: "date", value: val }))}
+              />
+            </div>
           </div>
         </div>
       </div>

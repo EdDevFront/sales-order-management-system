@@ -10,6 +10,8 @@ import * as z from "zod";
 import { updateDeliveryRequest } from "@/stores/ordersActions";
 import { X } from "lucide-react";
 
+import { DatePicker } from "@/components/ui/DatePicker";
+
 const schedulingSchema = z.object({
   deliveryDate: z.string().min(1, "Select a delivery date"),
   deliveryWindow: z.string().min(1, "Select a delivery window"),
@@ -33,6 +35,11 @@ export default function SchedulingModal({ orderId, onClose }: SchedulingModalPro
     onClose();
   };
 
+  const windowOptions = [
+    { value: "Morning (08:00 - 12:00)", label: "Morning (08:00 - 12:00)" },
+    { value: "Afternoon (13:00 - 18:00)", label: "Afternoon (13:00 - 18:00)" }
+  ];
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-md rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
@@ -43,21 +50,23 @@ export default function SchedulingModal({ orderId, onClose }: SchedulingModalPro
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Delivery Date</label>
-            <Input
-              type="date"
-              {...register("deliveryDate")}
-              min={new Date().toISOString().split("T")[0]}
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800"
-            />
+            <div className="mt-1">
+              <DatePicker
+                {...register("deliveryDate")}
+                placeholder="Pick delivery date"
+              />
+            </div>
             {errors.deliveryDate && <p className="mt-1 text-xs text-red-500">{errors.deliveryDate.message}</p>}
           </div>
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Time Window</label>
-            <Select {...register("deliveryWindow")} className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800">
-              <option value="">Select Time Window</option>
-              <option value="Morning (08:00 - 12:00)">Morning (08:00 - 12:00)</option>
-              <option value="Afternoon (13:00 - 18:00)">Afternoon (13:00 - 18:00)</option>
-            </Select>
+            <div className="mt-1">
+              <Select
+                {...register("deliveryWindow")}
+                options={windowOptions}
+                placeholder="Select Time Window"
+              />
+            </div>
             {errors.deliveryWindow && <p className="mt-1 text-xs text-red-500">{errors.deliveryWindow.message}</p>}
           </div>
 

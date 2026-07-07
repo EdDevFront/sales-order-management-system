@@ -52,6 +52,21 @@ export default function OrderForm({ onClose }: OrderFormProps) {
     onClose();
   };
 
+  const customerOptions = customers.map((c) => ({
+    value: c.id,
+    label: `${c.name} (${c.documentType})`,
+  }));
+
+  const transportOptions = authorizedTransports.map((t) => ({
+    value: t.id,
+    label: t.name,
+  }));
+
+  const itemOptions = allItems.map((i) => ({
+    value: i.id,
+    label: `${i.name} - SKU: ${i.sku} ($${i.price.toFixed(2)})`,
+  }));
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
       <div className="w-full max-w-2xl rounded-xl border border-zinc-200 bg-white shadow-xl dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
@@ -63,18 +78,25 @@ export default function OrderForm({ onClose }: OrderFormProps) {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Customer</label>
-              <Select {...register("customerId")} className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800">
-                <option value="">Select Customer</option>
-                {customers.map((c) => <option key={c.id} value={c.id}>{c.name} ({c.documentType})</option>)}
-              </Select>
+              <div className="mt-1">
+                <Select
+                  {...register("customerId")}
+                  options={customerOptions}
+                  placeholder="Select Customer"
+                />
+              </div>
               {errors.customerId && <p className="mt-1 text-xs text-red-500">{errors.customerId.message}</p>}
             </div>
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Transport Type</label>
-              <Select {...register("transportTypeId")} disabled={!selectedCustomerId} className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800 disabled:opacity-50">
-                <option value="">Select Transport Type</option>
-                {authorizedTransports.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-              </Select>
+              <div className="mt-1">
+                <Select
+                  {...register("transportTypeId")}
+                  disabled={!selectedCustomerId}
+                  options={transportOptions}
+                  placeholder="Select Transport Type"
+                />
+              </div>
               {errors.transportTypeId && <p className="mt-1 text-xs text-red-500">{errors.transportTypeId.message}</p>}
             </div>
           </div>
@@ -87,10 +109,11 @@ export default function OrderForm({ onClose }: OrderFormProps) {
             {fields.map((field, index) => (
               <div key={field.id} className="flex gap-3 items-end">
                 <div className="flex-1">
-                  <Select {...register(`items.${index}.itemId`)} className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800">
-                    <option value="">Select Item</option>
-                    {allItems.map((i) => <option key={i.id} value={i.id}>{i.name} - SKU: {i.sku} (${i.price})</option>)}
-                  </Select>
+                  <Select
+                    {...register(`items.${index}.itemId`)}
+                    options={itemOptions}
+                    placeholder="Select Item"
+                  />
                 </div>
                 <div className="w-24">
                   <Input type="number" {...register(`items.${index}.quantity`, { valueAsNumber: true })} className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />

@@ -132,13 +132,11 @@ export default function Orders() {
                 {["CRIADA", "PLANEJADA"].includes(selectedOrder.status) ? (
                   <Select
                     value={selectedOrder.transportTypeId}
-                    onChange={(e) => handleTransportChange(selectedOrder.id, e.target.value)}
-                    className="mt-1 block w-full rounded-md border border-zinc-300 px-2 py-1 text-sm focus:outline-none dark:border-zinc-700 dark:bg-zinc-800"
-                  >
-                    {transports.filter((t) => customers.find((c) => c.id === selectedOrder.customerId)?.authorizedTransportTypeIds.includes(t.id)).map((t) => (
-                      <option key={t.id} value={t.id}>{t.name}</option>
-                    ))}
-                  </Select>
+                    onValueChange={(val) => handleTransportChange(selectedOrder.id, val)}
+                    options={transports
+                      .filter((t) => customers.find((c) => c.id === selectedOrder.customerId)?.authorizedTransportTypeIds.includes(t.id))
+                      .map((t) => ({ value: t.id, label: t.name }))}
+                  />
                 ) : (
                   <p className="text-sm font-medium mt-1">{transports.find((t) => t.id === selectedOrder.transportTypeId)?.name}</p>
                 )}

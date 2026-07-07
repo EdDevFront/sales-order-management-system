@@ -163,7 +163,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
               </Button>
             </div>
             {fields.map((field, index) => (
-              <div key={field.id} className="flex items-end gap-2">
+              <div key={field.id} className="flex items-start gap-2">
                 <div className="flex-1 min-w-0">
                   <Select
                     {...register(`items.${index}.itemId`)}
@@ -177,9 +177,6 @@ export default function OrderForm({ onClose }: OrderFormProps) {
                   )}
                 </div>
                 <div className="w-20 shrink-0">
-                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-0.5">
-                    Qtd
-                  </label>
                   <Input
                     type="number"
                     min={1}
@@ -191,7 +188,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
                 <Button
                   type="button"
                   onClick={() => remove(index)}
-                  className="mb-0.5 rounded-lg border border-red-200 p-2 text-red-500 hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/20 shrink-0"
+                  className="rounded-lg border border-red-200 p-2 text-red-500 hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/20 shrink-0 mt-0"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>

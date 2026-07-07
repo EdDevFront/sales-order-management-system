@@ -49,7 +49,7 @@ export default function SchedulingModal({ orderId, onClose }: SchedulingModalPro
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-4">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Data de Entrega</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Data de Entrega <span className="text-red-500">*</span></label>
             <div className="mt-1">
               <DatePicker
                 {...register("deliveryDate")}
@@ -59,7 +59,7 @@ export default function SchedulingModal({ orderId, onClose }: SchedulingModalPro
             {errors.deliveryDate && <p className="mt-1 text-xs text-red-500">{errors.deliveryDate.message}</p>}
           </div>
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Janela de Horário</label>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Janela de Horário <span className="text-red-500">*</span></label>
             <div className="mt-1">
               <Select
                 {...register("deliveryWindow")}

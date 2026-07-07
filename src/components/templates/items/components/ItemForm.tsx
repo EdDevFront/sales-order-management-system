@@ -34,17 +34,17 @@ export default function ItemForm({
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Nome</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Nome <span className="text-red-500">*</span></label>
               <Input {...register("name")} placeholder="Motor Industrial" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
               {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Código SKU</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Código SKU <span className="text-red-500">*</span></label>
               <Input {...register("sku")} placeholder="SKU-100-XYZ" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
               {errors.sku && <p className="mt-1 text-xs text-red-500">{errors.sku.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Preço (USD)</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Preço (USD) <span className="text-red-500">*</span></label>
               <Input type="number" step="0.01" {...register("price", { valueAsNumber: true })} className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
               {errors.price && <p className="mt-1 text-xs text-red-500">{errors.price.message}</p>}
             </div>

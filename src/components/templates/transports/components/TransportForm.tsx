@@ -36,12 +36,12 @@ export default function TransportForm({
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Nome</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Nome <span className="text-red-500">*</span></label>
               <Input {...register("name")} placeholder="Caminhão, Carreta, Bi-truck" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
               {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Descrição</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Descrição <span className="text-red-500">*</span></label>
               <Input {...register("description")} placeholder="Detalhes sobre este tipo de transporte" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
               {errors.description && <p className="mt-1 text-xs text-red-500">{errors.description.message}</p>}
             </div>

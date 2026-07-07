@@ -29,6 +29,32 @@ export default function CustomerForm({
   });
 
   const currentTransports = watch("authorizedTransportTypeIds") || [];
+  const selectedType = watch("documentType") || "CNPJ";
+
+  const maskDocument = (val: string, type: "CPF" | "CNPJ") => {
+    const clean = val.replace(/\D/g, "");
+    if (type === "CPF") {
+      return clean
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+        .substring(0, 14);
+    } else {
+      return clean
+        .replace(/(\d{2})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1/$2")
+        .replace(/(\d{4})(\d{1,2})$/, "$1-$2")
+        .substring(0, 18);
+    }
+  };
+
+  React.useEffect(() => {
+    const currentDoc = watch("document") || "";
+    if (currentDoc) {
+      setValue("document", maskDocument(currentDoc, selectedType));
+    }
+  }, [selectedType, setValue]);
 
   const toggleTransport = (id: string) => {
     const next = currentTransports.includes(id)
@@ -49,21 +75,31 @@ export default function CustomerForm({
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Nome</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Nome <span className="text-red-500">*</span></label>
               <Input {...register("name")} className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
               {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Tipo de Documento</label>
-              <Select {...register("documentType")} options={[{ value: "CNPJ", label: "CNPJ (Pessoa Jurídica)" }, { value: "CPF", label: "CPF (Pessoa Física)" }]} />
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Tipo de Documento <span className="text-red-500">*</span></label>
+              <div className="mt-1">
+                <Select {...register("documentType")} options={[{ value: "CNPJ", label: "CNPJ (Pessoa Jurídica)" }, { value: "CPF", label: "CPF (Pessoa Física)" }]} />
+              </div>
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Número do Documento</label>
-              <Input {...register("document")} placeholder="00.000.000/0001-00" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Número do Documento <span className="text-red-500">*</span></label>
+              <Input 
+                {...register("document")} 
+                placeholder={selectedType === "CPF" ? "000.000.000-00" : "00.000.000/0001-00"} 
+                onChange={(e) => {
+                  const masked = maskDocument(e.target.value, selectedType);
+                  setValue("document", masked, { shouldValidate: true });
+                }}
+                className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" 
+              />
               {errors.document && <p className="mt-1 text-xs text-red-500">{errors.document.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Transportes Autorizados</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Transportes Autorizados <span className="text-red-500">*</span></label>
               <div className="mt-2 flex flex-wrap gap-2">
                 {transports.map((t) => {
                   const isActive = currentTransports.includes(t.id);

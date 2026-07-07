@@ -66,7 +66,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
         <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6 max-h-[75vh] overflow-y-auto">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Cliente</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Cliente <span className="text-red-500">*</span></label>
               <div className="mt-1">
                 <Select
                   {...register("customerId")}
@@ -77,7 +77,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
               {errors.customerId && <p className="mt-1 text-xs text-red-500">{errors.customerId.message}</p>}
             </div>
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Tipo de Transporte</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Tipo de Transporte <span className="text-red-500">*</span></label>
               <div className="mt-1">
                 <Select
                   {...register("transportTypeId")}
@@ -92,7 +92,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
 
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Itens</label>
+              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Itens <span className="text-red-500">*</span></label>
               <Button type="button" onClick={() => append({ itemId: "", quantity: 1 })} className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-500"><Plus className="h-3.5 w-3.5" /> Adicionar Item</Button>
             </div>
             {fields.map((field, index) => (

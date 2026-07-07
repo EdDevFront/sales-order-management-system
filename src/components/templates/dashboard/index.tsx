@@ -16,7 +16,12 @@ import { DASHBOARD_COLUMNS, DASHBOARD_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./
 
 export default function Dashboard() {
   const dispatch = useDispatch();
-  const filters = useSelector((state: RootState) => state.ui.filters);
+  const reduxFilters = useSelector((state: RootState) => state.ui.filters);
+  const [localFilters, setLocalFilters] = React.useState(reduxFilters);
+
+  React.useEffect(() => {
+    setLocalFilters(reduxFilters);
+  }, [reduxFilters]);
 
   const { data: orders = [], isLoading: loadingOrders } = useQuery({ queryKey: ["orders"], queryFn: fetchSalesOrders });
   const { data: customers = [], isLoading: loadingCustomers } = useQuery({ queryKey: ["customers"], queryFn: fetchCustomers });
@@ -27,15 +32,15 @@ export default function Dashboard() {
 
   const filteredOrders = React.useMemo(() => {
     return orders.filter((order) => {
-      const matchStatus = filters.status === "ALL" || order.status === filters.status;
-      const matchClient = filters.clientId === "ALL" || order.customerId === filters.clientId;
-      const matchTransport = filters.transportType === "ALL" || order.transportTypeId === filters.transportType;
-      const matchDate = !filters.date || order.createdAt.startsWith(filters.date);
+      const matchStatus = reduxFilters.status === "ALL" || order.status === reduxFilters.status;
+      const matchClient = reduxFilters.clientId === "ALL" || order.customerId === reduxFilters.clientId;
+      const matchTransport = reduxFilters.transportType === "ALL" || order.transportTypeId === reduxFilters.transportType;
+      const matchDate = !reduxFilters.date || order.createdAt.startsWith(reduxFilters.date);
       return matchStatus && matchClient && matchTransport && matchDate;
     });
-  }, [orders, filters]);
+  }, [orders, reduxFilters]);
 
-  const isFiltersActive = filters.status !== "ALL" || filters.clientId !== "ALL" || filters.transportType !== "ALL" || !!filters.date;
+  const isFiltersActive = reduxFilters.status !== "ALL" || reduxFilters.clientId !== "ALL" || reduxFilters.transportType !== "ALL" || !!reduxFilters.date;
   const totalPages = Math.ceil(filteredOrders.length / ITEMS_PER_PAGE);
   const paginatedOrders = React.useMemo(() =>
     filteredOrders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE),
@@ -65,6 +70,14 @@ export default function Dashboard() {
     dispatch(resetFilters());
     setCurrentPage(1);
   }, [dispatch]);
+
+  const handleApplyFilters = React.useCallback(() => {
+    dispatch(setFilter({ key: "status", value: localFilters.status }));
+    dispatch(setFilter({ key: "clientId", value: localFilters.clientId }));
+    dispatch(setFilter({ key: "transportType", value: localFilters.transportType }));
+    dispatch(setFilter({ key: "date", value: localFilters.date }));
+    setCurrentPage(1);
+  }, [dispatch, localFilters]);
 
   const metricCards = React.useMemo(() => [
     { title: "Total de Pedidos", val: orders.length, icon: BarChart3, bg: "bg-indigo-50 border-indigo-100 dark:bg-indigo-950/20" },
@@ -107,30 +120,35 @@ export default function Dashboard() {
             </button>
           )}
         </div>
-        <div className="grid gap-4 sm:grid-cols-4 items-end">
+        <div className="grid gap-4 sm:grid-cols-5 items-end">
           <div>
             <label className="text-xs font-semibold text-zinc-500">Status</label>
             <div className="mt-1">
-              <Select value={filters.status} onValueChange={(val) => dispatch(setFilter({ key: "status", value: val }))} options={statusOptions} />
+              <Select value={localFilters.status} onValueChange={(val) => setLocalFilters(prev => ({ ...prev, status: val }))} options={statusOptions} />
             </div>
           </div>
           <div>
             <label className="text-xs font-semibold text-zinc-500">Cliente</label>
             <div className="mt-1">
-              <Select value={filters.clientId} onValueChange={(val) => dispatch(setFilter({ key: "clientId", value: val }))} options={clientOptions} />
+              <Select value={localFilters.clientId} onValueChange={(val) => setLocalFilters(prev => ({ ...prev, clientId: val }))} options={clientOptions} />
             </div>
           </div>
           <div>
             <label className="text-xs font-semibold text-zinc-500">Modo de Transporte</label>
             <div className="mt-1">
-              <Select value={filters.transportType} onValueChange={(val) => dispatch(setFilter({ key: "transportType", value: val }))} options={transportOptions} />
+              <Select value={localFilters.transportType} onValueChange={(val) => setLocalFilters(prev => ({ ...prev, transportType: val }))} options={transportOptions} />
             </div>
           </div>
           <div>
             <label className="text-xs font-semibold text-zinc-500">Data de Criação</label>
             <div className="mt-1">
-              <DatePicker value={filters.date} onDateChange={(val) => dispatch(setFilter({ key: "date", value: val }))} />
+              <DatePicker value={localFilters.date} onDateChange={(val) => setLocalFilters(prev => ({ ...prev, date: val }))} />
             </div>
+          </div>
+          <div>
+            <Button onClick={handleApplyFilters} className="w-full bg-indigo-600 text-white hover:bg-indigo-500 font-semibold h-10 rounded-lg flex items-center justify-center gap-1.5 shadow-sm">
+              <Filter className="h-4 w-4" /> Aplicar Filtros
+            </Button>
           </div>
         </div>
       </div>

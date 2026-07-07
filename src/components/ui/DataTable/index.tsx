@@ -42,7 +42,9 @@ interface TableCellProps {
 
 function TableRoot({ children, className = "" }: TableRootProps) {
   return (
-    <div className={`rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden ${className}`}>
+    <div
+      className={`rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden ${className}`}
+    >
       <div className="w-full">
         <table className="w-full block md:table divide-y divide-zinc-200 dark:divide-zinc-800">
           {children}
@@ -76,7 +78,12 @@ function TableHead({ columns, lastAlignRight = true }: TableHeadProps) {
 
 // ─── Empty helpers ────────────────────────────────────────────────────────────
 
-function InlineEmptyState({ colSpan, message, icon: Icon, action }: {
+function InlineEmptyState({
+  colSpan,
+  message,
+  icon: Icon,
+  action,
+}: {
   colSpan: number;
   message: string;
   icon: React.ElementType;
@@ -128,7 +135,13 @@ function TableBody({
       );
     }
     if (isEmpty) {
-      return <InlineEmptyState colSpan={colSpan} message="Nenhum registro encontrado." icon={Inbox} />;
+      return (
+        <InlineEmptyState
+          colSpan={colSpan}
+          message="Nenhum registro encontrado."
+          icon={Inbox}
+        />
+      );
     }
     return children;
   };
@@ -144,7 +157,9 @@ function TableBody({
 
 function TableRow({ children, className = "" }: TableRowProps) {
   return (
-    <tr className={`block md:table-row border-b last:border-b-0 border-zinc-150 dark:border-zinc-800 p-4 md:p-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors ${className}`}>
+    <tr
+      className={`block md:table-row border-b last:border-b-0 border-zinc-150 dark:border-zinc-800 p-4 md:p-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors ${className}`}
+    >
       {children}
     </tr>
   );
@@ -152,29 +167,52 @@ function TableRow({ children, className = "" }: TableRowProps) {
 
 // ─── Cell ─────────────────────────────────────────────────────────────────────
 
-function TableCell({ children, className = "", alignRight = false, mobileLabel }: TableCellProps) {
+function TableCell({
+  children,
+  className = "",
+  alignRight = false,
+  mobileLabel,
+}: TableCellProps) {
   return (
-    <td className={`block md:table-cell px-4 md:px-6 py-2 md:py-4 text-sm ${alignRight ? "text-left md:text-right" : "text-left"} ${className}`}>
+    <td
+      className={`block md:table-cell px-4 md:px-6 py-2 md:py-4 text-sm ${alignRight ? "text-left md:text-right" : "text-left"} ${className}`}
+    >
       {mobileLabel && (
         <span className="md:hidden font-bold text-zinc-400 mr-2 uppercase text-[10px] tracking-wider inline-block min-w-[120px]">
           {mobileLabel}:
         </span>
       )}
-      <span className={mobileLabel ? "inline-block align-middle" : ""}>{children}</span>
+      <span className={mobileLabel ? "inline-block align-middle" : ""}>
+        {children}
+      </span>
     </td>
   );
 }
 
 // ─── Skeleton helpers ─────────────────────────────────────────────────────────
 
-function SkeletonRows({ widths, count = 5 }: { widths: readonly string[]; count?: number }) {
+function SkeletonRows({
+  widths,
+  count = 5,
+}: {
+  widths: readonly string[];
+  count?: number;
+}) {
   return (
     <>
       {Array.from({ length: count }).map((_, idx) => (
-        <tr key={`sk-${idx}`} className="block md:table-row border-b border-zinc-100 dark:border-zinc-800 p-4 md:p-0">
+        <tr
+          key={`sk-${idx}`}
+          className="block md:table-row border-b border-zinc-100 dark:border-zinc-800 p-4 md:p-0"
+        >
           {widths.map((w, i) => (
-            <td key={i} className="block md:table-cell px-4 md:px-6 py-2 md:py-4">
-              <Skeleton className={`h-4 ${w} ${i === widths.length - 1 ? "md:ml-auto" : ""}`} />
+            <td
+              key={i}
+              className="block md:table-cell px-4 md:px-6 py-2 md:py-4"
+            >
+              <Skeleton
+                className={`h-4 ${w} ${i === widths.length - 1 ? "md:ml-auto" : ""}`}
+              />
             </td>
           ))}
         </tr>
@@ -186,7 +224,15 @@ function SkeletonRows({ widths, count = 5 }: { widths: readonly string[]; count?
 // ─── Footer / Pagination ──────────────────────────────────────────────────────
 
 function TableFooter(props: PaginationProps) {
-  return <Pagination {...props} />;
+  return (
+    <tfoot className="block md:table-footer-group">
+      <tr className="block md:table-row">
+        <td colSpan={99} className="block md:table-cell">
+          <Pagination {...props} />
+        </td>
+      </tr>
+    </tfoot>
+  );
 }
 
 // ─── Composition export ───────────────────────────────────────────────────────

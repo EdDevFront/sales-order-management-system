@@ -76,8 +76,7 @@ export default function OrderDetailPanel({
     { value: "Tarde (13:00 - 18:00)", label: "Tarde (13:00 - 18:00)" },
   ];
 
-  const canSchedule =
-    selectedOrder.status === "PLANEJADA";
+  const canSchedule = selectedOrder.status === "PLANEJADA";
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -218,7 +217,9 @@ export default function OrderDetailPanel({
                         {selectedOrder.deliveryWindow}
                       </p>
                     </div>
-                    {["AGENDADA", "EM_TRANSPORTE"].includes(selectedOrder.status) && (
+                    {["AGENDADA", "EM_TRANSPORTE"].includes(
+                      selectedOrder.status,
+                    ) && (
                       <button
                         type="button"
                         onClick={() => setIsScheduling(true)}
@@ -249,7 +250,7 @@ export default function OrderDetailPanel({
                         </span>
                         <span className="font-semibold">
                           $
-                          {((matchedItem?.price || 0) * it.quantity).toFixed(2)}
+                          R$ {((matchedItem?.price || 0) * it.quantity).toFixed(2)}
                         </span>
                       </div>
                     );

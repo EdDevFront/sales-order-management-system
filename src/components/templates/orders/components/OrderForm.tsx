@@ -79,14 +79,12 @@ export default function OrderForm({ onClose }: OrderFormProps) {
     .filter(Boolean);
 
   const getItemOptions = (currentIndex: number) => {
-    const takenIds = selectedItemIds.filter(
-      (_, idx) => idx !== currentIndex,
-    );
+    const takenIds = selectedItemIds.filter((_, idx) => idx !== currentIndex);
     return allItems
       .filter((i) => !takenIds.includes(i.id))
       .map((i) => ({
         value: i.id,
-        label: `${i.name} - SKU: ${i.sku} ($${i.price.toFixed(2)})`,
+        label: `${i.name} - SKU: ${i.sku} (R$${i.price.toFixed(2)})`,
       }));
   };
 

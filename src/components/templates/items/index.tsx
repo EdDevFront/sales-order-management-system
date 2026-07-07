@@ -81,7 +81,7 @@ export default function Items() {
             <DataTable.Row key={i.id}>
               <DataTable.Cell mobileLabel="Nome" className="font-medium text-zinc-900 dark:text-white">{i.name}</DataTable.Cell>
               <DataTable.Cell mobileLabel="SKU" className="font-mono text-zinc-500 dark:text-zinc-400">{i.sku}</DataTable.Cell>
-              <DataTable.Cell mobileLabel="Preço" alignRight className="font-semibold text-zinc-900 dark:text-white">${i.price.toFixed(2)}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Preço" alignRight className="font-semibold text-zinc-900 dark:text-white">R$ {i.price.toFixed(2)}</DataTable.Cell>
             </DataTable.Row>
           ))}
         </DataTable.Body>

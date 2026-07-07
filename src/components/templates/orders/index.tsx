@@ -3,8 +3,16 @@ import { Button } from "@/components/ui/Button";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { fetchSalesOrders, fetchCustomers, fetchTransportTypes, fetchItems } from "@/infrastructure/repositories/mockRepositories";
-import { updateStatusRequest, updateTransportRequest } from "@/stores/ordersActions";
+import {
+  fetchSalesOrders,
+  fetchCustomers,
+  fetchTransportTypes,
+  fetchItems,
+} from "@/infrastructure/repositories/mockRepositories";
+import {
+  updateStatusRequest,
+  updateTransportRequest,
+} from "@/stores/ordersActions";
 import { SalesOrder, SalesOrderStatus } from "@/types/SalesOrder";
 import OrderForm from "./components/OrderForm";
 import OrderDetailPanel from "./components/OrderDetailPanel";
@@ -12,7 +20,11 @@ import { Plus, Info, Loader2 } from "lucide-react";
 
 import { DataTable } from "@/components/ui/DataTable";
 import { OrderStatusBadge } from "@/components/ui/OrderStatusBadge";
-import { ORDER_COLUMNS, ORDER_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
+import {
+  ORDER_COLUMNS,
+  ORDER_SKELETON_WIDTHS,
+  ITEMS_PER_PAGE,
+} from "./constants";
 
 export default function Orders() {
   const dispatch = useDispatch();
@@ -20,17 +32,53 @@ export default function Orders() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
 
-  const { data: orders = [], isLoading } = useQuery({ queryKey: ["orders"], queryFn: fetchSalesOrders });
-  const { data: customers = [] } = useQuery({ queryKey: ["customers"], queryFn: fetchCustomers });
-  const { data: transports = [] } = useQuery({ queryKey: ["transports"], queryFn: fetchTransportTypes });
-  const { data: items = [] } = useQuery({ queryKey: ["items"], queryFn: fetchItems });
+  const { data: orders = [], isLoading } = useQuery({
+    queryKey: ["orders"],
+    queryFn: fetchSalesOrders,
+  });
+  const { data: customers = [] } = useQuery({
+    queryKey: ["customers"],
+    queryFn: fetchCustomers,
+  });
+  const { data: transports = [] } = useQuery({
+    queryKey: ["transports"],
+    queryFn: fetchTransportTypes,
+  });
+  const { data: items = [] } = useQuery({
+    queryKey: ["items"],
+    queryFn: fetchItems,
+  });
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const totalPages = Math.ceil(orders.length / ITEMS_PER_PAGE);
-  const paginatedOrders = React.useMemo(() =>
-    orders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE),
-    [orders, currentPage]
+  const paginatedOrders = React.useMemo(
+    () =>
+      orders.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE,
+      ),
+    [orders, currentPage],
   );
+
+  // Refetch orders when the form modal closes (data may have changed via saga)
+  const prevFormOpen = React.useRef(isFormOpen);
+  useEffect(() => {
+    if (prevFormOpen.current && !isFormOpen) {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["auditLogs"] });
+    }
+    prevFormOpen.current = isFormOpen;
+  }, [isFormOpen, queryClient]);
+
+  // Refetch when detail panel closes (status/transport/delivery may have changed)
+  const prevSelectedOrder = React.useRef(selectedOrder);
+  useEffect(() => {
+    if (prevSelectedOrder.current && !selectedOrder) {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["auditLogs"] });
+    }
+    prevSelectedOrder.current = selectedOrder;
+  }, [selectedOrder, queryClient]);
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["orders"] });
@@ -41,37 +89,59 @@ export default function Orders() {
     }
   }, [orders, queryClient]);
 
-  const handleStatusChange = React.useCallback((orderId: string, nextStatus: SalesOrderStatus) => {
-    dispatch(updateStatusRequest({ orderId, newStatus: nextStatus }));
-  }, [dispatch]);
+  const handleStatusChange = React.useCallback(
+    (orderId: string, nextStatus: SalesOrderStatus) => {
+      dispatch(updateStatusRequest({ orderId, newStatus: nextStatus }));
+    },
+    [dispatch],
+  );
 
-  const handleTransportChange = React.useCallback((orderId: string, transportTypeId: string) => {
-    dispatch(updateTransportRequest({ orderId, transportTypeId }));
-  }, [dispatch]);
+  const handleTransportChange = React.useCallback(
+    (orderId: string, transportTypeId: string) => {
+      dispatch(updateTransportRequest({ orderId, transportTypeId }));
+    },
+    [dispatch],
+  );
 
-  const getNextStatus = React.useCallback((status: SalesOrderStatus): SalesOrderStatus | null => {
-    if (status === "CRIADA") return "PLANEJADA";
-    if (status === "PLANEJADA") return null;
-    if (status === "AGENDADA") return "EM_TRANSPORTE";
-    if (status === "EM_TRANSPORTE") return "ENTREGUE";
-    return null;
-  }, []);
+  const getNextStatus = React.useCallback(
+    (status: SalesOrderStatus): SalesOrderStatus | null => {
+      if (status === "CRIADA") return "PLANEJADA";
+      if (status === "PLANEJADA") return null;
+      if (status === "AGENDADA") return "EM_TRANSPORTE";
+      if (status === "EM_TRANSPORTE") return "ENTREGUE";
+      return null;
+    },
+    [],
+  );
 
-  const calculateOrderTotal = React.useCallback((order: SalesOrder) => {
-    return order.items.reduce((total, orderItem) => {
-      const item = items.find((i) => i.id === orderItem.itemId);
-      return total + (item?.price || 0) * orderItem.quantity;
-    }, 0);
-  }, [items]);
+  const calculateOrderTotal = React.useCallback(
+    (order: SalesOrder) => {
+      return order.items.reduce((total, orderItem) => {
+        const item = items.find((i) => i.id === orderItem.itemId);
+        return total + (item?.price || 0) * orderItem.quantity;
+      }, 0);
+    },
+    [items],
+  );
 
-  if (isLoading) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-indigo-600" /></div>;
+  if (isLoading)
+    return (
+      <div className="flex h-64 items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-indigo-600" />
+      </div>
+    );
 
   return (
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Pedidos de Venda</h2>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">Monitore e gerencie as transições do ciclo de vida dos pedidos de venda</p>
+          <h2 className="text-2xl font-bold tracking-tight">
+            Pedidos de Venda
+          </h2>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Monitore e gerencie as transições do ciclo de vida dos pedidos de
+            venda
+          </p>
         </div>
         <Button
           onClick={() => setIsFormOpen(true)}
@@ -88,18 +158,41 @@ export default function Orders() {
             isLoading={isLoading}
             isEmpty={!isLoading && orders.length === 0}
             colSpan={ORDER_COLUMNS.length}
-            skeletonRows={<DataTable.SkeletonRows widths={ORDER_SKELETON_WIDTHS} />}
+            skeletonRows={
+              <DataTable.SkeletonRows widths={ORDER_SKELETON_WIDTHS} />
+            }
           >
             {paginatedOrders.map((order: SalesOrder) => {
               const customer = customers.find((c) => c.id === order.customerId);
               return (
                 <DataTable.Row key={order.id}>
-                  <DataTable.Cell mobileLabel="ID Pedido" className="font-mono text-zinc-900 dark:text-white">{order.id}</DataTable.Cell>
-                  <DataTable.Cell mobileLabel="Cliente" className="text-zinc-500 dark:text-zinc-400 font-medium">{customer?.name || order.customerId}</DataTable.Cell>
-                  <DataTable.Cell mobileLabel="Status"><OrderStatusBadge status={order.status} /></DataTable.Cell>
-                  <DataTable.Cell mobileLabel="Total" alignRight className="font-semibold text-zinc-900 dark:text-white">${calculateOrderTotal(order).toFixed(2)}</DataTable.Cell>
+                  <DataTable.Cell
+                    mobileLabel="ID Pedido"
+                    className="font-mono text-zinc-900 dark:text-white"
+                  >
+                    {order.id}
+                  </DataTable.Cell>
+                  <DataTable.Cell
+                    mobileLabel="Cliente"
+                    className="text-zinc-500 dark:text-zinc-400 font-medium"
+                  >
+                    {customer?.name || order.customerId}
+                  </DataTable.Cell>
+                  <DataTable.Cell mobileLabel="Status">
+                    <OrderStatusBadge status={order.status} />
+                  </DataTable.Cell>
+                  <DataTable.Cell
+                    mobileLabel="Total"
+                    alignRight
+                    className="font-semibold text-zinc-900 dark:text-white"
+                  >
+                    R${calculateOrderTotal(order).toFixed(2)}
+                  </DataTable.Cell>
                   <DataTable.Cell mobileLabel="Ações" alignRight>
-                    <Button onClick={() => setSelectedOrder(order)} className="flex items-center gap-1 sm:ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold w-full sm:w-auto justify-center">
+                    <Button
+                      onClick={() => setSelectedOrder(order)}
+                      className="flex items-center gap-1 sm:ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold w-full sm:w-auto justify-center"
+                    >
                       <Info className="h-4 w-4" /> Gerenciar
                     </Button>
                   </DataTable.Cell>
@@ -107,7 +200,13 @@ export default function Orders() {
               );
             })}
           </DataTable.Body>
-          <DataTable.Footer currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} totalItems={orders.length} itemsPerPage={ITEMS_PER_PAGE} />
+          <DataTable.Footer
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={setCurrentPage}
+            totalItems={orders.length}
+            itemsPerPage={ITEMS_PER_PAGE}
+          />
         </DataTable>
 
         {selectedOrder && (

@@ -28,7 +28,7 @@ function logAudit(
   db.auditLogs.unshift(audit);
 }
 
-function* createOrderWorker(action: ReturnType<typeof actions.createOrderRequest>): Generator<any, void, any> {
+export function* createOrderWorker(action: ReturnType<typeof actions.createOrderRequest>): Generator<any, void, any> {
   try {
     const db = loadDatabase();
     const customer = db.customers.find((c: any) => c.id === action.payload.customerId);
@@ -51,7 +51,7 @@ function* createOrderWorker(action: ReturnType<typeof actions.createOrderRequest
   }
 }
 
-function* updateStatusWorker(action: ReturnType<typeof actions.updateStatusRequest>): Generator<any, void, any> {
+export function* updateStatusWorker(action: ReturnType<typeof actions.updateStatusRequest>): Generator<any, void, any> {
   try {
     const db = loadDatabase();
     const orderIndex = db.salesOrders.findIndex((o: any) => o.id === action.payload.orderId);
@@ -71,7 +71,7 @@ function* updateStatusWorker(action: ReturnType<typeof actions.updateStatusReque
   }
 }
 
-function* updateDeliveryWorker(action: ReturnType<typeof actions.updateDeliveryRequest>): Generator<any, void, any> {
+export function* updateDeliveryWorker(action: ReturnType<typeof actions.updateDeliveryRequest>): Generator<any, void, any> {
   try {
     const db = loadDatabase();
     const orderIndex = db.salesOrders.findIndex((o: any) => o.id === action.payload.orderId);
@@ -97,7 +97,7 @@ function* updateDeliveryWorker(action: ReturnType<typeof actions.updateDeliveryR
   }
 }
 
-function* updateTransportWorker(action: ReturnType<typeof actions.updateTransportRequest>): Generator<any, void, any> {
+export function* updateTransportWorker(action: ReturnType<typeof actions.updateTransportRequest>): Generator<any, void, any> {
   try {
     const db = loadDatabase();
     const orderIndex = db.salesOrders.findIndex((o: any) => o.id === action.payload.orderId);

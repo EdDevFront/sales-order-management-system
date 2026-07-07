@@ -60,6 +60,11 @@ src/
 ├── app/               # Next.js routes — page.tsx files only, 
 ├── components/
 │   ├── ui/            # Reusable, generic UI primitives (Button, Input, DataTable, etc.)
+│   │   └── <component>/
+│   │       ├── index.tsx              # Component entry/container
+│   │       ├── types/                 # Component-scoped types
+│   │       └── constants/             # Component-specific constants
+│   │
 │   └── templates/     # Domain/page-level components
 │       └── <page>/
 │           ├── index.tsx              # Entry/container component
@@ -71,7 +76,7 @@ src/
 │           ├── constants/             # Module-level constants (columns, status maps…)
 │           └── utils/                 # Pure helper functions (formatters, variant maps…)
 │
-│   ⚠️  Only create the folders a page actually needs.
+│   ⚠️  Only create the folders a page/component actually needs.
 │       Do NOT create empty folders as boilerplate.
 │
 ├── infrastructure/    # Data access (repositories, API clients)

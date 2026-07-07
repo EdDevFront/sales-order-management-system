@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, Users, Truck, Package, ShoppingCart, History, Menu, X } from "lucide-react";
 
-import Toast from "./Toast";
+import Toast from "../Toast";
 
 interface LayoutProps {
   children: React.ReactNode;

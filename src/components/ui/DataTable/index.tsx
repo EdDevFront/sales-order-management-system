@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { SearchX, Inbox } from "lucide-react";
-import { Skeleton } from "./Skeleton";
-import { Pagination, PaginationProps } from "./Pagination";
+import { Skeleton } from "../Skeleton";
+import { Pagination, PaginationProps } from "../Pagination";
 
 // ─── Sub-component prop types ─────────────────────────────────────────────────
 

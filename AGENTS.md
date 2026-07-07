@@ -1,4 +1,4 @@
-﻿<!-- BEGIN:nextjs-agent-rules -->
+<!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
@@ -56,10 +56,18 @@ src/
 │   ├── ui/            # Reusable, generic UI primitives (Button, Input, DataTable, etc.)
 │   └── templates/     # Domain/page-level components
 │       └── <page>/
-│           ├── index.tsx
-│           ├── hooks/
-│           ├── types/
-│           └── components/   # Sub-components specific to this template
+│           ├── index.tsx              # Entry/container component
+│           ├── components/            # Sub-components specific to this page
+│           ├── hooks/                 # Custom hooks (e.g. useOrderFilters)
+│           ├── types/                 # Page-scoped TypeScript interfaces & enums
+│           ├── context/               # React context (only if deep prop drilling exists)
+│           ├── schemas/               # Zod validation schemas (only if page has forms)
+│           ├── constants/             # Module-level constants (columns, status maps…)
+│           └── utils/                 # Pure helper functions (formatters, variant maps…)
+│
+│   ⚠️  Only create the folders a page actually needs.
+│       Do NOT create empty folders as boilerplate.
+│
 ├── infrastructure/    # Data access (repositories, API clients)
 ├── stores/            # Redux store, slices, sagas, actions
 └── types/             # Global TypeScript type definitions

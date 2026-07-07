@@ -7,12 +7,18 @@ Configurações de itens do inventário de mercadorias.
 - **ItemForm**: Formulário retrátil para detalhes do item (Nome, SKU, Preço).
 - **DataTable**: Lista itens.
 
-## Diagrama de Fluxo
+## Diagrama de Fluxo (Sequência)
 ```mermaid
-graph TD
-    A[Visualização de Itens] --> B[DataTable Lista Itens]
-    B --> C[Clique em Novo Item]
-    C --> D[Abre ItemForm]
-    D --> E[Usuário insere nome, SKU, preço]
-    E --> F[Clique em Criar -> Dispara Mutação -> Invalida query de itens -> Fecha Formulário]
+sequenceDiagram
+    actor Usuario as Usuário
+    participant UI as Itens (UI)
+    participant Repo as React Query (Repository)
+
+    Usuario->>UI: Clica em "Novo Item"
+    UI->>UI: Abre formulário ItemForm
+    Usuario->>UI: Insere nome, SKU e preço do item
+    Usuario->>UI: Clica em "Criar"
+    UI->>Repo: Dispara mutação saveItem(payload)
+    Repo-->>UI: Invalida consulta de itens e atualiza DataTable
+    UI->>UI: Fecha ItemForm
 ```

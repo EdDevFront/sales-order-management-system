@@ -7,12 +7,18 @@ Configurações de modos de transporte logístico.
 - **TransportForm**: Formulário retrátil para detalhes (Nome, Descrição).
 - **DataTable**: Lista modos de transporte com ação de Editar.
 
-## Diagrama de Fluxo
+## Diagrama de Fluxo (Sequência)
 ```mermaid
-graph TD
-    A[Visualização de Transportes] --> B[DataTable Lista Modos de Transporte]
-    B --> C[Clique em Novo Tipo de Transporte / Editar]
-    C --> D[Abre TransportForm]
-    D --> E[Usuário insere nome e descrição]
-    E --> F[Clique em Salvar -> Dispara Mutação -> Invalida query de transportes/clientes -> Fecha Formulário]
+sequenceDiagram
+    actor Usuario as Usuário
+    participant UI as Transportes (UI)
+    participant Repo as React Query (Repository)
+
+    Usuario->>UI: Clica em "Novo Tipo de Transporte" ou "Editar"
+    UI->>UI: Abre formulário TransportForm
+    Usuario->>UI: Insere nome e descrição do transporte
+    Usuario->>UI: Clica em "Salvar"
+    UI->>Repo: Dispara mutação saveTransportType(payload)
+    Repo-->>UI: Invalida consultas de transportes/clientes e atualiza DataTable
+    UI->>UI: Fecha TransportForm
 ```

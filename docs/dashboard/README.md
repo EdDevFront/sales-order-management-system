@@ -8,21 +8,26 @@ Painel de monitoramento operacional contendo métricas, controles de filtro ativ
 - **DataTable**: Lista pedidos filtrados pela seleção, mostrando ID do Pedido, Cliente, Tipo de Transporte, Detalhes de Entrega e Status.
 - **Rodapé de Paginação**: Controlador de paginação padrão com 8 itens por página.
 
-## Diagrama de Fluxo
+## Diagrama de Fluxo (Sequência)
 ```mermaid
-graph TD
-    A[Usuário acessa o Dashboard] --> B[React Query carrega Pedidos, Clientes, Transportes]
-    B --> C{Está carregando?}
-    C -- Sim --> D[Renderiza Cards de Skeleton & Linhas de Skeleton]
-    C -- Não --> E[Renderiza Métricas & Controles de Filtro]
-    E --> F[Usuário altera os Filtros]
-    F --> G[Critérios de filtro atualizados na Store do Redux]
-    G --> H[Deriva filteredOrders via useMemo]
-    H --> I[Divide filteredOrders em paginatedOrders]
-    I --> J{Existem correspondências?}
-    J -- Não e filtros ativos --> K[Renderiza Estado Filtrado-Vazio com botão de Limpar Filtros]
-    J -- Não e sem filtros ativos --> L[Renderiza Estado Vazio]
-    J -- Sim --> M[Renderiza linhas da DataTable + controles de paginação]
-    K -- Clique em Limpar --> N[Reseta Filtros no Redux & currentPage = 1]
-    N --> G
+sequenceDiagram
+    actor Usuario as Usuário
+    participant UI as Dashboard (UI)
+    participant Store as Redux (Store)
+    participant Repo as React Query (Repository)
+
+    Usuario->>UI: Acessa a página de Dashboard
+    activate UI
+    UI->>Repo: Consulta Pedidos, Clientes e Transportes
+    Repo-->>UI: Retorna dados cadastrados
+    UI->>UI: Calcula métricas e renderiza componentes
+    deactivate UI
+
+    Usuario->>UI: Altera critério de Filtro
+    activate UI
+    UI->>Store: Despacha setFilter(key, value)
+    Store-->>UI: Retorna novo estado de filtros
+    UI->>UI: Filtra e divide a lista em useMemo
+    UI->>Usuario: Atualiza DataTable (Linhas ou Estado Vazio)
+    deactivate UI
 ```

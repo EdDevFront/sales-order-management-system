@@ -1,4 +1,4 @@
-<!-- BEGIN:nextjs-agent-rules -->
+﻿<!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
@@ -8,16 +8,69 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 All coding agents working on this project must strictly adhere to the following rules:
 
-1. **Coding Style & Limits**:
-   - Keep all functions under **20 lines** of code.
-   - Keep all components under **200 lines** of code. If a component grows larger, break it down into subcomponents.
-2. **Variable & Function Naming**:
-   - Variables representing checks, conditions, or business rules must have highly descriptive and specific names (e.g., `isLegalPerson` or `isTransportTypeAuthorizedForCustomer` instead of generic names).
-3. **Architecture Principles**:
-   - Strictly follow **SOLID** design principles.
-   - Adhere to **Domain-Driven Design (DDD)** practices. Segregate core business logic (Domain), data layers (Infrastructure), state workflows (Application), and components (Presentation).
-4. **Language & Commits**:
-   - All code, comments, variables, and documentation must be written in **English**.
-   - Git commits must strictly follow **Conventional Commits** in English.
-5. **Senior Behavioral Role**:
-   - Always act and write code like a Senior Frontend Developer, prioritizing performance optimization, robust state management, clean component segregation, and clear technical decisions.
+## 1. Coding Style & Limits
+- Keep all functions under **20 lines** of code.
+- Keep all components under **200 lines** of code. If a component grows larger, break it down into subcomponents.
+
+## 2. Variable & Function Naming
+- Variables representing checks, conditions, or business rules must have highly descriptive and specific names (e.g., `isLegalPerson` or `isTransportTypeAuthorizedForCustomer` instead of generic names).
+
+## 3. Architecture Principles
+- Strictly follow **SOLID** design principles.
+- Adhere to **Domain-Driven Design (DDD)** practices. Segregate core business logic (Domain), data layers (Infrastructure), state workflows (Application), and components (Presentation).
+- Use **Composition Patterns** for shared UI: prefer compound/composition components (e.g., `DataTable`, `DataTable.Head`, `DataTable.Body`) over copy-pasting HTML structures across templates.
+
+## 4. Language & Commits
+- All code, comments, variables, and documentation must be written in **English**.
+- Git commits must strictly follow **Conventional Commits** in English.
+
+## 5. Senior Behavioral Role
+- Always act and write code like a Senior Frontend Developer, prioritizing performance optimization, robust state management, clean component segregation, and clear technical decisions.
+
+## 6. UI Component Rules
+- **All HTML native inputs** (`<input>`, `<select>`, `<textarea>`) must be replaced by custom-styled components from `src/components/ui/`.
+- Use **Shadcn-style** UI primitives (Button, Input, Select, DatePicker) throughout — never raw HTML inputs in templates.
+- Use **`DataTable`** composition component for all tabular data: `<DataTable>`, `<DataTable.Head>`, `<DataTable.Body>`, `<DataTable.Row>`, `<DataTable.Cell>`, `<DataTable.Footer>`.
+- **Skeletons** must only be used where async data fetches happen. They must reflect the visual structure of the final loaded state (matching column count and approximate widths).
+- **Empty states** must always be present:
+  - If there is no data at all, show an inbox/empty icon with a descriptive message.
+  - If filters are active but yield no results, show a "No results match your filters" message with a **Clear filters** button.
+- **Clear Filters button** must only appear on pages/sections that actually have active filter controls (e.g., Dashboard). Never show it on unfiltered pages.
+
+## 7. Performance & Memoization
+- Wrap expensive derivations (e.g., filtered/sorted/paginated lists) in `React.useMemo`.
+- Wrap event handlers passed as props in `React.useCallback`.
+- Extract module-level constants (e.g., `ITEMS_PER_PAGE = 8`, column definitions) to avoid re-creating arrays on every render.
+
+## 8. Pagination
+- Every page with a table/list must implement pagination using the shared `DataTable.Footer` (backed by `Pagination` component).
+- Default page size: **8 items per page**.
+- `paginatedItems` must be derived via `useMemo`.
+- Reset `currentPage` to `1` whenever filters change.
+
+## 9. File Structure
+```
+src/
+├── app/               # Next.js routes — page.tsx files only, always "use client"
+├── components/
+│   ├── ui/            # Reusable, generic UI primitives (Button, Input, DataTable, etc.)
+│   └── templates/     # Domain/page-level components
+│       └── <page>/
+│           ├── index.tsx
+│           ├── hooks/
+│           ├── types/
+│           └── components/   # Sub-components specific to this template
+├── infrastructure/    # Data access (repositories, API clients)
+├── stores/            # Redux store, slices, sagas, actions
+└── types/             # Global TypeScript type definitions
+```
+
+## 10. Commits Convention
+Always use [Conventional Commits](https://www.conventionalcommits.org/):
+- `feat:` — new feature
+- `fix:` — bug fix
+- `refactor:` — code change that neither fixes a bug nor adds a feature
+- `chore:` — dependency updates, config, tooling
+- `docs:` — documentation only changes
+- `style:` — formatting changes
+- `perf:` — performance improvements

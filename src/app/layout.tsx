@@ -17,6 +17,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Sales Order Management System (OVGS)",
   description: "Enterprise Sales Order Management and Logistics Tracker",
+  icons: { icon: "/favicon.svg" },
 };
 
 export default function RootLayout({

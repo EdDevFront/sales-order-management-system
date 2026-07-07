@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import React, { useState } from "react";
@@ -9,6 +9,11 @@ import * as z from "zod";
 import { fetchItems, saveItem } from "@/infrastructure/repositories/mockRepositories";
 import { Item } from "@/types/Item";
 import { Plus, Loader2 } from "lucide-react";
+import { DataTable } from "@/components/ui/DataTable";
+
+const ITEM_COLUMNS = ["Name", "SKU", "Price"];
+const ITEM_SKELETON_WIDTHS = ["w-32", "w-24", "w-16"];
+const ITEMS_PER_PAGE = 8;
 
 const itemSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -19,16 +24,19 @@ const itemSchema = z.object({
 export default function Items() {
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [currentPage, setCurrentPage] = React.useState(1);
 
   const { data: items = [], isLoading } = useQuery({ queryKey: ["items"], queryFn: fetchItems });
 
+  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+  const paginatedItems = React.useMemo(() =>
+    items.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE),
+    [items, currentPage]
+  );
+
   const mutation = useMutation({
     mutationFn: saveItem,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      setIsFormOpen(false);
-      reset();
-    },
+    onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["items"] }); setIsFormOpen(false); reset(); },
   });
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<z.infer<typeof itemSchema>>({
@@ -40,8 +48,6 @@ export default function Items() {
     const id = `item-${Math.random().toString(36).substring(2, 9)}`;
     mutation.mutate({ ...data, id });
   };
-
-  if (isLoading) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-indigo-600" /></div>;
 
   return (
     <div className="space-y-6">
@@ -79,31 +85,31 @@ export default function Items() {
           </div>
           <div className="flex justify-end gap-3 pt-2">
             <Button type="button" onClick={() => setIsFormOpen(false)} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancel</Button>
-            <Button type="submit" disabled={mutation.isPending} className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">{mutation.isPending ? "Creating..." : "Create Item"}</Button>
+            <Button type="submit" disabled={mutation.isPending} className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+              {mutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Create Item"}
+            </Button>
           </div>
         </form>
       )}
 
-      <div className="rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-        <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
-          <thead className="bg-zinc-50 dark:bg-zinc-800/50">
-            <tr>
-              <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">Name</th>
-              <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">SKU</th>
-              <th className="px-6 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500">Price</th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
-            {items.map((i: Item) => (
-              <tr key={i.id}>
-                <td className="px-6 py-4 text-sm font-medium text-zinc-900 dark:text-white">{i.name}</td>
-                <td className="px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400 font-mono">{i.sku}</td>
-                <td className="px-6 py-4 text-right text-sm font-semibold text-zinc-900 dark:text-white">${i.price.toFixed(2)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataTable>
+        <DataTable.Head columns={ITEM_COLUMNS} />
+        <DataTable.Body
+          isLoading={isLoading}
+          isEmpty={!isLoading && items.length === 0}
+          colSpan={ITEM_COLUMNS.length}
+          skeletonRows={<DataTable.SkeletonRows widths={ITEM_SKELETON_WIDTHS} />}
+        >
+          {paginatedItems.map((i: Item) => (
+            <DataTable.Row key={i.id}>
+              <DataTable.Cell className="font-medium text-zinc-900 dark:text-white">{i.name}</DataTable.Cell>
+              <DataTable.Cell className="font-mono text-zinc-500 dark:text-zinc-400">{i.sku}</DataTable.Cell>
+              <DataTable.Cell alignRight className="font-semibold text-zinc-900 dark:text-white">${i.price.toFixed(2)}</DataTable.Cell>
+            </DataTable.Row>
+          ))}
+        </DataTable.Body>
+        <DataTable.Footer currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} totalItems={items.length} itemsPerPage={ITEMS_PER_PAGE} />
+      </DataTable>
     </div>
   );
 }

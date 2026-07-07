@@ -1,0 +1,138 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e4]:
+        - generic [ref=e5]:
+          - img [ref=e7]
+          - generic [ref=e11]:
+            - heading "OVGS Portal" [level=1] [ref=e12]
+            - paragraph [ref=e13]: Sales Order Management & Logistics
+        - navigation [ref=e14]:
+          - link "Dashboard" [ref=e15] [cursor=pointer]:
+            - /url: /dashboard
+            - img [ref=e16]
+            - text: Dashboard
+          - link "Sales Orders" [ref=e21] [cursor=pointer]:
+            - /url: /orders
+            - img [ref=e22]
+            - text: Sales Orders
+          - link "Customers" [ref=e26] [cursor=pointer]:
+            - /url: /customers
+            - img [ref=e27]
+            - text: Customers
+          - link "Transport Types" [ref=e32] [cursor=pointer]:
+            - /url: /transports
+            - img [ref=e33]
+            - text: Transport Types
+          - link "Items" [ref=e38] [cursor=pointer]:
+            - /url: /items
+            - img [ref=e39]
+            - text: Items
+          - link "Audits" [ref=e43] [cursor=pointer]:
+            - /url: /audit
+            - img [ref=e44]
+            - text: Audits
+    - main [ref=e48]:
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - heading "Operational Monitoring Dashboard" [level=2] [ref=e51]
+          - paragraph [ref=e52]: Real-time status overview of active sales orders and logistics delivery chains
+        - generic [ref=e53]:
+          - generic [ref=e54]:
+            - generic [ref=e55]: Total Sales Orders
+            - img [ref=e57]
+          - generic [ref=e59]:
+            - generic [ref=e60]: Needs Scheduling
+            - img [ref=e62]
+          - generic [ref=e65]:
+            - generic [ref=e66]: In Transit
+            - img [ref=e68]
+          - generic [ref=e70]:
+            - generic [ref=e71]: Delivered
+            - img [ref=e73]
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - img [ref=e78]
+            - heading "Query Filter Controls" [level=3] [ref=e80]
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - text: Status
+              - generic [ref=e84]:
+                - combobox [ref=e85]:
+                  - option "Select..."
+                  - option "All Statuses" [selected]
+                  - option "CRIADA (Created)"
+                  - option "PLANEJADA (Planned)"
+                  - option "AGENDADA (Scheduled)"
+                  - option "EM_TRANSPORTE (In Transit)"
+                  - option "ENTREGUE (Delivered)"
+                - button "All Statuses" [ref=e86]:
+                  - generic [ref=e87]: All Statuses
+                  - img [ref=e88]
+            - generic [ref=e90]:
+              - text: Client
+              - generic [ref=e92]:
+                - combobox [ref=e93]:
+                  - option "Select..."
+                  - option "All Clients" [selected]
+                - button "All Clients" [ref=e94]:
+                  - generic [ref=e95]: All Clients
+                  - img [ref=e96]
+            - generic [ref=e98]:
+              - text: Transport Mode
+              - generic [ref=e100]:
+                - combobox [ref=e101]:
+                  - option "Select..."
+                  - option "All Transports" [selected]
+                - button "All Transports" [ref=e102]:
+                  - generic [ref=e103]: All Transports
+                  - img [ref=e104]
+            - generic [ref=e106]:
+              - text: Creation Date
+              - generic [ref=e108]:
+                - textbox [ref=e109]
+                - button "Pick a date" [ref=e110]:
+                  - generic [ref=e111]: Pick a date
+                  - img [ref=e112]
+        - table [ref=e115]:
+          - rowgroup [ref=e116]:
+            - row "Order ID Client Transport Delivery details Status" [ref=e117]:
+              - columnheader "Order ID" [ref=e118]
+              - columnheader "Client" [ref=e119]
+              - columnheader "Transport" [ref=e120]
+              - columnheader "Delivery details" [ref=e121]
+              - columnheader "Status" [ref=e122]
+          - rowgroup [ref=e123]:
+            - row [ref=e124]:
+              - cell [ref=e125]
+              - cell [ref=e127]
+              - cell [ref=e129]
+              - cell [ref=e131]
+              - cell [ref=e133]
+            - row [ref=e135]:
+              - cell [ref=e136]
+              - cell [ref=e138]
+              - cell [ref=e140]
+              - cell [ref=e142]
+              - cell [ref=e144]
+            - row [ref=e146]:
+              - cell [ref=e147]
+              - cell [ref=e149]
+              - cell [ref=e151]
+              - cell [ref=e153]
+              - cell [ref=e155]
+            - row [ref=e157]:
+              - cell [ref=e158]
+              - cell [ref=e160]
+              - cell [ref=e162]
+              - cell [ref=e164]
+              - cell [ref=e166]
+            - row [ref=e168]:
+              - cell [ref=e169]
+              - cell [ref=e171]
+              - cell [ref=e173]
+              - cell [ref=e175]
+              - cell [ref=e177]
+    - contentinfo [ref=e179]: © 2026 OVGS. All rights reserved. Senior Frontend Challenge.
+  - button "Open Next.js Dev Tools" [ref=e185] [cursor=pointer]:
+    - img [ref=e186]

@@ -11,6 +11,13 @@ import OrderForm from "./components/OrderForm";
 import SchedulingModal from "./components/SchedulingModal";
 import { Plus, Calendar, ArrowRight, Info, Loader2 } from "lucide-react";
 
+import { DataTable } from "@/components/ui/DataTable";
+import { OrderStatusBadge } from "@/components/ui/OrderStatusBadge";
+
+const ORDER_COLUMNS = ["Order ID", "Customer", "Status", "Total", "Details"];
+const ORDER_SKELETON_WIDTHS = ["w-24", "w-32", "w-20", "w-16", "w-12"];
+const ITEMS_PER_PAGE = 8;
+
 export default function Orders() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
@@ -22,6 +29,13 @@ export default function Orders() {
   const { data: customers = [] } = useQuery({ queryKey: ["customers"], queryFn: fetchCustomers });
   const { data: transports = [] } = useQuery({ queryKey: ["transports"], queryFn: fetchTransportTypes });
   const { data: items = [] } = useQuery({ queryKey: ["items"], queryFn: fetchItems });
+
+  const [currentPage, setCurrentPage] = React.useState(1);
+  const totalPages = Math.ceil(orders.length / ITEMS_PER_PAGE);
+  const paginatedOrders = React.useMemo(() =>
+    orders.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE),
+    [orders, currentPage]
+  );
 
   useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ["orders"] });
@@ -72,46 +86,34 @@ export default function Orders() {
         </Button>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden">
-          <table className="min-w-full divide-y divide-zinc-200 dark:divide-zinc-800">
-            <thead className="bg-zinc-50 dark:bg-zinc-800/50">
-              <tr>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">Order ID</th>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">Customer</th>
-                <th className="px-6 py-3.5 text-left text-xs font-semibold uppercase tracking-wider text-zinc-500">Status</th>
-                <th className="px-6 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500">Total</th>
-                <th className="px-6 py-3.5 text-right text-xs font-semibold uppercase tracking-wider text-zinc-500">Details</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
-              {orders.map((order: SalesOrder) => {
-                const customer = customers.find((c) => c.id === order.customerId);
-                return (
-                  <tr key={order.id} className="hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30">
-                    <td className="px-6 py-4 text-sm font-mono text-zinc-900 dark:text-white">{order.id}</td>
-                    <td className="px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400 font-medium">{customer?.name || order.customerId}</td>
-                    <td className="px-6 py-4 text-sm text-zinc-500">
-                      <span className={`rounded-full px-2.5 py-1 text-xs font-semibold border ${
-                        order.status === "CRIADA" ? "bg-zinc-100 text-zinc-700 border-zinc-200 dark:bg-zinc-800" :
-                        order.status === "PLANEJADA" ? "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950/20" :
-                        order.status === "AGENDADA" ? "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/20" :
-                        order.status === "EM_TRANSPORTE" ? "bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/20" :
-                        "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/20"
-                      }`}>{order.status}</span>
-                    </td>
-                    <td className="px-6 py-4 text-right text-sm font-semibold text-zinc-900 dark:text-white">${calculateOrderTotal(order).toFixed(2)}</td>
-                    <td className="px-6 py-4 text-right text-sm">
-                      <Button onClick={() => setSelectedOrder(order)} className="flex items-center gap-1 ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold">
-                        <Info className="h-4 w-4" /> Manage
-                      </Button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+      <div className={`grid gap-6 ${selectedOrder ? "lg:grid-cols-3" : "grid-cols-1"}`}>
+        <DataTable className={selectedOrder ? "lg:col-span-2" : ""}>
+          <DataTable.Head columns={ORDER_COLUMNS} />
+          <DataTable.Body
+            isLoading={isLoading}
+            isEmpty={!isLoading && orders.length === 0}
+            colSpan={ORDER_COLUMNS.length}
+            skeletonRows={<DataTable.SkeletonRows widths={ORDER_SKELETON_WIDTHS} />}
+          >
+            {paginatedOrders.map((order: SalesOrder) => {
+              const customer = customers.find((c) => c.id === order.customerId);
+              return (
+                <DataTable.Row key={order.id}>
+                  <DataTable.Cell className="font-mono text-zinc-900 dark:text-white">{order.id}</DataTable.Cell>
+                  <DataTable.Cell className="text-zinc-500 dark:text-zinc-400 font-medium">{customer?.name || order.customerId}</DataTable.Cell>
+                  <DataTable.Cell><OrderStatusBadge status={order.status} /></DataTable.Cell>
+                  <DataTable.Cell alignRight className="font-semibold text-zinc-900 dark:text-white">${calculateOrderTotal(order).toFixed(2)}</DataTable.Cell>
+                  <DataTable.Cell alignRight>
+                    <Button onClick={() => setSelectedOrder(order)} className="flex items-center gap-1 ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold">
+                      <Info className="h-4 w-4" /> Manage
+                    </Button>
+                  </DataTable.Cell>
+                </DataTable.Row>
+              );
+            })}
+          </DataTable.Body>
+          <DataTable.Footer currentPage={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} totalItems={orders.length} itemsPerPage={ITEMS_PER_PAGE} />
+        </DataTable>
 
         {selectedOrder && (
           <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">

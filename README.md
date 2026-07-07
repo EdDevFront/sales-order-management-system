@@ -1,36 +1,71 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sales Order Management System (OVGS) - Frontend Portal
 
-## Getting Started
+This is the frontend implementation of the **Sales Order Management System (OVGS)**, designed as a Senior Frontend Developer technical challenge.
 
-First, run the development server:
+The project is implemented in **English** using modern React/Next.js practices, prioritizing **Clean Code**, **SOLID**, **Domain-Driven Design (DDD)**, and strict modularization constraints (functions $\le$ 20 lines, components $\le$ 200 lines).
 
+---
+
+## 🚀 Execution Instructions
+
+### Local Development Server
+To launch the hot-reloading development server locally:
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Running Test Suites
+To run unit and integration tests (Jest + React Testing Library):
+```bash
+npm run test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Production Build
+To test the production build compilation and static optimization output:
+```bash
+npm run build
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🛠️ Technologies Used
+- **Framework**: Next.js 16 (App Router, Client-side view providers)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **Global State / Workflows**: Redux Toolkit & Redux Saga
+- **Server Caching**: React Query (TanStack Query)
+- **Forms**: React Hook Form with Zod schema validation
+- **Icons**: Lucide React
+- **Testing**: Jest & React Testing Library (ts-jest)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🏛️ Architectural Decisions & Domain Modeling (DDD)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The project structure is organized following **DDD** and **Clean Architecture** patterns:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1. **Domain Layer** (`src/domain`):
+   - Pure business rules and entities (`Customer`, `SalesOrder`, `Item`, `TransportType`, `AuditLog`).
+   - Transition rules of order status workflow (`isValidStatusTransition`) and customer transport type authorization rules (`isTransportTypeAuthorizedForCustomer`).
+2. **Infrastructure Layer** (`src/infrastructure`):
+   - Simulated REST API database in-memory utilizing `localStorage` persistence (`mockDatabase.ts`) so page reloads do not wipe data.
+   - Delay-mocked repository functions (`mockRepositories.ts`) to emulate server network requests.
+3. **Application Layer** (`src/application`):
+   - Redux store slices for UI active filters/tabs and transaction banners.
+   - **Redux Saga middleware** coordinates transactional multi-step operations (e.g. updating order state and appending audit log details atomically).
+4. **Presentation Layer** (`src/presentation`):
+   - React components and custom styling. All components adhere to the `< 200 lines` rule, splitting functions into helper files when required.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## ⚙️ Persistence & Audit Log Strategy
+- **Persistence**: Emulated using a `localStorage` database sync mechanism.
+- **Audit Logs**: Any modification (creation, status update, scheduling change, transport mode change) is intercepted by **Redux Saga** which compiles the previous/next state snapshots, generates an audit entry, and saves it. The portal includes a detail panel to inspect raw payload changes.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 📈 Scalability, Performance & Trade-offs
+- **State Separation**: We separated UI state (Redux) from cached backend data (React Query). React Query avoids over-fetching through automatic cache management, while Redux Saga manages asynchronous workflows.
+- **Micro-Animations**: Uses hover transforms, active tab indicator transitions, and bouncing toast messages.
+- **Trade-offs**: LocalStorage is used for fast prototyping, but in a real-world system, it would be replaced by an actual REST client. Domain validation is executed client-side, but is designed to match backend constraints.

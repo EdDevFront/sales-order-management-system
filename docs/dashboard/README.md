@@ -8,26 +8,33 @@ Painel de monitoramento operacional contendo métricas, controles de filtro ativ
 - **DataTable**: Lista pedidos filtrados pela seleção, mostrando ID do Pedido, Cliente, Tipo de Transporte, Detalhes de Entrega e Status.
 - **Rodapé de Paginação**: Controlador de paginação padrão com 8 itens por página.
 
-## Diagrama de Fluxo (Sequência)
+## Diagramas de Sequência
+
+### 👥 Fluxo do Usuário (Não Técnico)
 ```mermaid
 sequenceDiagram
     actor Usuario as Usuário
-    participant UI as Dashboard (UI)
-    participant Store as Redux (Store)
-    participant Repo as React Query (Repository)
+    participant Tela as Tela de Dashboard
 
-    Usuario->>UI: Acessa a página de Dashboard
-    activate UI
-    UI->>Repo: Consulta Pedidos, Clientes e Transportes
-    Repo-->>UI: Retorna dados cadastrados
-    UI->>UI: Calcula métricas e renderiza componentes
-    deactivate UI
+    Usuario->>Tela: Entra no Dashboard
+    Tela-->>Usuario: Mostra resumo de métricas e filtros
+    Usuario->>Tela: Escolhe um filtro (ex: Cliente)
+    Tela-->>Usuario: Atualiza a tabela com pedidos do cliente
+    Usuario->>Tela: Clica em "Limpar Filtros"
+    Tela-->>Usuario: Restaura todos os pedidos na tabela
+```
 
-    Usuario->>UI: Altera critério de Filtro
-    activate UI
-    UI->>Store: Despacha setFilter(key, value)
-    Store-->>UI: Retorna novo estado de filtros
-    UI->>UI: Filtra e divide a lista em useMemo
-    UI->>Usuario: Atualiza DataTable (Linhas ou Estado Vazio)
-    deactivate UI
+### ⚙️ Arquitetura e Fluxo Técnico
+```mermaid
+sequenceDiagram
+    participant UI as Dashboard Component
+    participant Store as Redux Store (uiSlice)
+    participant Cache as React Query (Orders Cache)
+
+    UI->>Cache: Executa useQuery("orders")
+    Cache-->>UI: Retorna lista de SalesOrder[]
+    UI->>Store: Despacha setFilter({key, value})
+    Store-->>UI: Retorna novos critérios de filtros
+    UI->>UI: Executa useMemo para filtrar e paginar pedidos
+    UI->>UI: Renderiza DataTable com subcomponentes
 ```

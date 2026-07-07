@@ -6,19 +6,29 @@ Visualizador de registros da trilha de auditoria do sistema.
 - **DataTable**: Lista logs, exibindo Data e Hora, Tipo de Ação, Entidade Afetada, ID e ação de Inspeção de Detalhes.
 - **Ação de Inspeção**: Abre uma linha expansível abaixo do registro, renderizando os payloads JSON brutos do `previousState` (estado anterior) e `nextState` (próximo estado) lado a lado.
 
-## Diagrama de Fluxo (Sequência)
+## Diagramas de Sequência
+
+### 👥 Fluxo do Usuário (Não Técnico)
 ```mermaid
 sequenceDiagram
     actor Usuario as Usuário
-    participant UI as Auditoria (UI)
+    participant Tela as Tela de Auditoria
 
-    Usuario->>UI: Clica em "Inspecionar" no registro do log
-    activate UI
-    UI->>UI: Analisa previousState e nextState JSONs
-    UI->>UI: Abre painel expansível abaixo da linha
-    UI->>Usuario: Exibe JSONs lado a lado de forma formatada
-    deactivate UI
+    Usuario->>Tela: Clica em "Inspecionar" no log
+    Tela-->>Usuario: Abre painel mostrando dados antigos e novos lado a lado
+    Usuario->>Tela: Clica em "Ocultar"
+    Tela-->>Usuario: Fecha o painel de detalhes do log
+```
 
-    Usuario->>UI: Clica em "Ocultar"
-    UI->>UI: Fecha o painel expansível da linha
+### ⚙️ Arquitetura e Fluxo Técnico
+```mermaid
+sequenceDiagram
+    participant UI as AuditLogs Component
+    participant Cache as fetchAuditLogs Query
+
+    UI->>Cache: useQuery("auditLogs")
+    Cache-->>UI: Retorna AuditLog[]
+    UI->>UI: setExpandedLogId(logId)
+    UI->>UI: Executa JSON.parse(previousState / nextState)
+    UI->>UI: Renderiza elementos pre formatados com Tailwind side-by-side
 ```

@@ -7,18 +7,30 @@ Gerenciamento de perfis e autorizações de logística.
 - **CustomerForm**: Formulário retrátil para dados do cliente (Nome, Tipo de Documento, Número do Documento e tags multi-seleção de Transportes Autorizados).
 - **DataTable**: Lista clientes com detalhes e ação de Editar.
 
-## Diagrama de Fluxo (Sequência)
+## Diagramas de Sequência
+
+### 👥 Fluxo do Usuário (Não Técnico)
 ```mermaid
 sequenceDiagram
     actor Usuario as Usuário
-    participant UI as Clientes (UI)
-    participant Repo as React Query (Repository)
+    participant Tela as Tela de Clientes
 
-    Usuario->>UI: Clica em "Novo Cliente" ou "Editar"
-    UI->>UI: Abre formulário CustomerForm
-    Usuario->>UI: Insere dados e seleciona transportes autorizados
-    Usuario->>UI: Clica em "Salvar"
-    UI->>Repo: Dispara mutação saveCustomer(payload)
-    Repo-->>UI: Invalida consulta de clientes e atualiza DataTable
-    UI->>UI: Fecha CustomerForm
+    Usuario->>Tela: Clica em "Novo Cliente" ou "Editar"
+    Tela-->>Usuario: Exibe formulário do cliente
+    Usuario->>Tela: Preenche dados e badges de transporte
+    Usuario->>Tela: Clica em "Salvar"
+    Tela-->>Usuario: Fecha formulário e exibe cliente atualizado na tabela
+```
+
+### ⚙️ Arquitetura e Fluxo Técnico
+```mermaid
+sequenceDiagram
+    participant UI as Customers Component
+    participant Form as CustomerForm Component
+    participant Repo as saveCustomer Mutation
+
+    UI->>Form: Abre passando editingCustomer (defaultValues)
+    Form->>Repo: mutate(CustomerFormData)
+    Repo->>UI: invalidateQueries("customers")
+    UI->>UI: Atualiza DataTable com novos dados do cache
 ```

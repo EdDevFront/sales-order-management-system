@@ -8,31 +8,37 @@ Gerenciamento de ciclo de vida para Pedidos de Venda, operações de agendamento
 - **OrderDetailPanel**: Painel lateral que aparece quando um pedido é selecionado, exibindo dados do cliente, seleção de tipo de transporte (para estados mutáveis), detalhamento de itens e controles de transição de status.
 - **SchedulingModal**: Modal para especificar a data de entrega e períodos (manhã/tarde/noite) para pedidos planejados.
 
-## Diagrama de Fluxo (Sequência)
+## Diagramas de Sequência
+
+### 👥 Fluxo do Usuário (Não Técnico)
 ```mermaid
 sequenceDiagram
     actor Usuario as Usuário
-    participant UI as Pedidos (UI)
-    participant Store as Redux (Store / Actions)
-    participant Repo as React Query (Cache)
+    participant Tela as Tela de Pedidos
 
-    Usuario->>UI: Clica em "Novo Pedido"
-    UI->>UI: Abre modal OrderForm
-    Usuario->>UI: Preenche dados e clica em Salvar
-    UI->>Store: Despacha createOrderRequest(payload)
-    Store->>Repo: Atualiza dados e invalida cache
-    Repo-->>UI: Atualiza lista da DataTable
+    Usuario->>Tela: Clica em "Novo Pedido"
+    Tela-->>Usuario: Exibe formulário do pedido
+    Usuario->>Tela: Preenche dados e clica em Salvar
+    Tela-->>Usuario: Fecha formulário e exibe pedido na tabela
+    Usuario->>Tela: Seleciona pedido e clica em Inspecionar
+    Tela-->>Usuario: Exibe detalhes do pedido no painel lateral
+    Usuario->>Tela: Clica em "Transicionar Status" ou "Agendar"
+    Tela-->>Usuario: Atualiza status/entrega no painel e na tabela
+```
 
-    Usuario->>UI: Clica em "Inspecionar" na linha
-    UI->>UI: Renderiza OrderDetailPanel lateral
+### ⚙️ Arquitetura e Fluxo Técnico
+```mermaid
+sequenceDiagram
+    participant UI as Orders Component
+    participant Panel as OrderDetailPanel
+    participant Modal as SchedulingModal
+    participant Store as Redux (Sagas / Actions)
+    participant Cache as React Query Cache
 
-    Usuario->>UI: Clica em Transicionar Status
-    UI->>Store: Despacha updateStatusRequest(newStatus)
-    Store->>Repo: Atualiza status do pedido
-
-    Usuario->>UI: Clica em Agendar / Reagendar
-    UI->>UI: Abre modal SchedulingModal
-    Usuario->>UI: Informa Data/Janela e clica em Agendar
-    UI->>Store: Despacha updateStatusRequest com dados de entrega
-    Store->>Repo: Atualiza informações de entrega do pedido
+    UI->>Store: dispatch(createOrderRequest(data))
+    Store->>Cache: Grava novo pedido e invalida consultas
+    UI->>Panel: Abre selecionando order
+    Panel->>Store: dispatch(updateStatusRequest(newStatus))
+    Panel->>Modal: Abre para agendamento
+    Modal->>Store: dispatch(updateStatusRequest(status + data/janela))
 ```

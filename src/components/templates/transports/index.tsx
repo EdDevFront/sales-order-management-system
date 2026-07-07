@@ -1,5 +1,6 @@
 "use client";
-
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
@@ -55,12 +56,12 @@ export default function Transports() {
           <h2 className="text-2xl font-bold tracking-tight">Transport Types</h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">Configure logistics transport modes</p>
         </div>
-        <button
+        <Button
           onClick={() => { reset({ name: "", description: "" }); setIsFormOpen(!isFormOpen); }}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
         >
           <Plus className="h-4 w-4" /> New Transport Type
-        </button>
+        </Button>
       </div>
 
       {isFormOpen && (
@@ -68,18 +69,18 @@ export default function Transports() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Name</label>
-              <input {...register("name")} placeholder="Caminhão, Carreta, Bi-truck" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
+              <Input {...register("name")} placeholder="Caminhão, Carreta, Bi-truck" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
               {errors.name && <p className="mt-1 text-xs text-red-500">{errors.name.message}</p>}
             </div>
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">Description</label>
-              <input {...register("description")} placeholder="Details about this transport category" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
+              <Input {...register("description")} placeholder="Details about this transport category" className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800" />
               {errors.description && <p className="mt-1 text-xs text-red-500">{errors.description.message}</p>}
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={() => setIsFormOpen(false)} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancel</button>
-            <button type="submit" disabled={mutation.isPending} className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">{mutation.isPending ? "Saving..." : "Save Transport"}</button>
+            <Button type="button" onClick={() => setIsFormOpen(false)} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancel</Button>
+            <Button type="submit" disabled={mutation.isPending} className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">{mutation.isPending ? "Saving..." : "Save Transport"}</Button>
           </div>
         </form>
       )}
@@ -98,7 +99,7 @@ export default function Transports() {
               <tr key={t.id}>
                 <td className="px-6 py-4 text-sm font-medium text-zinc-900 dark:text-white">{t.name}</td>
                 <td className="px-6 py-4 text-sm text-zinc-500 dark:text-zinc-400">{t.description}</td>
-                <td className="px-6 py-4 text-right text-sm"><button onClick={() => handleEdit(t)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Edit</button></td>
+                <td className="px-6 py-4 text-right text-sm"><Button onClick={() => handleEdit(t)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Edit</Button></td>
               </tr>
             ))}
           </tbody>

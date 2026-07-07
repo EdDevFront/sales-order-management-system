@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchAuditLogs } from "@/infrastructure/repositories/mockRepositories";

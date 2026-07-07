@@ -1,5 +1,6 @@
 "use client";
-
+import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Select";
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -63,12 +64,12 @@ export default function Orders() {
           <h2 className="text-2xl font-bold tracking-tight">Sales Orders</h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">Track and manage lifecycle transitions of sales orders</p>
         </div>
-        <button
+        <Button
           onClick={() => setIsFormOpen(true)}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
         >
           <Plus className="h-4 w-4" /> New Order
-        </button>
+        </Button>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -101,9 +102,9 @@ export default function Orders() {
                     </td>
                     <td className="px-6 py-4 text-right text-sm font-semibold text-zinc-900 dark:text-white">${calculateOrderTotal(order).toFixed(2)}</td>
                     <td className="px-6 py-4 text-right text-sm">
-                      <button onClick={() => setSelectedOrder(order)} className="flex items-center gap-1 ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold">
+                      <Button onClick={() => setSelectedOrder(order)} className="flex items-center gap-1 ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold">
                         <Info className="h-4 w-4" /> Manage
-                      </button>
+                      </Button>
                     </td>
                   </tr>
                 );
@@ -116,7 +117,7 @@ export default function Orders() {
           <div className="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 space-y-6">
             <div className="flex items-center justify-between border-b border-zinc-100 pb-4 dark:border-zinc-800">
               <h3 className="font-bold text-lg">Order Details ({selectedOrder.id})</h3>
-              <button onClick={() => setSelectedOrder(null)} className="text-zinc-400 hover:text-zinc-500 text-xs">Close</button>
+              <Button onClick={() => setSelectedOrder(null)} className="text-zinc-400 hover:text-zinc-500 text-xs">Close</Button>
             </div>
             
             <div className="space-y-4">
@@ -129,7 +130,7 @@ export default function Orders() {
               <div>
                 <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Transport Type</span>
                 {["CRIADA", "PLANEJADA"].includes(selectedOrder.status) ? (
-                  <select
+                  <Select
                     value={selectedOrder.transportTypeId}
                     onChange={(e) => handleTransportChange(selectedOrder.id, e.target.value)}
                     className="mt-1 block w-full rounded-md border border-zinc-300 px-2 py-1 text-sm focus:outline-none dark:border-zinc-700 dark:bg-zinc-800"
@@ -137,7 +138,7 @@ export default function Orders() {
                     {transports.filter((t) => customers.find((c) => c.id === selectedOrder.customerId)?.authorizedTransportTypeIds.includes(t.id)).map((t) => (
                       <option key={t.id} value={t.id}>{t.name}</option>
                     ))}
-                  </select>
+                  </Select>
                 ) : (
                   <p className="text-sm font-medium mt-1">{transports.find((t) => t.id === selectedOrder.transportTypeId)?.name}</p>
                 )}
@@ -166,28 +167,28 @@ export default function Orders() {
               <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
                 <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">Available Lifecycle Transition</span>
                 {getNextStatus(selectedOrder.status) && (
-                  <button
+                  <Button
                     onClick={() => handleStatusChange(selectedOrder.id, getNextStatus(selectedOrder.status)!)}
                     className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
                   >
                     Transition to {getNextStatus(selectedOrder.status)} <ArrowRight className="h-3.5 w-3.5" />
-                  </button>
+                  </Button>
                 )}
                 {selectedOrder.status === "PLANEJADA" && (
-                  <button
+                  <Button
                     onClick={() => setSchedulingOrderId(selectedOrder.id)}
                     className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
                   >
                     Schedule Delivery <Calendar className="h-3.5 w-3.5" />
-                  </button>
+                  </Button>
                 )}
                 {["AGENDADA", "EM_TRANSPORTE"].includes(selectedOrder.status) && selectedOrder.deliveryDate && (
-                  <button
+                  <Button
                     onClick={() => setSchedulingOrderId(selectedOrder.id)}
                     className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-300 py-2 text-xs font-bold hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800 transition-all"
                   >
                     Reschedule Delivery
-                  </button>
+                  </Button>
                 )}
                 {!getNextStatus(selectedOrder.status) && selectedOrder.status !== "PLANEJADA" && (
                   <p className="text-xs text-zinc-400 italic text-center">Lifecycle completed for this order.</p>

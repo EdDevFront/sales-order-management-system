@@ -11,6 +11,7 @@ export interface SelectOption {
 interface CustomSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
   options: SelectOption[];
   onValueChange?: (value: string) => void;
+  placeholder?: string;
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(

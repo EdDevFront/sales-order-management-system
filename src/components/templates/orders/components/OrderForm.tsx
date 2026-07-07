@@ -170,6 +170,11 @@ export default function OrderForm({ onClose }: OrderFormProps) {
                     options={getItemOptions(index)}
                     placeholder="Selecione o Item"
                   />
+                  {errors.items?.[index]?.itemId && (
+                    <p className="mt-1 text-xs text-red-500">
+                      {errors.items[index]?.itemId?.message}
+                    </p>
+                  )}
                 </div>
                 <div className="w-20 shrink-0">
                   <label className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-0.5">

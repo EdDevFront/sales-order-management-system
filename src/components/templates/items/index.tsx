@@ -40,7 +40,7 @@ export default function Items() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Itens</h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">Gerencie o inventário de itens e precificação dos pedidos de venda</p>
@@ -50,7 +50,7 @@ export default function Items() {
             setEditingItem({ name: "", sku: "", price: 0 });
             setIsFormOpen(true);
           }}
-          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 w-full sm:w-auto justify-center"
         >
           <Plus className="h-4 w-4" /> Novo Item
         </Button>
@@ -75,9 +75,9 @@ export default function Items() {
         >
           {paginatedItems.map((i: Item) => (
             <DataTable.Row key={i.id}>
-              <DataTable.Cell className="font-medium text-zinc-900 dark:text-white">{i.name}</DataTable.Cell>
-              <DataTable.Cell className="font-mono text-zinc-500 dark:text-zinc-400">{i.sku}</DataTable.Cell>
-              <DataTable.Cell alignRight className="font-semibold text-zinc-900 dark:text-white">${i.price.toFixed(2)}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Nome" className="font-medium text-zinc-900 dark:text-white">{i.name}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="SKU" className="font-mono text-zinc-500 dark:text-zinc-400">{i.sku}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Preço" alignRight className="font-semibold text-zinc-900 dark:text-white">${i.price.toFixed(2)}</DataTable.Cell>
             </DataTable.Row>
           ))}
         </DataTable.Body>

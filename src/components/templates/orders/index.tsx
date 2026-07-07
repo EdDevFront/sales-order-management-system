@@ -70,14 +70,14 @@ export default function Orders() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Pedidos de Venda</h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">Monitore e gerencie as transições do ciclo de vida dos pedidos de venda</p>
         </div>
         <Button
           onClick={() => setIsFormOpen(true)}
-          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 w-full sm:w-auto justify-center"
         >
           <Plus className="h-4 w-4" /> Novo Pedido
         </Button>
@@ -96,12 +96,12 @@ export default function Orders() {
               const customer = customers.find((c) => c.id === order.customerId);
               return (
                 <DataTable.Row key={order.id}>
-                  <DataTable.Cell className="font-mono text-zinc-900 dark:text-white">{order.id}</DataTable.Cell>
-                  <DataTable.Cell className="text-zinc-500 dark:text-zinc-400 font-medium">{customer?.name || order.customerId}</DataTable.Cell>
-                  <DataTable.Cell><OrderStatusBadge status={order.status} /></DataTable.Cell>
-                  <DataTable.Cell alignRight className="font-semibold text-zinc-900 dark:text-white">${calculateOrderTotal(order).toFixed(2)}</DataTable.Cell>
-                  <DataTable.Cell alignRight>
-                    <Button onClick={() => setSelectedOrder(order)} className="flex items-center gap-1 ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold">
+                  <DataTable.Cell mobileLabel="ID Pedido" className="font-mono text-zinc-900 dark:text-white">{order.id}</DataTable.Cell>
+                  <DataTable.Cell mobileLabel="Cliente" className="text-zinc-500 dark:text-zinc-400 font-medium">{customer?.name || order.customerId}</DataTable.Cell>
+                  <DataTable.Cell mobileLabel="Status"><OrderStatusBadge status={order.status} /></DataTable.Cell>
+                  <DataTable.Cell mobileLabel="Total" alignRight className="font-semibold text-zinc-900 dark:text-white">${calculateOrderTotal(order).toFixed(2)}</DataTable.Cell>
+                  <DataTable.Cell mobileLabel="Ações" alignRight>
+                    <Button onClick={() => setSelectedOrder(order)} className="flex items-center gap-1 sm:ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold w-full sm:w-auto justify-center">
                       <Info className="h-4 w-4" /> Gerenciar
                     </Button>
                   </DataTable.Cell>

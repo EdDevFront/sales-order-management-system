@@ -46,7 +46,7 @@ export default function Transports() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Tipos de Transporte</h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">Configure os modos de transporte logístico autorizados</p>
@@ -56,7 +56,7 @@ export default function Transports() {
             setEditingTransport({ name: "", description: "" });
             setIsFormOpen(true);
           }}
-          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 w-full sm:w-auto justify-center"
         >
           <Plus className="h-4 w-4" /> Novo Tipo de Transporte
         </Button>
@@ -81,9 +81,9 @@ export default function Transports() {
         >
           {paginatedTransports.map((t: TransportType) => (
             <DataTable.Row key={t.id}>
-              <DataTable.Cell className="font-medium text-zinc-900 dark:text-white">{t.name}</DataTable.Cell>
-              <DataTable.Cell className="text-zinc-500 dark:text-zinc-400">{t.description}</DataTable.Cell>
-              <DataTable.Cell alignRight>
+              <DataTable.Cell mobileLabel="Nome" className="font-medium text-zinc-900 dark:text-white">{t.name}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Descrição" className="text-zinc-500 dark:text-zinc-400">{t.description}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Ações" alignRight>
                 <Button onClick={() => handleEdit(t)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Editar</Button>
               </DataTable.Cell>
             </DataTable.Row>

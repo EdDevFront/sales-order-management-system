@@ -28,7 +28,7 @@ export default function Layout({ children }: LayoutProps) {
     <div className="flex min-h-screen flex-col bg-zinc-50 dark:bg-zinc-950 font-sans">
       <header className="sticky top-0 z-40 border-b border-zinc-200/80 bg-white/80 backdrop-blur-md dark:border-zinc-800/80 dark:bg-zinc-900/80">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
             <div className="rounded-xl bg-indigo-600 p-2.5 text-white shadow-lg shadow-indigo-500/20">
               <ShoppingCart className="h-6 w-6" />
             </div>
@@ -36,7 +36,7 @@ export default function Layout({ children }: LayoutProps) {
               <h1 className="text-xl font-bold tracking-tight text-zinc-900 dark:text-white">Portal OVGS</h1>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">Gestão de Pedidos de Venda & Logística</p>
             </div>
-          </div>
+          </Link>
           <nav className="flex gap-1.5 max-md:hidden">
             {navItems.map((item) => {
               const Icon = item.icon;

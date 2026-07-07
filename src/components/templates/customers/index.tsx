@@ -46,7 +46,7 @@ export default function Customers() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Clientes</h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">Gerencie os perfis dos clientes e autorizações logísticas de transporte</p>
@@ -56,7 +56,7 @@ export default function Customers() {
             setEditingCustomer({ name: "", document: "", documentType: "CNPJ", authorizedTransportTypeIds: [] });
             setIsFormOpen(true);
           }}
-          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
+          className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 w-full sm:w-auto justify-center"
         >
           <Plus className="h-4 w-4" /> Novo Cliente
         </Button>
@@ -82,10 +82,10 @@ export default function Customers() {
         >
           {paginatedCustomers.map((c: Customer) => (
             <DataTable.Row key={c.id}>
-              <DataTable.Cell className="font-medium text-zinc-900 dark:text-white">{c.name}</DataTable.Cell>
-              <DataTable.Cell><span className="rounded bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">{c.documentType}</span></DataTable.Cell>
-              <DataTable.Cell className="text-zinc-500 dark:text-zinc-400">{c.document}</DataTable.Cell>
-              <DataTable.Cell>
+              <DataTable.Cell mobileLabel="Nome" className="font-medium text-zinc-900 dark:text-white">{c.name}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Tipo"><span className="rounded bg-zinc-100 px-2 py-0.5 text-xs font-semibold text-zinc-800 dark:bg-zinc-800 dark:text-zinc-200">{c.documentType}</span></DataTable.Cell>
+              <DataTable.Cell mobileLabel="Documento" className="text-zinc-500 dark:text-zinc-400">{c.document}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Autorizados">
                 <div className="flex flex-wrap gap-1">
                   {c.authorizedTransportTypeIds.map((tid) => (
                     <span key={tid} className="rounded bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-950/40 dark:text-indigo-400">
@@ -94,7 +94,7 @@ export default function Customers() {
                   ))}
                 </div>
               </DataTable.Cell>
-              <DataTable.Cell alignRight>
+              <DataTable.Cell mobileLabel="Ações" alignRight>
                 <Button onClick={() => handleEdit(c)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Editar</Button>
               </DataTable.Cell>
             </DataTable.Row>

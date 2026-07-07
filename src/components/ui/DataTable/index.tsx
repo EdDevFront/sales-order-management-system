@@ -35,6 +35,7 @@ interface TableCellProps {
   children: React.ReactNode;
   className?: string;
   alignRight?: boolean;
+  mobileLabel?: string;
 }
 
 // ─── Root ─────────────────────────────────────────────────────────────────────
@@ -42,8 +43,8 @@ interface TableCellProps {
 function TableRoot({ children, className = "" }: TableRootProps) {
   return (
     <div className={`rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-900 overflow-hidden ${className}`}>
-      <div className="overflow-x-auto w-full">
-        <table className="w-full divide-y divide-zinc-200 dark:divide-zinc-800">
+      <div className="w-full">
+        <table className="w-full block md:table divide-y divide-zinc-200 dark:divide-zinc-800">
           {children}
         </table>
       </div>
@@ -55,7 +56,7 @@ function TableRoot({ children, className = "" }: TableRootProps) {
 
 function TableHead({ columns, lastAlignRight = true }: TableHeadProps) {
   return (
-    <thead className="bg-zinc-50 dark:bg-zinc-800/50">
+    <thead className="hidden md:table-header-group bg-zinc-50 dark:bg-zinc-800/50">
       <tr>
         {columns.map((col, i) => {
           const isLastColumn = lastAlignRight && i === columns.length - 1;
@@ -82,8 +83,8 @@ function InlineEmptyState({ colSpan, message, icon: Icon, action }: {
   action?: React.ReactNode;
 }) {
   return (
-    <tr>
-      <td colSpan={colSpan}>
+    <tr className="block md:table-row">
+      <td colSpan={colSpan} className="block md:table-cell">
         <div className="flex flex-col items-center justify-center py-16 gap-3 text-zinc-400 dark:text-zinc-600">
           <Icon className="h-10 w-10 opacity-50" />
           <p className="text-sm font-medium">{message}</p>
@@ -133,7 +134,7 @@ function TableBody({
   };
 
   return (
-    <tbody className="divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
+    <tbody className="block md:table-row-group divide-y divide-zinc-200 dark:divide-zinc-800 bg-white dark:bg-zinc-900">
       {renderContent()}
     </tbody>
   );
@@ -143,7 +144,7 @@ function TableBody({
 
 function TableRow({ children, className = "" }: TableRowProps) {
   return (
-    <tr className={`hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors ${className}`}>
+    <tr className={`block md:table-row border-b border-zinc-150 dark:border-zinc-800 p-4 md:p-0 hover:bg-zinc-50/50 dark:hover:bg-zinc-800/30 transition-colors ${className}`}>
       {children}
     </tr>
   );
@@ -151,10 +152,15 @@ function TableRow({ children, className = "" }: TableRowProps) {
 
 // ─── Cell ─────────────────────────────────────────────────────────────────────
 
-function TableCell({ children, className = "", alignRight = false }: TableCellProps) {
+function TableCell({ children, className = "", alignRight = false, mobileLabel }: TableCellProps) {
   return (
-    <td className={`px-6 py-4 text-sm ${alignRight ? "text-right" : ""} ${className}`}>
-      {children}
+    <td className={`block md:table-cell px-4 md:px-6 py-2 md:py-4 text-sm ${alignRight ? "text-left md:text-right" : "text-left"} ${className}`}>
+      {mobileLabel && (
+        <span className="md:hidden font-bold text-zinc-400 mr-2 uppercase text-[10px] tracking-wider inline-block min-w-[120px]">
+          {mobileLabel}:
+        </span>
+      )}
+      <span className={mobileLabel ? "inline-block align-middle" : ""}>{children}</span>
     </td>
   );
 }
@@ -165,10 +171,10 @@ function SkeletonRows({ widths, count = 5 }: { widths: readonly string[]; count?
   return (
     <>
       {Array.from({ length: count }).map((_, idx) => (
-        <tr key={`sk-${idx}`}>
+        <tr key={`sk-${idx}`} className="block md:table-row border-b border-zinc-100 dark:border-zinc-800 p-4 md:p-0">
           {widths.map((w, i) => (
-            <td key={i} className="px-6 py-4">
-              <Skeleton className={`h-4 ${w} ${i === widths.length - 1 ? "ml-auto" : ""}`} />
+            <td key={i} className="block md:table-cell px-4 md:px-6 py-2 md:py-4">
+              <Skeleton className={`h-4 ${w} ${i === widths.length - 1 ? "md:ml-auto" : ""}`} />
             </td>
           ))}
         </tr>

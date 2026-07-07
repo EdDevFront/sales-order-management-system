@@ -166,13 +166,13 @@ export default function Dashboard() {
         >
           {paginatedOrders.map((order: SalesOrder) => (
             <DataTable.Row key={order.id}>
-              <DataTable.Cell className="font-mono text-zinc-900 dark:text-white">{order.id}</DataTable.Cell>
-              <DataTable.Cell className="text-zinc-500 dark:text-zinc-400 font-medium">{customers.find((c) => c.id === order.customerId)?.name}</DataTable.Cell>
-              <DataTable.Cell className="text-zinc-500">{transports.find((t) => t.id === order.transportTypeId)?.name}</DataTable.Cell>
-              <DataTable.Cell className="text-zinc-500 dark:text-zinc-400">
+              <DataTable.Cell mobileLabel="ID Pedido" className="font-mono text-zinc-900 dark:text-white">{order.id}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Cliente" className="text-zinc-500 dark:text-zinc-400 font-medium">{customers.find((c) => c.id === order.customerId)?.name}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Modo Transporte" className="text-zinc-500">{transports.find((t) => t.id === order.transportTypeId)?.name}</DataTable.Cell>
+              <DataTable.Cell mobileLabel="Data Entrega" className="text-zinc-500 dark:text-zinc-400">
                 {order.deliveryDate ? `${order.deliveryDate} (${order.deliveryWindow})` : <span className="text-zinc-400 italic">Não agendado</span>}
               </DataTable.Cell>
-              <DataTable.Cell>
+              <DataTable.Cell mobileLabel="Status">
                 <span className={`rounded-full px-2.5 py-1 text-xs font-semibold border ${orderStatusVariant(order.status)}`}>{order.status}</span>
               </DataTable.Cell>
             </DataTable.Row>

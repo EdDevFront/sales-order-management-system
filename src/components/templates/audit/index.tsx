@@ -39,20 +39,20 @@ export default function AuditLogs() {
             return (
               <React.Fragment key={log.id}>
                 <DataTable.Row>
-                  <DataTable.Cell className="font-mono text-zinc-500 dark:text-zinc-400">
+                  <DataTable.Cell mobileLabel="Data/Hora" className="font-mono text-zinc-500 dark:text-zinc-400">
                     {new Date(log.timestamp).toLocaleString("pt-BR")}
                   </DataTable.Cell>
-                  <DataTable.Cell>
+                  <DataTable.Cell mobileLabel="Ação">
                     <span className={`rounded-full px-2.5 py-1 text-xs font-semibold border ${auditActionVariant(log.actionType)}`}>
                       {log.actionType}
                     </span>
                   </DataTable.Cell>
-                  <DataTable.Cell className="font-medium text-zinc-500">{log.entityAffected}</DataTable.Cell>
-                  <DataTable.Cell className="font-mono text-zinc-500">{log.entityId}</DataTable.Cell>
-                  <DataTable.Cell alignRight>
+                  <DataTable.Cell mobileLabel="Entidade" className="font-medium text-zinc-500">{log.entityAffected}</DataTable.Cell>
+                  <DataTable.Cell mobileLabel="ID Entidade" className="font-mono text-zinc-500">{log.entityId}</DataTable.Cell>
+                  <DataTable.Cell mobileLabel="Detalhes" alignRight>
                     <button
                       onClick={() => setExpandedLogId(isExpanded ? null : log.id)}
-                      className="flex items-center gap-1 ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold"
+                      className="flex items-center gap-1 sm:ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold w-full sm:w-auto justify-center"
                     >
                       {isExpanded ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       {isExpanded ? "Ocultar" : "Inspecionar"}
@@ -60,8 +60,8 @@ export default function AuditLogs() {
                   </DataTable.Cell>
                 </DataTable.Row>
                 {isExpanded && (
-                  <tr>
-                    <td colSpan={5} className="bg-zinc-50 p-6 dark:bg-zinc-800/20">
+                  <tr className="block md:table-row">
+                    <td colSpan={5} className="block md:table-cell bg-zinc-50 p-4 md:p-6 dark:bg-zinc-800/20">
                       <div className="grid gap-4 md:grid-cols-2 text-xs font-mono">
                         <div>
                           <span className="block font-semibold uppercase tracking-wider text-zinc-400 mb-2">Estado Anterior</span>

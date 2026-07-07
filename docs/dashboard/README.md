@@ -2,8 +2,14 @@
 
 Painel de monitoramento operacional contendo métricas, controles de filtro ativos e tabela paginada de Pedidos de Venda.
 
+## Funcionalidades
+- **Métricas Operacionais**: Visualização de contadores consolidados para pedidos totais, pendentes de agendamento (PLANEJADA), em trânsito (EM_TRANSPORTE) e entregues (ENTREGUE).
+- **Filtros Dinâmicos**: Filtragem instantânea de pedidos por critérios combinados de Status, Cliente, Tipo de Transporte e Data de Criação.
+- **Limpeza de Filtros**: Ação rápida de reset de todos os filtros ativos, limpando as seleções em um único clique.
+- **Tabela Paginada**: Visualização dos pedidos de venda filtrados com suporte a paginação sob demanda (8 itens por página).
+
 ## Componentes e Estrutura
-- **Cards de Métrica**: Total de Pedidos, Necessita Agendamento (PLANEJADA), Em Transporte (EM_TRANSPORTE) e Entregues (ENTREGUE).
+- **Cards de Métrica**: Total de Pedidos, Necessita Agendamento, Em Transporte e Entregues.
 - **Controles de Filtro**: Seleções para Status, Cliente, Modo de Transporte e DatePicker para Data de Criação.
 - **DataTable**: Lista pedidos filtrados pela seleção, mostrando ID do Pedido, Cliente, Tipo de Transporte, Detalhes de Entrega e Status.
 - **Rodapé de Paginação**: Controlador de paginação padrão com 8 itens por página.

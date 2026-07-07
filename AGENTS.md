@@ -12,6 +12,12 @@ All coding agents working on this project must strictly adhere to the following 
 - Keep all functions under **20 lines** of code.
 - Keep all components under **200 lines** of code. If a component grows larger, break it down into subcomponents.
 
+### Practical Rules for Component Splitting
+Even before reaching the 200-line limit, use these triggers to extract new components:
+- **Immediate Readability Rule**: If you need to scroll the screen to understand what the component does, it is already too large and should be divided.
+- **Sub-component Extraction**: If the main file is approaching 150 lines and contains lists (`.map()`), modals, or internal forms, extract these pieces into separate files (typically 20 to 30 lines).
+- **State Isolation**: If a block of code requires its own local state (`useState`) that the rest of the file does not need, extract it to a new file to avoid unnecessary re-renders.
+
 ## 2. Variable & Function Naming
 - Variables representing checks, conditions, or business rules must have highly descriptive and specific names (e.g., `isLegalPerson` or `isTransportTypeAuthorizedForCustomer` instead of generic names).
 

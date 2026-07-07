@@ -15,9 +15,23 @@ interface CustomSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement
 }
 
 export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
-  ({ className = "", value, defaultValue, onChange, options, onValueChange, placeholder = "Select...", ...props }, ref) => {
+  (
+    {
+      className = "",
+      value,
+      defaultValue,
+      onChange,
+      options,
+      onValueChange,
+      placeholder = "Select...",
+      ...props
+    },
+    ref,
+  ) => {
     const [isOpen, setIsOpen] = useState(false);
-    const [selectedVal, setSelectedVal] = useState<string>((value as string) || (defaultValue as string) || "");
+    const [selectedVal, setSelectedVal] = useState<string>(
+      (value as string) || (defaultValue as string) || "",
+    );
     const containerRef = useRef<HTMLDivElement>(null);
     const nativeSelectRef = useRef<HTMLSelectElement | null>(null);
 
@@ -27,7 +41,10 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
 
     useEffect(() => {
       const handler = (e: MouseEvent) => {
-        if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        if (
+          containerRef.current &&
+          !containerRef.current.contains(e.target as Node)
+        ) {
           setIsOpen(false);
         }
       };
@@ -46,7 +63,8 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
       }
     };
 
-    const currentLabel = options.find((o) => o.value === selectedVal)?.label || placeholder;
+    const currentLabel =
+      options.find((o) => o.value === selectedVal)?.label || placeholder;
 
     return (
       <div ref={containerRef} className="relative w-full">
@@ -73,11 +91,20 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
         {/* Custom trigger */}
         <button
           type="button"
-          onClick={() => setIsOpen(!isOpen)}
-          className={`flex h-11 sm:h-10 w-full items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 sm:px-3 py-3 sm:py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 ${className}`}
+          disabled={props.disabled}
+          onClick={() => { if (!props.disabled) setIsOpen(!isOpen); }}
+          className={`flex h-11 sm:h-10 w-full items-center justify-between rounded-lg border px-4 sm:px-3 py-3 sm:py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:ring-offset-zinc-950 ${
+            props.disabled
+              ? "border-zinc-100 bg-zinc-50 text-zinc-400 cursor-not-allowed dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-600"
+              : "border-zinc-200 bg-white text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100"
+          } ${className}`}
         >
-          <span className="truncate text-zinc-900 dark:text-zinc-100">{currentLabel}</span>
-          <ChevronDown className={`h-5 w-5 sm:h-4 sm:w-4 shrink-0 ml-2 text-zinc-500 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          <span className="truncate">{currentLabel}</span>
+          <ChevronDown
+            className={`h-5 w-5 sm:h-4 sm:w-4 shrink-0 ml-2 transition-transform ${isOpen ? "rotate-180" : ""} ${
+              props.disabled ? "text-zinc-300 dark:text-zinc-700" : "text-zinc-500"
+            }`}
+          />
         </button>
 
         {/* Custom options overlay */}
@@ -89,7 +116,9 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
                 type="button"
                 onClick={() => handleSelectOption(o.value)}
                 className={`flex w-full items-center rounded-sm px-3 sm:px-2 py-3 sm:py-1.5 text-sm text-left hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
-                  o.value === selectedVal ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 font-semibold" : "text-zinc-700 dark:text-zinc-300"
+                  o.value === selectedVal
+                    ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 font-semibold"
+                    : "text-zinc-700 dark:text-zinc-300"
                 }`}
               >
                 {o.label}
@@ -99,7 +128,7 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
         )}
       </div>
     );
-  }
+  },
 );
 
 Select.displayName = "Select";

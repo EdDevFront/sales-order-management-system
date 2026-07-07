@@ -74,10 +74,10 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`flex h-10 w-full items-center justify-between rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 ${className}`}
+          className={`flex h-11 sm:h-10 w-full items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 sm:px-3 py-3 sm:py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 ${className}`}
         >
           <span className="truncate text-zinc-900 dark:text-zinc-100">{currentLabel}</span>
-          <ChevronDown className={`h-4 w-4 text-zinc-500 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          <ChevronDown className={`h-5 w-5 sm:h-4 sm:w-4 shrink-0 ml-2 text-zinc-500 transition-transform ${isOpen ? "rotate-180" : ""}`} />
         </button>
 
         {/* Custom options overlay */}
@@ -88,7 +88,7 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
                 key={o.value}
                 type="button"
                 onClick={() => handleSelectOption(o.value)}
-                className={`flex w-full items-center rounded-sm px-2 py-1.5 text-sm text-left hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
+                className={`flex w-full items-center rounded-sm px-3 sm:px-2 py-3 sm:py-1.5 text-sm text-left hover:bg-zinc-100 dark:hover:bg-zinc-800 ${
                   o.value === selectedVal ? "bg-indigo-50 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300 font-semibold" : "text-zinc-700 dark:text-zinc-300"
                 }`}
               >

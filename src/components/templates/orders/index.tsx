@@ -7,7 +7,6 @@ import { fetchSalesOrders, fetchCustomers, fetchTransportTypes, fetchItems } fro
 import { updateStatusRequest, updateTransportRequest } from "@/stores/ordersActions";
 import { SalesOrder, SalesOrderStatus } from "@/types/SalesOrder";
 import OrderForm from "./components/OrderForm";
-import SchedulingModal from "./components/SchedulingModal";
 import OrderDetailPanel from "./components/OrderDetailPanel";
 import { Plus, Info, Loader2 } from "lucide-react";
 
@@ -19,7 +18,6 @@ export default function Orders() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [schedulingOrderId, setSchedulingOrderId] = useState<string | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
 
   const { data: orders = [], isLoading } = useQuery({ queryKey: ["orders"], queryFn: fetchSalesOrders });
@@ -121,14 +119,12 @@ export default function Orders() {
             onClose={() => setSelectedOrder(null)}
             handleTransportChange={handleTransportChange}
             handleStatusChange={handleStatusChange}
-            setSchedulingOrderId={setSchedulingOrderId}
             getNextStatus={getNextStatus}
           />
         )}
       </div>
 
       {isFormOpen && <OrderForm onClose={() => setIsFormOpen(false)} />}
-      {schedulingOrderId && <SchedulingModal orderId={schedulingOrderId} onClose={() => setSchedulingOrderId(null)} />}
     </div>
   );
 }

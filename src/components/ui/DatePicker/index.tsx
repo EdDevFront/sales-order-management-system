@@ -77,7 +77,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
         <button
           type="button"
           onClick={() => setIsOpen(!isOpen)}
-          className={`flex h-10 w-full items-center justify-between rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-left ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 ${className}`}
+          className={`flex h-11 sm:h-10 w-full items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 sm:px-3 py-3 sm:py-2 text-sm text-left ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:border-zinc-800 dark:bg-zinc-950 dark:ring-offset-zinc-950 ${className}`}
         >
           <span className={selectedDate ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-500 dark:text-zinc-400"}>
             {selectedDate ? new Date(selectedDate + "T00:00:00").toLocaleDateString("pt-BR", { dateStyle: "medium" }) : placeholder}

@@ -74,10 +74,14 @@ export default function OrderForm({ onClose }: OrderFormProps) {
     label: t.name,
   }));
 
-  const itemOptions = allItems.map((i) => ({
-    value: i.id,
-    label: `${i.name} - SKU: ${i.sku} ($${i.price.toFixed(2)})`,
-  }));
+  const selectedItemIds = watch("items").map((i) => i.itemId).filter(Boolean);
+
+  const itemOptions = allItems
+    .filter((i) => !selectedItemIds.includes(i.id))
+    .map((i) => ({
+      value: i.id,
+      label: `${i.name} - SKU: ${i.sku} ($${i.price.toFixed(2)})`,
+    }));
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
@@ -127,7 +131,10 @@ export default function OrderForm({ onClose }: OrderFormProps) {
                 />
               </div>
               {!selectedCustomerId && (
-                <p className="mt-1 text-xs text-zinc-400 italic">Selecione um cliente primeiro para ver os transportes disponíveis</p>
+                <p className="mt-1 text-xs text-zinc-400 italic">
+                  Selecione um cliente primeiro para ver os transportes
+                  disponíveis
+                </p>
               )}
               {errors.transportTypeId && (
                 <p className="mt-1 text-xs text-red-500">
@@ -151,39 +158,33 @@ export default function OrderForm({ onClose }: OrderFormProps) {
               </Button>
             </div>
             {fields.map((field, index) => (
-              <div
-                key={field.id}
-                className="rounded-lg border border-zinc-100 bg-zinc-50/50 p-3 space-y-2 dark:border-zinc-800 dark:bg-zinc-800/20"
-              >
-                <div className="flex-1">
+              <div key={field.id} className="flex items-end gap-2">
+                <div className="flex-1 min-w-0">
                   <Select
                     {...register(`items.${index}.itemId`)}
                     options={itemOptions}
                     placeholder="Selecione o Item"
                   />
                 </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex-1">
-                    <label className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-0.5">
-                      Qtd
-                    </label>
-                    <Input
-                      type="number"
-                      min={1}
-                      {...register(`items.${index}.quantity`, {
-                        valueAsNumber: true,
-                      })}
-                      className="block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm focus:border-indigo-500 focus:outline-none dark:border-zinc-700 dark:bg-zinc-800"
-                    />
-                  </div>
-                  <Button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="mt-5 rounded-lg border border-red-200 p-2 text-red-500 hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/20 shrink-0"
-                  >
-                    <Trash2 className="h-4 w-4" />
-                  </Button>
+                <div className="w-20 shrink-0">
+                  <label className="block text-[10px] font-semibold uppercase tracking-wider text-zinc-400 mb-0.5">
+                    Qtd
+                  </label>
+                  <Input
+                    type="number"
+                    min={1}
+                    {...register(`items.${index}.quantity`, {
+                      valueAsNumber: true,
+                    })}
+                  />
                 </div>
+                <Button
+                  type="button"
+                  onClick={() => remove(index)}
+                  className="mb-0.5 rounded-lg border border-red-200 p-2 text-red-500 hover:bg-red-50 dark:border-red-900 dark:hover:bg-red-950/20 shrink-0"
+                >
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </div>
             ))}
             {errors.items && (

@@ -69,7 +69,7 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
           }}
           type="text"
           value={selectedDate}
-          onChange={onChange}
+          onChange={onChange || (() => {})}
           className="sr-only"
           {...props}
         />

@@ -58,7 +58,7 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
             else if (ref) ref.current = el;
           }}
           value={selectedVal}
-          onChange={onChange}
+          onChange={onChange || (() => {})}
           className="sr-only"
           {...props}
         >

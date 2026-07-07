@@ -17,7 +17,7 @@ export default function Dashboard() {
   const { data: customers = [] } = useQuery({ queryKey: ["customers"], queryFn: fetchCustomers });
   const { data: transports = [] } = useQuery({ queryKey: ["transports"], queryFn: fetchTransportTypes });
 
-  const getFilteredOrders = () => {
+  const filteredOrders = React.useMemo(() => {
     return orders.filter((order) => {
       const matchStatus = filters.status === "ALL" || order.status === filters.status;
       const matchClient = filters.clientId === "ALL" || order.customerId === filters.clientId;
@@ -25,32 +25,40 @@ export default function Dashboard() {
       const matchDate = !filters.date || order.createdAt.startsWith(filters.date);
       return matchStatus && matchClient && matchTransport && matchDate;
     });
-  };
+  }, [orders, filters]);
 
-  const filteredOrders = getFilteredOrders();
   const totalCount = orders.length;
-  const planCount = orders.filter((o) => o.status === "PLANEJADA").length;
-  const transitCount = orders.filter((o) => o.status === "EM_TRANSPORTE").length;
-  const doneCount = orders.filter((o) => o.status === "ENTREGUE").length;
 
-  const statusOptions: SelectOption[] = [
+  const planCount = React.useMemo(() => {
+    return orders.filter((o) => o.status === "PLANEJADA").length;
+  }, [orders]);
+
+  const transitCount = React.useMemo(() => {
+    return orders.filter((o) => o.status === "EM_TRANSPORTE").length;
+  }, [orders]);
+
+  const doneCount = React.useMemo(() => {
+    return orders.filter((o) => o.status === "ENTREGUE").length;
+  }, [orders]);
+
+  const statusOptions = React.useMemo<SelectOption[]>(() => [
     { value: "ALL", label: "All Statuses" },
     { value: "CRIADA", label: "CRIADA (Created)" },
     { value: "PLANEJADA", label: "PLANEJADA (Planned)" },
     { value: "AGENDADA", label: "AGENDADA (Scheduled)" },
     { value: "EM_TRANSPORTE", label: "EM_TRANSPORTE (In Transit)" },
     { value: "ENTREGUE", label: "ENTREGUE (Delivered)" },
-  ];
+  ], []);
 
-  const clientOptions: SelectOption[] = [
+  const clientOptions = React.useMemo<SelectOption[]>(() => [
     { value: "ALL", label: "All Clients" },
     ...customers.map((c) => ({ value: c.id, label: c.name })),
-  ];
+  ], [customers]);
 
-  const transportOptions: SelectOption[] = [
+  const transportOptions = React.useMemo<SelectOption[]>(() => [
     { value: "ALL", label: "All Transports" },
     ...transports.map((t) => ({ value: t.id, label: t.name })),
-  ];
+  ], [transports]);
 
   return (
     <div className="space-y-8">

@@ -32,28 +32,28 @@ export default function Orders() {
     }
   }, [orders, queryClient]);
 
-  const handleStatusChange = (orderId: string, nextStatus: SalesOrderStatus) => {
+  const handleStatusChange = React.useCallback((orderId: string, nextStatus: SalesOrderStatus) => {
     dispatch(updateStatusRequest({ orderId, newStatus: nextStatus }));
-  };
+  }, [dispatch]);
 
-  const handleTransportChange = (orderId: string, transportTypeId: string) => {
+  const handleTransportChange = React.useCallback((orderId: string, transportTypeId: string) => {
     dispatch(updateTransportRequest({ orderId, transportTypeId }));
-  };
+  }, [dispatch]);
 
-  const getNextStatus = (status: SalesOrderStatus): SalesOrderStatus | null => {
+  const getNextStatus = React.useCallback((status: SalesOrderStatus): SalesOrderStatus | null => {
     if (status === "CRIADA") return "PLANEJADA";
     if (status === "PLANEJADA") return null;
     if (status === "AGENDADA") return "EM_TRANSPORTE";
     if (status === "EM_TRANSPORTE") return "ENTREGUE";
     return null;
-  };
+  }, []);
 
-  const calculateOrderTotal = (order: SalesOrder) => {
+  const calculateOrderTotal = React.useCallback((order: SalesOrder) => {
     return order.items.reduce((total, orderItem) => {
       const item = items.find((i) => i.id === orderItem.itemId);
       return total + (item?.price || 0) * orderItem.quantity;
     }, 0);
-  };
+  }, [items]);
 
   if (isLoading) return <div className="flex h-64 items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-indigo-600" /></div>;
 

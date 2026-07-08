@@ -64,6 +64,7 @@ export default function CustomerForm({
     if (currentDoc) {
       setValue("document", maskDocument(currentDoc, selectedType));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType, setValue]);
 
   const toggleTransport = (id: string) => {

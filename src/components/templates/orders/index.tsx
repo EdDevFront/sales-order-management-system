@@ -91,13 +91,6 @@ export default function Orders() {
     }
   }, [successMessage, queryClient]);
 
-  useEffect(() => {
-    if (selectedOrder) {
-      const fresh = orders.find((o) => o.id === selectedOrder.id);
-      if (fresh) setSelectedOrder(fresh);
-    }
-  }, [orders]);
-
   const handleStatusChange = React.useCallback(
     (orderId: string, nextStatus: SalesOrderStatus) => {
       dispatch(updateStatusRequest({ orderId, newStatus: nextStatus }));

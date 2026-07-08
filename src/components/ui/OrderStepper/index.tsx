@@ -51,29 +51,38 @@ export default function OrderStepper({
           return (
             <React.Fragment key={status}>
               <div className="flex flex-col items-center">
-                <button
-                  type="button"
-                  disabled={!isClickable}
-                  onClick={() => isClickable && onStepClick?.(status)}
-                  className={`
-                    flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-all
-                    ${isCompleted ? "bg-emerald-500 text-white shadow-sm" : ""}
-                    ${isCurrent ? "bg-indigo-600 text-white ring-2 ring-indigo-200 ring-offset-2 dark:ring-indigo-800" : ""}
-                    ${isFuture ? "bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600" : ""}
-                    ${isClickable ? "cursor-pointer hover:bg-indigo-500 hover:text-white" : "cursor-default"}
-                  `}
-                >
-                  {isCompleted ? (
-                    <Check className="h-4 w-4" />
-                  ) : (
-                    <Icon className="h-4 w-4" />
+                <div className="relative">
+                  {isCurrent && onStepClick && (
+                    <>
+                      <span className="absolute -inset-2 rounded-full bg-indigo-500/30 animate-ping opacity-75 pointer-events-none" />
+                      <span className="absolute -inset-1.5 rounded-full bg-indigo-500/20 animate-pulse pointer-events-none" />
+                    </>
                   )}
-                </button>
+                  <button
+                    type="button"
+                    disabled={!isClickable}
+                    onClick={() => isClickable && onStepClick?.(status)}
+                    className={`
+                      relative z-10 flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-all
+                      ${isCompleted ? "bg-emerald-500 text-white shadow-sm" : ""}
+                      ${isCurrent ? "bg-indigo-600 text-white ring-2 ring-indigo-200 ring-offset-2 dark:ring-indigo-800" : ""}
+                      ${isFuture && !isClickable ? "bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600" : ""}
+                      ${isClickable ? "bg-indigo-50 text-indigo-600 border border-indigo-200 hover:bg-indigo-600 hover:text-white hover:scale-105 shadow-[0_0_12px_rgba(79,70,229,0.25)] cursor-pointer" : "cursor-default"}
+                    `}
+                  >
+                    {isCompleted ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <Icon className="h-4 w-4" />
+                    )}
+                  </button>
+                </div>
                 <span
                   className={`
                     mt-1.5 text-[10px] font-semibold leading-tight text-center max-w-16
                     ${isCompleted || isCurrent ? "text-zinc-800 dark:text-zinc-200" : ""}
-                    ${isFuture ? "text-zinc-300 dark:text-zinc-600" : ""}
+                    ${isClickable ? "text-indigo-600 dark:text-indigo-400 font-bold" : ""}
+                    ${isFuture && !isClickable ? "text-zinc-300 dark:text-zinc-600" : ""}
                   `}
                 >
                   {STATUS_LABEL[status]}

@@ -60,6 +60,14 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
       setSelectedDate(dateStr);
       setIsOpen(false);
       if (onDateChange) onDateChange(dateStr);
+      if (onChange) {
+        onChange({
+          target: {
+            name: props.name || "",
+            value: dateStr,
+          },
+        } as React.ChangeEvent<HTMLInputElement>);
+      }
       if (nativeInputRef.current) {
         nativeInputRef.current.value = dateStr;
         const event = new Event("change", { bubbles: true });
@@ -163,13 +171,27 @@ export const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
                 const day = i + 1;
                 const dateStr = `${currentMonth.getFullYear()}-${String(currentMonth.getMonth() + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
                 const active = dateStr === selectedDate;
+
+                // Business Rule: Disable past dates and weekends (Saturdays and Sundays)
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const dateObj = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day);
+                const isPast = dateObj < today;
+                const isWeekend = dateObj.getDay() === 0 || dateObj.getDay() === 6;
+                const isDisabled = isPast || isWeekend;
+
                 return (
                   <button
                     key={day}
                     type="button"
+                    disabled={isDisabled}
                     onClick={() => handleSelectDay(day)}
-                    className={`rounded-md p-1.5 hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950/40 ${
-                      active
+                    className={`rounded-md p-1.5 transition-colors ${
+                      isDisabled
+                        ? "text-zinc-300 dark:text-zinc-700 cursor-not-allowed hover:bg-transparent hover:text-zinc-300 dark:hover:text-zinc-700"
+                        : "hover:bg-indigo-50 hover:text-indigo-600 dark:hover:bg-indigo-950/40"
+                    } ${
+                      active && !isDisabled
                         ? "bg-indigo-600 text-white font-semibold hover:bg-indigo-600 hover:text-white"
                         : ""
                     }`}

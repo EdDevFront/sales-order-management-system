@@ -19,6 +19,8 @@ export default function Toast() {
     }
   }, [error, successMessage, dispatch]);
 
+  const isModalOpen = typeof document !== "undefined" && !!document.querySelector(".fixed.inset-0.z-50");
+  if (isModalOpen) return null;
   if (!error && !successMessage) return null;
 
   return (

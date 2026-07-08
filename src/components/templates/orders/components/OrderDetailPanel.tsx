@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
 import { Input } from "@/components/ui/Input";
 import { DatePicker } from "@/components/ui/DatePicker";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/stores";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -12,10 +13,30 @@ import { Customer } from "@/types/Customer";
 import { TransportType } from "@/types/TransportType";
 import { Item } from "@/types/Item";
 import { updateDeliveryRequest } from "@/stores/ordersActions";
-import { setNotification } from "@/stores/ordersSlice";
-import { Calendar, ArrowLeft, X, Pencil, ArrowRight, Check } from "lucide-react";
+import { setNotification, clearNotification } from "@/stores/ordersSlice";
+import {
+  Calendar,
+  ArrowLeft,
+  X,
+  Pencil,
+  ArrowRight,
+  Check,
+  FileText,
+  ClipboardList,
+  Truck,
+  CheckCircle2,
+  AlertCircle,
+} from "lucide-react";
 import { formatCurrencyBR } from "@/utils/formatCurrency";
 import OrderStepper from "@/components/ui/OrderStepper";
+
+const STEP_ICONS: Record<SalesOrderStatus, React.ElementType> = {
+  CRIADA: FileText,
+  PLANEJADA: ClipboardList,
+  AGENDADA: Calendar,
+  EM_TRANSPORTE: Truck,
+  ENTREGUE: CheckCircle2,
+};
 
 const schedulingSchema = z.object({
   deliveryDate: z.string().min(1, "Selecione uma data de entrega"),
@@ -44,17 +65,24 @@ export default function OrderDetailPanel({
   getNextStatus,
 }: OrderDetailPanelProps) {
   const dispatch = useDispatch();
+  const { error, successMessage } = useSelector((state: RootState) => state.orders);
   const [isScheduling, setIsScheduling] = useState(false);
   const [isConfirmingTransition, setIsConfirmingTransition] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState<SalesOrderStatus | null>(null);
+  const [pendingStatus, setPendingStatus] = useState<SalesOrderStatus | null>(
+    null,
+  );
 
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<z.infer<typeof schedulingSchema>>({
     resolver: zodResolver(schedulingSchema),
-    defaultValues: { deliveryDate: "", deliveryWindow: "" },
+    values: {
+      deliveryDate: selectedOrder.deliveryDate || "",
+      deliveryWindow: selectedOrder.deliveryWindow || "",
+    },
   });
 
   const customer = customers.find((c) => c.id === selectedOrder.customerId);
@@ -75,7 +103,6 @@ export default function OrderDetailPanel({
     dispatch(updateDeliveryRequest({ orderId: selectedOrder.id, ...data }));
     dispatch(setNotification({ success: "Entrega agendada com sucesso!" }));
     setIsScheduling(false);
-    onClose();
   };
 
   const windowOptions = [
@@ -88,7 +115,11 @@ export default function OrderDetailPanel({
   const handleConfirmTransition = () => {
     if (pendingStatus) {
       handleStatusChange(selectedOrder.id, pendingStatus);
-      dispatch(setNotification({ success: `Status atualizado para ${STATUS_LABEL[pendingStatus]}!` }));
+      dispatch(
+        setNotification({
+          success: `Status atualizado para ${STATUS_LABEL[pendingStatus]}!`,
+        }),
+      );
       setIsConfirmingTransition(false);
       setPendingStatus(null);
     }
@@ -96,7 +127,8 @@ export default function OrderDetailPanel({
 
   const getModalTitle = () => {
     if (isScheduling) return "Agendar Entrega";
-    if (isConfirmingTransition && pendingStatus) return `Transicionar para ${STATUS_LABEL[pendingStatus]}`;
+    if (isConfirmingTransition && pendingStatus)
+      return `Transicionar para ${STATUS_LABEL[pendingStatus]}`;
     return `Detalhes do Pedido (${selectedOrder.id})`;
   };
 
@@ -133,12 +165,39 @@ export default function OrderDetailPanel({
           </Button>
         </div>
 
-        {/* ── Transition Confirmation ── */}
-        {isConfirmingTransition && pendingStatus && (
+        {/* Internal Toast Notification */}
+        {(error || successMessage) && (
+          <div className="mx-6 mt-4 flex items-center gap-3 rounded-lg border p-3.5 shadow-sm bg-white border-zinc-200 dark:bg-zinc-800 dark:border-zinc-700 animate-pulse">
+            {error ? (
+              <>
+                <AlertCircle className="h-5 w-5 text-red-500 shrink-0" />
+                <div className="text-sm font-semibold text-red-650 dark:text-red-400">{error}</div>
+              </>
+            ) : (
+              <>
+                <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
+                <div className="text-sm font-semibold text-emerald-655 dark:text-emerald-400">{successMessage}</div>
+              </>
+            )}
+            <button
+              onClick={() => dispatch(clearNotification())}
+              className="ml-auto rounded-full p-1 text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-700"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        )}
+
+        {/* ── Modal Content ── */}
+        {isConfirmingTransition && pendingStatus ? (
+          /* ── Transition Confirmation ── */
           <div className="p-6 space-y-6">
             <div className="flex flex-col items-center text-center gap-4 py-4">
               <div className="rounded-full bg-indigo-100 p-4 dark:bg-indigo-950/40">
-                <ArrowRight className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+                {(() => {
+                  const DestIcon = STEP_ICONS[pendingStatus] || ArrowRight;
+                  return <DestIcon className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />;
+                })()}
               </div>
               <div>
                 <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -175,10 +234,8 @@ export default function OrderDetailPanel({
               </Button>
             </div>
           </div>
-        )}
-
-        {/* ── Scheduling form ── */}
-        {isScheduling ? (
+        ) : isScheduling ? (
+          /* ── Scheduling form ── */
           <form
             onSubmit={handleSubmit(handleScheduleSubmit)}
             noValidate
@@ -191,6 +248,7 @@ export default function OrderDetailPanel({
               <div className="mt-1">
                 <DatePicker
                   {...register("deliveryDate")}
+                  value={watch("deliveryDate")}
                   placeholder="Escolha a data de entrega"
                 />
               </div>
@@ -207,6 +265,7 @@ export default function OrderDetailPanel({
               <div className="mt-1">
                 <Select
                   {...register("deliveryWindow")}
+                  value={watch("deliveryWindow")}
                   options={windowOptions}
                   placeholder="Selecione a Janela de Horário"
                 />
@@ -278,7 +337,7 @@ export default function OrderDetailPanel({
                   <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">
                     Detalhes da Entrega
                   </span>
-                  <div className="flex items-center gap-2 mt-1">
+                  <div className="flex items-center justify-between mt-1">
                     <div>
                       <p className="text-sm font-medium">
                         {formatDateBR(selectedOrder.deliveryDate)}
@@ -326,6 +385,17 @@ export default function OrderDetailPanel({
                       </div>
                     );
                   })}
+                  <div className="border-t border-zinc-200 dark:border-zinc-700/60 mt-2 pt-2 flex justify-between text-xs font-bold text-zinc-800 dark:text-zinc-100">
+                    <span>Total do Pedido</span>
+                    <span>
+                      {formatCurrencyBR(
+                        selectedOrder.items.reduce((total, orderItem) => {
+                          const item = items.find((i) => i.id === orderItem.itemId);
+                          return total + (item?.price || 0) * orderItem.quantity;
+                        }, 0)
+                      )}
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -334,7 +404,7 @@ export default function OrderDetailPanel({
                   Progresso do Pedido
                 </span>
                 <OrderStepper
-                  currentStatus={selectedOrder.status}
+                  currentStatus={isConfirmingTransition && pendingStatus ? pendingStatus : selectedOrder.status}
                   onStepClick={
                     getNextStatus(selectedOrder.status)
                       ? (nextStatus) => {
@@ -344,6 +414,19 @@ export default function OrderDetailPanel({
                       : undefined
                   }
                 />
+                
+                {/* Dynamic transition action buttons */}
+                {selectedOrder.status === "CRIADA" && (
+                  <Button
+                    onClick={() => {
+                      setPendingStatus("PLANEJADA");
+                      setIsConfirmingTransition(true);
+                    }}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
+                  >
+                    Transicionar para Planejada <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                )}
                 {canSchedule && (
                   <Button
                     onClick={() => setIsScheduling(true)}
@@ -352,6 +435,29 @@ export default function OrderDetailPanel({
                     Agendar Entrega <Calendar className="h-3.5 w-3.5" />
                   </Button>
                 )}
+                {selectedOrder.status === "AGENDADA" && (
+                  <Button
+                    onClick={() => {
+                      setPendingStatus("EM_TRANSPORTE");
+                      setIsConfirmingTransition(true);
+                    }}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
+                  >
+                    Transicionar para Em Transporte <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+                {selectedOrder.status === "EM_TRANSPORTE" && (
+                  <Button
+                    onClick={() => {
+                      setPendingStatus("ENTREGUE");
+                      setIsConfirmingTransition(true);
+                    }}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
+                  >
+                    Transicionar para Entregue <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+                
                 {!getNextStatus(selectedOrder.status) &&
                   selectedOrder.status !== "PLANEJADA" && (
                     <p className="text-xs text-zinc-400 italic text-center">

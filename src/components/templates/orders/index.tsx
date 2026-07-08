@@ -1,7 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/Button";
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/stores";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   fetchSalesOrders,
@@ -32,6 +33,8 @@ export default function Orders() {
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
+
+  const successMessage = useSelector((state: RootState) => state.orders.successMessage);
 
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["orders"],
@@ -82,13 +85,18 @@ export default function Orders() {
   }, [selectedOrder, queryClient]);
 
   useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ["orders"] });
-    queryClient.invalidateQueries({ queryKey: ["auditLogs"] });
+    if (successMessage) {
+      queryClient.invalidateQueries({ queryKey: ["orders"] });
+      queryClient.invalidateQueries({ queryKey: ["auditLogs"] });
+    }
+  }, [successMessage, queryClient]);
+
+  useEffect(() => {
     if (selectedOrder) {
       const fresh = orders.find((o) => o.id === selectedOrder.id);
       if (fresh) setSelectedOrder(fresh);
     }
-  }, [orders, queryClient]);
+  }, [orders]);
 
   const handleStatusChange = React.useCallback(
     (orderId: string, nextStatus: SalesOrderStatus) => {

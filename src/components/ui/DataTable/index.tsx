@@ -57,12 +57,18 @@ function TableRoot({ children, className = "" }: TableRootProps) {
 
 // ─── Head ─────────────────────────────────────────────────────────────────────
 
-function TableHead({ columns, lastAlignRight = true, alignRightColumns = [] }: TableHeadProps) {
+function TableHead({
+  columns,
+  lastAlignRight = true,
+  alignRightColumns = [],
+}: TableHeadProps) {
   return (
     <thead className="hidden md:table-header-group bg-zinc-50 dark:bg-zinc-800/50">
       <tr>
         {columns.map((col, i) => {
-          const isRightAligned = (lastAlignRight && i === columns.length - 1) || alignRightColumns.includes(i);
+          const isRightAligned =
+            (lastAlignRight && i === columns.length - 1) ||
+            alignRightColumns.includes(i);
           return (
             <th
               key={`th-${col}`}

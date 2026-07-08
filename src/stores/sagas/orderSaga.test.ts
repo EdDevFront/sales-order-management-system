@@ -9,7 +9,7 @@ jest.mock("@/infrastructure/mock/mockDatabase", () => ({
 }));
 
 describe("Saga Integration Flow - Sales Order Status Transitions", () => {
-  let mockDatabaseState: any;
+  let mockDatabaseState: ReturnType<typeof mockDb.loadDatabase>;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -33,8 +33,11 @@ describe("Saga Integration Flow - Sales Order Status Transitions", () => {
   });
 
   test("should transition status from CRIADA to PLANEJADA and record audit log", async () => {
-    const dispatchedActions: any[] = [];
-    const action = actions.updateStatusRequest({ orderId: "so-1", newStatus: "PLANEJADA" });
+    const dispatchedActions: unknown[] = [];
+    const action = actions.updateStatusRequest({
+      orderId: "so-1",
+      newStatus: "PLANEJADA",
+    });
 
     await runSaga(
       {
@@ -42,7 +45,7 @@ describe("Saga Integration Flow - Sales Order Status Transitions", () => {
         getState: () => ({}),
       },
       updateStatusWorker,
-      action
+      action,
     ).toPromise();
 
     // Verify success actions dispatched
@@ -53,13 +56,13 @@ describe("Saga Integration Flow - Sales Order Status Transitions", () => {
           id: "so-1",
           status: "PLANEJADA",
         }),
-      })
+      }),
     );
 
     expect(dispatchedActions).toContainEqual(
       expect.objectContaining({
         type: actions.refreshOrders.type,
-      })
+      }),
     );
 
     // Verify mock database was updated and saved
@@ -77,7 +80,7 @@ describe("Saga Integration Flow - Sales Order Status Transitions", () => {
             entityId: "so-1",
           }),
         ]),
-      })
+      }),
     );
   });
 });

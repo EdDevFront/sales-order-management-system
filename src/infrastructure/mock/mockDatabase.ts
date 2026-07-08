@@ -6,7 +6,7 @@ import { AuditLog } from "@/types/AuditLog";
 
 const STORAGE_KEY = "ovgs_mock_db";
 
-interface DatabaseSchema {
+export interface DatabaseSchema {
   customers: Customer[];
   transportTypes: TransportType[];
   items: Item[];

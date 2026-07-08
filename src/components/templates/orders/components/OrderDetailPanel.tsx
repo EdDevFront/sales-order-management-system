@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Select } from "@/components/ui/Select";
-import { Input } from "@/components/ui/Input";
 import { DatePicker } from "@/components/ui/DatePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/stores";
@@ -65,7 +64,9 @@ export default function OrderDetailPanel({
   getNextStatus,
 }: OrderDetailPanelProps) {
   const dispatch = useDispatch();
-  const { error, successMessage } = useSelector((state: RootState) => state.orders);
+  const { error, successMessage } = useSelector(
+    (state: RootState) => state.orders,
+  );
   const [isScheduling, setIsScheduling] = useState(false);
   const [isConfirmingTransition, setIsConfirmingTransition] = useState(false);
   const [pendingStatus, setPendingStatus] = useState<SalesOrderStatus | null>(
@@ -171,12 +172,16 @@ export default function OrderDetailPanel({
             {error ? (
               <>
                 <AlertCircle className="h-5 w-5 text-red-500 shrink-0" />
-                <div className="text-sm font-semibold text-red-650 dark:text-red-400">{error}</div>
+                <div className="text-sm font-semibold text-red-650 dark:text-red-400">
+                  {error}
+                </div>
               </>
             ) : (
               <>
                 <CheckCircle2 className="h-5 w-5 text-emerald-500 shrink-0" />
-                <div className="text-sm font-semibold text-emerald-655 dark:text-emerald-400">{successMessage}</div>
+                <div className="text-sm font-semibold text-emerald-655 dark:text-emerald-400">
+                  {successMessage}
+                </div>
               </>
             )}
             <button
@@ -196,7 +201,9 @@ export default function OrderDetailPanel({
               <div className="rounded-full bg-indigo-100 p-4 dark:bg-indigo-950/40">
                 {(() => {
                   const DestIcon = STEP_ICONS[pendingStatus] || ArrowRight;
-                  return <DestIcon className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />;
+                  return (
+                    <DestIcon className="h-8 w-8 text-indigo-600 dark:text-indigo-400" />
+                  );
                 })()}
               </div>
               <div>
@@ -390,9 +397,13 @@ export default function OrderDetailPanel({
                     <span>
                       {formatCurrencyBR(
                         selectedOrder.items.reduce((total, orderItem) => {
-                          const item = items.find((i) => i.id === orderItem.itemId);
-                          return total + (item?.price || 0) * orderItem.quantity;
-                        }, 0)
+                          const item = items.find(
+                            (i) => i.id === orderItem.itemId,
+                          );
+                          return (
+                            total + (item?.price || 0) * orderItem.quantity
+                          );
+                        }, 0),
                       )}
                     </span>
                   </div>
@@ -404,7 +415,11 @@ export default function OrderDetailPanel({
                   Progresso do Pedido
                 </span>
                 <OrderStepper
-                  currentStatus={isConfirmingTransition && pendingStatus ? pendingStatus : selectedOrder.status}
+                  currentStatus={
+                    isConfirmingTransition && pendingStatus
+                      ? pendingStatus
+                      : selectedOrder.status
+                  }
                   onStepClick={
                     getNextStatus(selectedOrder.status)
                       ? (nextStatus) => {
@@ -414,7 +429,7 @@ export default function OrderDetailPanel({
                       : undefined
                   }
                 />
-                
+
                 {/* Dynamic transition action buttons */}
                 {selectedOrder.status === "CRIADA" && (
                   <Button
@@ -424,7 +439,8 @@ export default function OrderDetailPanel({
                     }}
                     className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
                   >
-                    Transicionar para Planejada <ArrowRight className="h-3.5 w-3.5" />
+                    Transicionar para Planejada{" "}
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 )}
                 {canSchedule && (
@@ -443,7 +459,8 @@ export default function OrderDetailPanel({
                     }}
                     className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
                   >
-                    Transicionar para Em Transporte <ArrowRight className="h-3.5 w-3.5" />
+                    Transicionar para Em Transporte{" "}
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 )}
                 {selectedOrder.status === "EM_TRANSPORTE" && (
@@ -454,10 +471,11 @@ export default function OrderDetailPanel({
                     }}
                     className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
                   >
-                    Transicionar para Entregue <ArrowRight className="h-3.5 w-3.5" />
+                    Transicionar para Entregue{" "}
+                    <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 )}
-                
+
                 {!getNextStatus(selectedOrder.status) &&
                   selectedOrder.status !== "PLANEJADA" && (
                     <p className="text-xs text-zinc-400 italic text-center">

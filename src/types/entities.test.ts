@@ -1,5 +1,9 @@
-import { Customer, isTransportTypeAuthorizedForCustomer, isLegalPerson } from "./Customer";
-import { SalesOrderStatus, isValidStatusTransition } from "./SalesOrder";
+import {
+  Customer,
+  isTransportTypeAuthorizedForCustomer,
+  isLegalPerson,
+} from "./Customer";
+import { isValidStatusTransition } from "./SalesOrder";
 
 describe("Customer Domain Rules", () => {
   const mockCustomer: Customer = {
@@ -16,8 +20,12 @@ describe("Customer Domain Rules", () => {
   });
 
   test("should check transport type authorization correctly", () => {
-    expect(isTransportTypeAuthorizedForCustomer(mockCustomer, "trans-1")).toBe(true);
-    expect(isTransportTypeAuthorizedForCustomer(mockCustomer, "trans-3")).toBe(false);
+    expect(isTransportTypeAuthorizedForCustomer(mockCustomer, "trans-1")).toBe(
+      true,
+    );
+    expect(isTransportTypeAuthorizedForCustomer(mockCustomer, "trans-3")).toBe(
+      false,
+    );
   });
 });
 

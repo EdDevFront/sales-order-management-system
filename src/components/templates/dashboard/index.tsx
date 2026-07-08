@@ -34,10 +34,6 @@ export default function Dashboard() {
   const reduxFilters = useSelector((state: RootState) => state.ui.filters);
   const [localFilters, setLocalFilters] = React.useState(reduxFilters);
 
-  React.useEffect(() => {
-    setLocalFilters(reduxFilters);
-  }, [reduxFilters]);
-
   const { data: orders = [], isLoading: loadingOrders } = useQuery({
     queryKey: ["orders"],
     queryFn: fetchSalesOrders,

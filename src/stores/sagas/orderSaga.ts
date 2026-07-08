@@ -1,20 +1,32 @@
-import { call, put, takeLatest } from "redux-saga/effects";
+import { put, takeLatest } from "redux-saga/effects";
 import * as actions from "../ordersActions";
-import { loadDatabase, saveDatabase } from "@/infrastructure/mock/mockDatabase";
+import {
+  loadDatabase,
+  saveDatabase,
+  DatabaseSchema,
+} from "@/infrastructure/mock/mockDatabase";
 import { SalesOrder, isValidStatusTransition } from "@/types/SalesOrder";
 import { AuditLog } from "@/types/AuditLog";
-import { isTransportTypeAuthorizedForCustomer } from "@/types/Customer";
+import {
+  Customer,
+  isTransportTypeAuthorizedForCustomer,
+} from "@/types/Customer";
 
 function generateId(prefix: string): string {
   return `${prefix}-${Math.random().toString(36).substring(2, 9)}`;
 }
 
+function getErrorMessage(error: unknown): string {
+  if (error instanceof Error) return error.message;
+  return String(error);
+}
+
 function logAudit(
-  db: any,
+  db: DatabaseSchema,
   actionType: AuditLog["actionType"],
   entityId: string,
-  prev?: any,
-  next?: any
+  prev?: unknown,
+  next?: unknown,
 ) {
   const audit: AuditLog = {
     id: generateId("audit"),
@@ -28,17 +40,29 @@ function logAudit(
   db.auditLogs.unshift(audit);
 }
 
-export function* createOrderWorker(action: ReturnType<typeof actions.createOrderRequest>): Generator<any, void, any> {
+export function* createOrderWorker(
+  action: ReturnType<typeof actions.createOrderRequest>,
+): Generator<unknown, void, unknown> {
   try {
     const db = loadDatabase();
-    const customer = db.customers.find((c: any) => c.id === action.payload.customerId);
-    if (!customer || !isTransportTypeAuthorizedForCustomer(customer, action.payload.transportTypeId)) {
-      throw new Error("Selected transport type is not authorized for this customer.");
+    const customer: Customer | undefined = db.customers.find(
+      (c: Customer) => c.id === action.payload.customerId,
+    );
+    if (
+      !customer ||
+      !isTransportTypeAuthorizedForCustomer(
+        customer,
+        action.payload.transportTypeId,
+      )
+    ) {
+      throw new Error(
+        "Selected transport type is not authorized for this customer.",
+      );
     }
     const newOrder: SalesOrder = {
       ...action.payload,
       id: generateId("so"),
-      status: "CRIADA",
+      status: "CRIADA" as const,
       createdAt: new Date().toISOString(),
     };
     db.salesOrders.unshift(newOrder);
@@ -46,42 +70,52 @@ export function* createOrderWorker(action: ReturnType<typeof actions.createOrder
     saveDatabase(db);
     yield put(actions.createOrderSuccess(newOrder));
     yield put(actions.refreshOrders());
-  } catch (error: any) {
-    yield put(actions.createOrderFailure(error.message || "Failed to create order"));
+  } catch (error: unknown) {
+    yield put(actions.createOrderFailure(getErrorMessage(error)));
   }
 }
 
-export function* updateStatusWorker(action: ReturnType<typeof actions.updateStatusRequest>): Generator<any, void, any> {
+export function* updateStatusWorker(
+  action: ReturnType<typeof actions.updateStatusRequest>,
+): Generator<unknown, void, unknown> {
   try {
     const db = loadDatabase();
-    const orderIndex = db.salesOrders.findIndex((o: any) => o.id === action.payload.orderId);
+    const orderIndex = db.salesOrders.findIndex(
+      (o: SalesOrder) => o.id === action.payload.orderId,
+    );
     if (orderIndex === -1) throw new Error("Order not found");
     const order = db.salesOrders[orderIndex];
     if (!isValidStatusTransition(order.status, action.payload.newStatus)) {
-      throw new Error(`Invalid status transition from ${order.status} to ${action.payload.newStatus}`);
+      throw new Error(
+        `Invalid status transition from ${order.status} to ${action.payload.newStatus}`,
+      );
     }
-    const updatedOrder = { ...order, status: action.payload.newStatus };
+    const updatedOrder: SalesOrder = {
+      ...order,
+      status: action.payload.newStatus,
+    };
     db.salesOrders[orderIndex] = updatedOrder;
     logAudit(db, "UPDATE_STATUS", order.id, order, updatedOrder);
     saveDatabase(db);
     yield put(actions.updateStatusSuccess(updatedOrder));
     yield put(actions.refreshOrders());
-  } catch (error: any) {
-    yield put(actions.updateStatusFailure(error.message || "Failed to update status"));
+  } catch (error: unknown) {
+    yield put(actions.updateStatusFailure(getErrorMessage(error)));
   }
 }
 
-export function* updateDeliveryWorker(action: ReturnType<typeof actions.updateDeliveryRequest>): Generator<any, void, any> {
+export function* updateDeliveryWorker(
+  action: ReturnType<typeof actions.updateDeliveryRequest>,
+): Generator<unknown, void, unknown> {
   try {
     const db = loadDatabase();
-    const orderIndex = db.salesOrders.findIndex((o: any) => o.id === action.payload.orderId);
+    const orderIndex = db.salesOrders.findIndex(
+      (o: SalesOrder) => o.id === action.payload.orderId,
+    );
     if (orderIndex === -1) throw new Error("Order not found");
     const order = db.salesOrders[orderIndex];
-    let nextStatus = order.status;
-    if (order.status === "PLANEJADA") {
-      nextStatus = "AGENDADA";
-    }
-    const updatedOrder = {
+    const nextStatus = order.status === "PLANEJADA" ? "AGENDADA" : order.status;
+    const updatedOrder: SalesOrder = {
       ...order,
       status: nextStatus,
       deliveryDate: action.payload.deliveryDate,
@@ -92,29 +126,46 @@ export function* updateDeliveryWorker(action: ReturnType<typeof actions.updateDe
     saveDatabase(db);
     yield put(actions.updateDeliverySuccess(updatedOrder));
     yield put(actions.refreshOrders());
-  } catch (error: any) {
-    yield put(actions.updateDeliveryFailure(error.message || "Failed to update delivery"));
+  } catch (error: unknown) {
+    yield put(actions.updateDeliveryFailure(getErrorMessage(error)));
   }
 }
 
-export function* updateTransportWorker(action: ReturnType<typeof actions.updateTransportRequest>): Generator<any, void, any> {
+export function* updateTransportWorker(
+  action: ReturnType<typeof actions.updateTransportRequest>,
+): Generator<unknown, void, unknown> {
   try {
     const db = loadDatabase();
-    const orderIndex = db.salesOrders.findIndex((o: any) => o.id === action.payload.orderId);
+    const orderIndex = db.salesOrders.findIndex(
+      (o: SalesOrder) => o.id === action.payload.orderId,
+    );
     if (orderIndex === -1) throw new Error("Order not found");
     const order = db.salesOrders[orderIndex];
-    const customer = db.customers.find((c: any) => c.id === order.customerId);
-    if (!customer || !isTransportTypeAuthorizedForCustomer(customer, action.payload.transportTypeId)) {
-      throw new Error("Selected transport type is not authorized for this customer.");
+    const customer: Customer | undefined = db.customers.find(
+      (c: Customer) => c.id === order.customerId,
+    );
+    if (
+      !customer ||
+      !isTransportTypeAuthorizedForCustomer(
+        customer,
+        action.payload.transportTypeId,
+      )
+    ) {
+      throw new Error(
+        "Selected transport type is not authorized for this customer.",
+      );
     }
-    const updatedOrder = { ...order, transportTypeId: action.payload.transportTypeId };
+    const updatedOrder: SalesOrder = {
+      ...order,
+      transportTypeId: action.payload.transportTypeId,
+    };
     db.salesOrders[orderIndex] = updatedOrder;
     logAudit(db, "UPDATE_TRANSPORT", order.id, order, updatedOrder);
     saveDatabase(db);
     yield put(actions.updateTransportSuccess(updatedOrder));
     yield put(actions.refreshOrders());
-  } catch (error: any) {
-    yield put(actions.updateTransportFailure(error.message || "Failed to update transport"));
+  } catch (error: unknown) {
+    yield put(actions.updateTransportFailure(getErrorMessage(error)));
   }
 }
 

@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import * as actions from "./ordersActions";
 
 interface OrdersState {
   loading: boolean;
@@ -21,7 +20,10 @@ const ordersSlice = createSlice({
       state.error = null;
       state.successMessage = null;
     },
-    setNotification(state, action: PayloadAction<{ success?: string | null; error?: string | null }>) {
+    setNotification(
+      state,
+      action: PayloadAction<{ success?: string | null; error?: string | null }>,
+    ) {
       state.error = action.payload.error || null;
       state.successMessage = action.payload.success || null;
     },
@@ -35,12 +37,12 @@ const ordersSlice = createSlice({
           state.loading = true;
           state.error = null;
           state.successMessage = null;
-        }
+        },
       )
       // Successes
       .addMatcher(
         (action) => action.type.endsWith("Success"),
-        (state, action: PayloadAction<any>) => {
+        (state, action: PayloadAction<unknown>) => {
           state.loading = false;
           state.error = null;
           if (action.type.includes("createOrder")) {
@@ -52,7 +54,7 @@ const ordersSlice = createSlice({
           } else if (action.type.includes("updateTransport")) {
             state.successMessage = "Tipo de transporte atualizado com sucesso!";
           }
-        }
+        },
       )
       // Failures
       .addMatcher(
@@ -61,7 +63,7 @@ const ordersSlice = createSlice({
           state.loading = false;
           state.error = action.payload;
           state.successMessage = null;
-        }
+        },
       );
   },
 });

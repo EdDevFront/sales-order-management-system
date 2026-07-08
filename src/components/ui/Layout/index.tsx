@@ -111,9 +111,7 @@ export default function Layout({ children }: LayoutProps) {
             onClick={() => setIsMobileMenuOpen(false)}
           />
           {/* Drawer panel sliding from right */}
-          <div
-            className="absolute right-0 top-0 h-full w-72 max-w-[85vw] border-l border-zinc-200 bg-white shadow-2xl dark:border-zinc-700 dark:bg-zinc-900 animate-slide-in"
-          >
+          <div className="absolute right-0 top-0 h-full w-72 max-w-[85vw] border-l border-zinc-200 bg-white shadow-2xl dark:border-zinc-700 dark:bg-zinc-900 animate-slide-in">
             <div className="flex items-center justify-between border-b border-zinc-100 px-5 py-4 dark:border-zinc-800">
               <div className="flex items-center gap-3">
                 <div className="rounded-lg bg-indigo-600 p-1.5 text-white">

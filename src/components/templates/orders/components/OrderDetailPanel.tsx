@@ -12,7 +12,8 @@ import { Customer } from "@/types/Customer";
 import { TransportType } from "@/types/TransportType";
 import { Item } from "@/types/Item";
 import { updateDeliveryRequest } from "@/stores/ordersActions";
-import { Calendar, ArrowRight, ArrowLeft, X, Pencil } from "lucide-react";
+import { Calendar, ArrowLeft, X, Pencil } from "lucide-react";
+import OrderStepper from "@/components/ui/OrderStepper";
 
 const schedulingSchema = z.object({
   deliveryDate: z.string().min(1, "Selecione uma data de entrega"),
@@ -249,8 +250,8 @@ export default function OrderDetailPanel({
                           {matchedItem?.name || it.itemId} x {it.quantity}
                         </span>
                         <span className="font-semibold">
-                          $
-                          R$ {((matchedItem?.price || 0) * it.quantity).toFixed(2)}
+                          R${" "}
+                          {((matchedItem?.price || 0) * it.quantity).toFixed(2)}
                         </span>
                       </div>
                     );
@@ -258,24 +259,19 @@ export default function OrderDetailPanel({
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 space-y-2">
+              <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
                 <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">
-                  Transição de Status Disponível
+                  Ciclo de Vida do Pedido
                 </span>
-                {getNextStatus(selectedOrder.status) && (
-                  <Button
-                    onClick={() =>
-                      handleStatusChange(
-                        selectedOrder.id,
-                        getNextStatus(selectedOrder.status)!,
-                      )
-                    }
-                    className="flex w-full items-center justify-center gap-2 rounded-lg bg-indigo-600 py-2.5 text-xs font-bold text-white shadow-md hover:bg-indigo-500 transition-all"
-                  >
-                    Transicionar para {getNextStatus(selectedOrder.status)}{" "}
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                )}
+                <OrderStepper
+                  currentStatus={selectedOrder.status}
+                  onStepClick={
+                    getNextStatus(selectedOrder.status)
+                      ? (nextStatus) =>
+                          handleStatusChange(selectedOrder.id, nextStatus)
+                      : undefined
+                  }
+                />
                 {canSchedule && (
                   <Button
                     onClick={() => setIsScheduling(true)}

@@ -22,7 +22,7 @@ export function Button({
 
   return (
     <button
-      className={`${base} ${variants[variant]} ${className}`}
+      className={`${className} ${base} ${variants[variant]}`}
       {...props}
     >
       {children}

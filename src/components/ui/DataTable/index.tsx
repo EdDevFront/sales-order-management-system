@@ -14,6 +14,7 @@ interface TableRootProps {
 interface TableHeadProps {
   columns: readonly string[];
   lastAlignRight?: boolean;
+  alignRightColumns?: number[];
 }
 
 interface TableBodyProps {
@@ -56,16 +57,16 @@ function TableRoot({ children, className = "" }: TableRootProps) {
 
 // ─── Head ─────────────────────────────────────────────────────────────────────
 
-function TableHead({ columns, lastAlignRight = true }: TableHeadProps) {
+function TableHead({ columns, lastAlignRight = true, alignRightColumns = [] }: TableHeadProps) {
   return (
     <thead className="hidden md:table-header-group bg-zinc-50 dark:bg-zinc-800/50">
       <tr>
         {columns.map((col, i) => {
-          const isLastColumn = lastAlignRight && i === columns.length - 1;
+          const isRightAligned = (lastAlignRight && i === columns.length - 1) || alignRightColumns.includes(i);
           return (
             <th
               key={`th-${col}`}
-              className={`px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-zinc-500 ${isLastColumn ? "text-right" : "text-left"}`}
+              className={`px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-zinc-500 ${isRightAligned ? "text-right" : "text-left"}`}
             >
               {col}
             </th>

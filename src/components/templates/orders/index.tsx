@@ -18,6 +18,7 @@ import OrderForm from "./components/OrderForm";
 import OrderDetailPanel from "./components/OrderDetailPanel";
 import { Plus, Info, Loader2 } from "lucide-react";
 
+import { formatCurrencyBR } from "@/utils/formatCurrency";
 import { DataTable } from "@/components/ui/DataTable";
 import { OrderStatusBadge } from "@/components/ui/OrderStatusBadge";
 import {
@@ -153,7 +154,7 @@ export default function Orders() {
 
       <div>
         <DataTable>
-          <DataTable.Head columns={ORDER_COLUMNS} />
+          <DataTable.Head columns={ORDER_COLUMNS} alignRightColumns={[3]} />
           <DataTable.Body
             isLoading={isLoading}
             isEmpty={!isLoading && orders.length === 0}
@@ -186,7 +187,7 @@ export default function Orders() {
                     alignRight
                     className="font-semibold text-zinc-900 dark:text-white"
                   >
-                    R${calculateOrderTotal(order).toFixed(2)}
+                    {formatCurrencyBR(calculateOrderTotal(order))}
                   </DataTable.Cell>
                   <DataTable.Cell mobileLabel="Ações" alignRight>
                     <Button

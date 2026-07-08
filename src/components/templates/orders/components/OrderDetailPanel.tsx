@@ -13,6 +13,7 @@ import { TransportType } from "@/types/TransportType";
 import { Item } from "@/types/Item";
 import { updateDeliveryRequest } from "@/stores/ordersActions";
 import { Calendar, ArrowLeft, X, Pencil } from "lucide-react";
+import { formatCurrencyBR } from "@/utils/formatCurrency";
 import OrderStepper from "@/components/ui/OrderStepper";
 
 const schedulingSchema = z.object({
@@ -250,8 +251,7 @@ export default function OrderDetailPanel({
                           {matchedItem?.name || it.itemId} x {it.quantity}
                         </span>
                         <span className="font-semibold">
-                          R${" "}
-                          {((matchedItem?.price || 0) * it.quantity).toFixed(2)}
+                          {formatCurrencyBR((matchedItem?.price || 0) * it.quantity)}
                         </span>
                       </div>
                     );

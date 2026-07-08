@@ -1,4 +1,5 @@
 "use client";
+import { formatCurrencyBR } from "@/utils/formatCurrency";
 import { Button } from "@/components/ui/Button";
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -86,7 +87,7 @@ export default function Items() {
       )}
 
       <DataTable>
-        <DataTable.Head columns={ITEM_COLUMNS} />
+        <DataTable.Head columns={ITEM_COLUMNS} alignRightColumns={[2]} />
         <DataTable.Body
           isLoading={isLoading}
           isEmpty={!isLoading && items.length === 0}
@@ -114,7 +115,7 @@ export default function Items() {
                 alignRight
                 className="font-semibold text-zinc-900 dark:text-white"
               >
-                R$ {i.price.toFixed(2)}
+                {formatCurrencyBR(i.price)}
               </DataTable.Cell>
             </DataTable.Row>
           ))}

@@ -12,6 +12,7 @@ import {
   fetchTransportTypes,
   fetchItems,
 } from "@/infrastructure/repositories/mockRepositories";
+import { formatCurrencyBR } from "@/utils/formatCurrency";
 import { createOrderRequest } from "@/stores/ordersActions";
 import { Plus, Trash2, X } from "lucide-react";
 import { orderFormSchema, OrderFormData } from "../schemas/orderFormSchema";
@@ -84,7 +85,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
       .filter((i) => !takenIds.includes(i.id))
       .map((i) => ({
         value: i.id,
-        label: `${i.name} - SKU: ${i.sku} (R$${i.price.toFixed(2)})`,
+        label: `${i.name} - SKU: ${i.sku} (${formatCurrencyBR(i.price)})`,
       }));
   };
 

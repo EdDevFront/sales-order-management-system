@@ -5,6 +5,29 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/stores";
 import { clearNotification } from "@/stores/ordersSlice";
 import { AlertCircle, CheckCircle2, X } from "lucide-react";
+import { tv } from "tailwind-variants";
+
+const toast = tv({
+  base: "fixed bottom-4 right-4 z-50 flex max-w-md animate-bounce items-center gap-3 rounded-lg border p-4 shadow-lg backdrop-blur-md bg-white border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800",
+});
+
+const iconWrapper = tv({
+  variants: {
+    type: {
+      error: "text-red-500",
+      success: "text-emerald-500",
+    },
+  },
+});
+
+const message = tv({
+  variants: {
+    type: {
+      error: "text-sm font-medium text-red-600 dark:text-red-400",
+      success: "text-sm font-medium text-emerald-600 dark:text-emerald-400",
+    },
+  },
+});
 
 export default function Toast() {
   const dispatch = useDispatch();
@@ -24,16 +47,16 @@ export default function Toast() {
   if (!error && !successMessage) return null;
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex max-w-md animate-bounce items-center gap-3 rounded-lg border p-4 shadow-lg backdrop-blur-md bg-white border-zinc-200 dark:bg-zinc-900 dark:border-zinc-800">
+    <div className={toast()}>
       {error ? (
         <>
-          <AlertCircle className="h-5 w-5 text-red-500" />
-          <div className="text-sm font-medium text-red-600 dark:text-red-400">{error}</div>
+          <AlertCircle className={iconWrapper({ type: "error" })} />
+          <div className={message({ type: "error" })}>{error}</div>
         </>
       ) : (
         <>
-          <CheckCircle2 className="h-5 w-5 text-emerald-500" />
-          <div className="text-sm font-medium text-emerald-600 dark:text-emerald-400">{successMessage}</div>
+          <CheckCircle2 className={iconWrapper({ type: "success" })} />
+          <div className={message({ type: "success" })}>{successMessage}</div>
         </>
       )}
       <button

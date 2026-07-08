@@ -110,6 +110,14 @@ Always use [Conventional Commits](https://www.conventionalcommits.org/):
 - `style:` — formatting changes
 - `perf:` — performance improvements
 
+**Version tags are only generated when the commit message contains one of these markers:**
+
+- `[FEATURE]` → **Minor** version bump
+- `[PATCH]` → **Patch** version bump
+- `[BREAKING]` → **Major** version bump
+
+The marker can appear anywhere in the commit subject (e.g. `feat: [FEATURE] add customer export` or `[PATCH] fix pagination bug`).
+
 ## 11. Release Flow (CI/CD)
 
 This project uses **Semantic Release** to automate versioning via GitHub Actions.

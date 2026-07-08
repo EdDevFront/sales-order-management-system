@@ -88,9 +88,14 @@ This project uses **Semantic Release** to automate versioning via GitHub Actions
 
 Commit messages determine the next version:
 
-- `feat:` → **Minor** (v0.2.0)
-- `fix:` → **Patch** (v0.1.1)
-- `BREAKING CHANGE:` in body → **Major** (v1.0.0)
+The marker can appear anywhere in the commit subject (e.g. `feat: [FEATURE] add customer export` or `[PATCH] fix pagination bug`):
+
+| Commit contains | Version |
+|---|---|
+| `[FEATURE]` | **Minor** (v1.0.0 → v1.1.0) |
+| `[PATCH]` | **Patch** (v1.0.0 → v1.0.1) |
+| `[BREAKING]` | **Major** (v1.0.0 → v2.0.0) |
+| *(none of the above)* | *No release generated* |
 
 The CI/CD pipeline runs on push to `main`:
 

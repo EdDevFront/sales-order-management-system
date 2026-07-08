@@ -92,7 +92,9 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
         <button
           type="button"
           disabled={props.disabled}
-          onClick={() => { if (!props.disabled) setIsOpen(!isOpen); }}
+          onClick={() => {
+            if (!props.disabled) setIsOpen(!isOpen);
+          }}
           className={`flex h-11 sm:h-10 w-full items-center justify-between rounded-lg border px-4 sm:px-3 py-3 sm:py-2 text-sm ring-offset-white focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:ring-offset-zinc-950 ${
             props.disabled
               ? "border-zinc-100 bg-zinc-50 text-zinc-400 cursor-not-allowed dark:border-zinc-800 dark:bg-zinc-900/50 dark:text-zinc-600"
@@ -102,7 +104,9 @@ export const Select = React.forwardRef<HTMLSelectElement, CustomSelectProps>(
           <span className="truncate">{currentLabel}</span>
           <ChevronDown
             className={`h-5 w-5 sm:h-4 sm:w-4 shrink-0 ml-2 transition-transform ${isOpen ? "rotate-180" : ""} ${
-              props.disabled ? "text-zinc-300 dark:text-zinc-700" : "text-zinc-500"
+              props.disabled
+                ? "text-zinc-300 dark:text-zinc-700"
+                : "text-zinc-500"
             }`}
           />
         </button>

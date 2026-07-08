@@ -39,7 +39,7 @@ const statusTransitions: Record<SalesOrderStatus, SalesOrderStatus[]> = {
 
 export function isValidStatusTransition(
   currentStatus: SalesOrderStatus,
-  newStatus: SalesOrderStatus
+  newStatus: SalesOrderStatus,
 ): boolean {
   const allowedTransitions = statusTransitions[currentStatus] || [];
   return allowedTransitions.includes(newStatus);

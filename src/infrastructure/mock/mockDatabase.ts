@@ -15,7 +15,11 @@ export interface DatabaseSchema {
 }
 
 const DEFAULT_TRANSPORT_TYPES: TransportType[] = [
-  { id: "trans-1", name: "Caminhão", description: "Standard single unit truck" },
+  {
+    id: "trans-1",
+    name: "Caminhão",
+    description: "Standard single unit truck",
+  },
   { id: "trans-2", name: "Carreta", description: "Large semi-trailer" },
   { id: "trans-3", name: "Bi-truck", description: "Double axle front truck" },
 ];
@@ -45,9 +49,24 @@ const DEFAULT_CUSTOMERS: Customer[] = [
 ];
 
 const DEFAULT_ITEMS: Item[] = [
-  { id: "item-1", name: "Heavy Duty Engine Part", sku: "HD-ENG-001", price: 1500.0 },
-  { id: "item-2", name: "Steel Support Beam 6m", sku: "STL-BEAM-6M", price: 450.0 },
-  { id: "item-3", name: "Industrial Air Filter", sku: "IND-FLTR-X", price: 120.0 },
+  {
+    id: "item-1",
+    name: "Heavy Duty Engine Part",
+    sku: "HD-ENG-001",
+    price: 1500.0,
+  },
+  {
+    id: "item-2",
+    name: "Steel Support Beam 6m",
+    sku: "STL-BEAM-6M",
+    price: 450.0,
+  },
+  {
+    id: "item-3",
+    name: "Industrial Air Filter",
+    sku: "IND-FLTR-X",
+    price: 120.0,
+  },
 ];
 
 const DEFAULT_SALES_ORDERS: SalesOrder[] = [
@@ -55,7 +74,10 @@ const DEFAULT_SALES_ORDERS: SalesOrder[] = [
     id: "so-1",
     customerId: "cust-1",
     transportTypeId: "trans-1",
-    items: [{ itemId: "item-1", quantity: 2 }, { itemId: "item-3", quantity: 5 }],
+    items: [
+      { itemId: "item-1", quantity: 2 },
+      { itemId: "item-3", quantity: 5 },
+    ],
     status: "CRIADA",
     createdAt: new Date(Date.now() - 3600000 * 2).toISOString(),
   },

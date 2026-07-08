@@ -34,7 +34,9 @@ export default function Orders() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
 
-  const successMessage = useSelector((state: RootState) => state.orders.successMessage);
+  const successMessage = useSelector(
+    (state: RootState) => state.orders.successMessage,
+  );
 
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["orders"],

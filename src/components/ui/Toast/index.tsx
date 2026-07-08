@@ -31,7 +31,9 @@ const message = tv({
 
 export default function Toast() {
   const dispatch = useDispatch();
-  const { error, successMessage } = useSelector((state: RootState) => state.orders);
+  const { error, successMessage } = useSelector(
+    (state: RootState) => state.orders,
+  );
 
   useEffect(() => {
     if (error || successMessage) {
@@ -42,7 +44,9 @@ export default function Toast() {
     }
   }, [error, successMessage, dispatch]);
 
-  const isModalOpen = typeof document !== "undefined" && !!document.querySelector(".fixed.inset-0.z-50");
+  const isModalOpen =
+    typeof document !== "undefined" &&
+    !!document.querySelector(".fixed.inset-0.z-50");
   if (isModalOpen) return null;
   if (!error && !successMessage) return null;
 

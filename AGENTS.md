@@ -26,6 +26,7 @@ Even before reaching the 200-line limit, use these triggers to extract new compo
 ## 2. Variable & Function Naming
 
 - Variables representing checks, conditions, or business rules must have highly descriptive and specific names (e.g., `isLegalPerson` or `isTransportTypeAuthorizedForCustomer` instead of generic names).
+- **The use of `any` is strictly forbidden.** Every value must have a proper TypeScript type. Use `unknown` when the type is truly not known, then narrow it with type guards.
 
 ## 3. Architecture Principles
 

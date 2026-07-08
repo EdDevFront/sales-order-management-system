@@ -12,6 +12,7 @@ import { Customer } from "@/types/Customer";
 import { TransportType } from "@/types/TransportType";
 import { Item } from "@/types/Item";
 import { updateDeliveryRequest } from "@/stores/ordersActions";
+import { setNotification } from "@/stores/ordersSlice";
 import { Calendar, ArrowLeft, X, Pencil } from "lucide-react";
 import { formatCurrencyBR } from "@/utils/formatCurrency";
 import OrderStepper from "@/components/ui/OrderStepper";
@@ -70,7 +71,9 @@ export default function OrderDetailPanel({
 
   const handleScheduleSubmit = (data: z.infer<typeof schedulingSchema>) => {
     dispatch(updateDeliveryRequest({ orderId: selectedOrder.id, ...data }));
+    dispatch(setNotification({ success: "Entrega agendada com sucesso!" }));
     setIsScheduling(false);
+    onClose();
   };
 
   const windowOptions = [
@@ -251,7 +254,9 @@ export default function OrderDetailPanel({
                           {matchedItem?.name || it.itemId} x {it.quantity}
                         </span>
                         <span className="font-semibold">
-                          {formatCurrencyBR((matchedItem?.price || 0) * it.quantity)}
+                          {formatCurrencyBR(
+                            (matchedItem?.price || 0) * it.quantity,
+                          )}
                         </span>
                       </div>
                     );
@@ -261,7 +266,7 @@ export default function OrderDetailPanel({
 
               <div className="pt-4 border-t border-zinc-200 dark:border-zinc-800 space-y-3">
                 <span className="block text-xs font-semibold uppercase tracking-wider text-zinc-400">
-                  Ciclo de Vida do Pedido
+                  Progresso do Pedido
                 </span>
                 <OrderStepper
                   currentStatus={selectedOrder.status}

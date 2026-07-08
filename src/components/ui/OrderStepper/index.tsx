@@ -1,8 +1,15 @@
 "use client";
 
 import React from "react";
+import {
+  FileText,
+  ClipboardList,
+  Calendar,
+  Truck,
+  CheckCircle2,
+  Check,
+} from "lucide-react";
 import { SalesOrderStatus, STATUS_LABEL } from "@/types/SalesOrder";
-import { Check } from "lucide-react";
 
 const STEP_ORDER: SalesOrderStatus[] = [
   "CRIADA",
@@ -11,6 +18,14 @@ const STEP_ORDER: SalesOrderStatus[] = [
   "EM_TRANSPORTE",
   "ENTREGUE",
 ];
+
+const STEP_ICONS: Record<SalesOrderStatus, React.ElementType> = {
+  CRIADA: FileText,
+  PLANEJADA: ClipboardList,
+  AGENDADA: Calendar,
+  EM_TRANSPORTE: Truck,
+  ENTREGUE: CheckCircle2,
+};
 
 interface OrderStepperProps {
   currentStatus: SalesOrderStatus;
@@ -31,24 +46,28 @@ export default function OrderStepper({
           const isCurrent = index === currentIndex;
           const isFuture = index > currentIndex;
           const isClickable = index === currentIndex + 1 && onStepClick;
+          const Icon = STEP_ICONS[status];
 
           return (
             <React.Fragment key={status}>
-              {/* Step circle + label */}
               <div className="flex flex-col items-center">
                 <button
                   type="button"
                   disabled={!isClickable}
                   onClick={() => isClickable && onStepClick?.(status)}
                   className={`
-                    flex h-8 w-8 items-center justify-center rounded-full text-xs font-bold transition-all
+                    flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold transition-all
                     ${isCompleted ? "bg-emerald-500 text-white shadow-sm" : ""}
                     ${isCurrent ? "bg-indigo-600 text-white ring-2 ring-indigo-200 ring-offset-2 dark:ring-indigo-800" : ""}
                     ${isFuture ? "bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600" : ""}
                     ${isClickable ? "cursor-pointer hover:bg-indigo-500 hover:text-white" : "cursor-default"}
                   `}
                 >
-                  {isCompleted ? <Check className="h-4 w-4" /> : index + 1}
+                  {isCompleted ? (
+                    <Check className="h-4 w-4" />
+                  ) : (
+                    <Icon className="h-4 w-4" />
+                  )}
                 </button>
                 <span
                   className={`
@@ -61,9 +80,8 @@ export default function OrderStepper({
                 </span>
               </div>
 
-              {/* Connector line (except after last) */}
               {index < STEP_ORDER.length - 1 && (
-                <div className="flex-1 mx-1 self-center mb-5">
+                <div className="flex-1 mx-1 self-center mb-6">
                   <div
                     className={`
                       h-0.5 rounded-full

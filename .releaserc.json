@@ -41,7 +41,9 @@
     [
       "@semantic-release/github",
       {
-        "assets": [{ "path": ".next/**", "label": "Build artifacts" }]
+        "assets": [
+          { "path": "CHANGELOG.md", "label": "Changelog" }
+        ]
       }
     ]
   ]

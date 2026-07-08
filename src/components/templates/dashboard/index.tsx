@@ -316,7 +316,7 @@ export default function Dashboard() {
                 className="text-zinc-500 dark:text-zinc-400"
               >
                 {order.deliveryDate ? (
-                  `${order.deliveryDate} (${order.deliveryWindow})`
+                  `${order.deliveryDate.split("-").reverse().join("/")} (${order.deliveryWindow})`
                 ) : (
                   <span className="text-zinc-400 italic">Não agendado</span>
                 )}
@@ -325,7 +325,7 @@ export default function Dashboard() {
                 <span
                   className={`rounded-full px-2.5 py-1 text-xs font-semibold border ${orderStatusVariant(order.status)}`}
                 >
-                  {order.status}
+                  {STATUS_LABEL[order.status] || order.status}
                 </span>
               </DataTable.Cell>
             </DataTable.Row>

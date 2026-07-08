@@ -93,3 +93,16 @@ Always use [Conventional Commits](https://www.conventionalcommits.org/):
 - `docs:` — documentation only changes
 - `style:` — formatting changes
 - `perf:` — performance improvements
+
+## 11. Release Flow (CI/CD)
+
+This project uses **Semantic Release** to automate versioning via GitHub Actions.
+
+Commit messages determine the next version:
+- `feat:` → **Minor** (v0.2.0)
+- `fix:` → **Patch** (v0.1.1)
+- `BREAKING CHANGE:` in body → **Major** (v1.0.0)
+
+The CI/CD pipeline runs on push to `main`:
+1. **Quality** — lint, test, build
+2. **Release** — generate changelog, bump version, create Git tag, publish GitHub Release

@@ -30,7 +30,7 @@ const navItems = [
   {
     id: "orders",
     href: "/orders",
-    label: "Pedidos de Venda",
+    label: "Ordens de Venda",
     icon: ShoppingCart,
   },
   { id: "customers", href: "/customers", label: "Clientes", icon: Users },
@@ -64,7 +64,7 @@ export default function Layout({ children }: LayoutProps) {
                 Portal OVGS
               </h1>
               <p className="text-xs text-zinc-500 dark:text-zinc-400">
-                Gestão de Pedidos de Venda & Logística
+                Gestão de Ordens de Venda & Logística
               </p>
             </div>
           </Link>
@@ -154,7 +154,7 @@ export default function Layout({ children }: LayoutProps) {
             </nav>
             <div className="absolute bottom-0 left-0 right-0 border-t border-zinc-100 px-5 py-4 dark:border-zinc-800">
               <p className="text-xs text-zinc-400">
-                Gestão de Pedidos de Venda & Logística
+                Gestão de Ordens de Venda & Logística
               </p>
             </div>
           </div>

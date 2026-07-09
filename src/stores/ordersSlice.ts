@@ -46,7 +46,7 @@ const ordersSlice = createSlice({
           state.loading = false;
           state.error = null;
           if (action.type.includes("createOrder")) {
-            state.successMessage = "Pedido de Venda criado com sucesso!";
+            state.successMessage = "Ordem de Venda criada com sucesso!";
           } else if (action.type.includes("updateStatus")) {
             state.successMessage = "Status do pedido atualizado com sucesso!";
           } else if (action.type.includes("updateDelivery")) {

@@ -140,7 +140,7 @@ export default function Orders() {
       <div className="flex flex-col sm:flex-row gap-4 sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">
-            Pedidos de Venda
+            Ordens de Venda
           </h2>
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
             Monitore e gerencie as transições do ciclo de vida dos pedidos de
@@ -193,7 +193,8 @@ export default function Orders() {
                     {formatCurrencyBR(calculateOrderTotal(order))}
                   </DataTable.Cell>
                   <DataTable.Cell mobileLabel="Ações" alignRight>
-                    <Button variant="ghost"
+                    <Button
+                      variant="ghost"
                       onClick={() => setSelectedOrder(order)}
                       className="flex items-center gap-1 sm:ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold w-full sm:w-auto justify-center"
                     >

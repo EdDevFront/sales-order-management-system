@@ -1,9 +1,9 @@
 ﻿# Documentação da Página de Pedidos
 
-Gerenciamento de ciclo de vida para Pedidos de Venda, operações de agendamento e inspeções de detalhes.
+Gerenciamento de ciclo de vida para Ordens de Venda, operações de agendamento e inspeções de detalhes.
 
 ## Funcionalidades
-- **Listagem de Pedidos**: Exibição paginada de todos os pedidos de venda do sistema com cálculo automático do total financeiro do pedido.
+- **Listagem de Pedidos**: Exibição paginada de todos os ordens de venda do sistema com cálculo automático do total financeiro do pedido.
 - **Criação de Pedidos**: Formulário completo para registrar novos pedidos, vinculando um Cliente, seu respectivo Tipo de Transporte e adicionando dinamicamente múltiplos itens com suas respectivas quantidades.
 - **Inspeção de Pedido**: Painel lateral detalhado exibindo informações do cliente, checklist de itens com preços parciais e históricos de entrega.
 - **Edição de Transporte**: Troca dinâmica de tipo de transporte diretamente no painel de detalhes (permitido apenas nos status mutáveis iniciais CRIADA ou PLANEJADA).

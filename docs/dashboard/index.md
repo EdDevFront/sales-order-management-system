@@ -1,12 +1,12 @@
 ﻿# Documentação da Página de Dashboard
 
-Painel de monitoramento operacional contendo métricas, controles de filtro ativos e tabela paginada de Pedidos de Venda.
+Painel de monitoramento operacional contendo métricas, controles de filtro ativos e tabela paginada de Ordens de Venda.
 
 ## Funcionalidades
 - **Métricas Operacionais**: Visualização de contadores consolidados para pedidos totais, pendentes de agendamento (PLANEJADA), em trânsito (EM_TRANSPORTE) e entregues (ENTREGUE).
 - **Filtros Dinâmicos**: Filtragem instantânea de pedidos por critérios combinados de Status, Cliente, Tipo de Transporte e Data de Criação.
 - **Limpeza de Filtros**: Ação rápida de reset de todos os filtros ativos, limpando as seleções em um único clique.
-- **Tabela Paginada**: Visualização dos pedidos de venda filtrados com suporte a paginação sob demanda (8 itens por página).
+- **Tabela Paginada**: Visualização dos ordens de venda filtrados com suporte a paginação sob demanda (8 itens por página).
 
 ## Componentes e Estrutura
 - **Cards de Métrica**: Total de Pedidos, Necessita Agendamento, Em Transporte e Entregues.

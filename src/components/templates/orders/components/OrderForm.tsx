@@ -157,6 +157,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
               </label>
               <Button
                 type="button"
+                variant="ghost"
                 onClick={() => append({ itemId: "", quantity: 1 })}
                 className="flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-500"
               >
@@ -201,11 +202,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-            <Button
-              type="button"
-              onClick={onClose}
-              variant="outline"
-            >
+            <Button type="button" onClick={onClose} variant="outline">
               Cancelar
             </Button>
             <Button

@@ -4,8 +4,8 @@ import {
   createOrderWorker,
   updateDeliveryWorker,
   updateTransportWorker,
-} from "./orderSaga";
-import * as actions from "../ordersActions";
+} from "@/stores/sagas/orderSaga";
+import * as actions from "@/stores/ordersActions";
 import * as mockDb from "@/infrastructure/mock/mockDatabase";
 import { SalesOrder } from "@/types/SalesOrder";
 
@@ -101,7 +101,7 @@ describe("Saga - createOrderWorker", () => {
           name: "Acme",
           document: "12.345.678/0001-97",
           documentType: "CNPJ",
-          authorizedTransportTypeIds: ["trans-1"], // only trans-1
+          authorizedTransportTypeIds: ["trans-1"],
         },
       ],
     });
@@ -112,7 +112,7 @@ describe("Saga - createOrderWorker", () => {
       createOrderWorker,
       actions.createOrderRequest({
         customerId: "cust-1",
-        transportTypeId: "trans-99", // not authorized
+        transportTypeId: "trans-99",
         items: [{ itemId: "item-1", quantity: 1 }],
       }),
     ).toPromise();
@@ -345,7 +345,7 @@ describe("Saga - updateDeliveryWorker", () => {
       expect.objectContaining({
         type: actions.updateDeliverySuccess.type,
         payload: expect.objectContaining({
-          status: "AGENDADA", // status unchanged
+          status: "AGENDADA",
           deliveryDate: "2026-07-20",
         }),
       }),
@@ -439,7 +439,7 @@ describe("Saga - updateTransportWorker", () => {
           name: "Acme",
           document: "12.345.678/0001-97",
           documentType: "CNPJ",
-          authorizedTransportTypeIds: ["trans-1"], // only trans-1
+          authorizedTransportTypeIds: ["trans-1"],
         },
       ],
       salesOrders: [sampleOrder],
@@ -486,8 +486,8 @@ describe("Saga - updateTransportWorker", () => {
 
   test("should fail when customer not found for the order", async () => {
     const db = makeMockDb({
-      customers: [], // no customers
-      salesOrders: [sampleOrder], // order references cust-1
+      customers: [],
+      salesOrders: [sampleOrder],
     });
     (mockDb.loadDatabase as jest.Mock).mockReturnValue(db);
 

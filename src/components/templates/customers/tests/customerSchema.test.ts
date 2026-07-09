@@ -185,3 +185,69 @@ describe("Customer Schema (Zod)", () => {
     expect(result.success).toBe(true);
   });
 });
+
+// ─── Document Masking Tests ───────────────────────────────────────────────────
+
+describe("Document Masking", () => {
+  function maskDocument(val: string, type: "CPF" | "CNPJ"): string {
+    const clean = val.replace(/\D/g, "");
+    if (type === "CPF") {
+      return clean
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+        .substring(0, 14);
+    }
+    return clean
+      .replace(/(\d{2})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1.$2")
+      .replace(/(\d{3})(\d)/, "$1/$2")
+      .replace(/(\d{4})(\d{1,2})$/, "$1-$2")
+      .substring(0, 18);
+  }
+
+  describe("CT-UNIT-28: CPF masking", () => {
+    test("should format 11 digits as CPF", () => {
+      expect(maskDocument("52998224725", "CPF")).toBe("529.982.247-25");
+    });
+
+    test("should format partially typed CPF", () => {
+      expect(maskDocument("529", "CPF")).toBe("529");
+      expect(maskDocument("5299", "CPF")).toBe("529.9");
+      expect(maskDocument("529982", "CPF")).toBe("529.982");
+    });
+
+    test("should strip non-digits from CPF input", () => {
+      expect(maskDocument("abc529.982.247-25def", "CPF")).toBe("529.982.247-25");
+    });
+  });
+
+  describe("CT-UNIT-29: CNPJ masking", () => {
+    test("should format 14 digits as CNPJ", () => {
+      expect(maskDocument("11222333000181", "CNPJ")).toBe("11.222.333/0001-81");
+    });
+
+    test("should format partially typed CNPJ", () => {
+      expect(maskDocument("11", "CNPJ")).toBe("11");
+      expect(maskDocument("11222", "CNPJ")).toBe("11.222");
+      expect(maskDocument("11222333", "CNPJ")).toBe("11.222.333");
+      expect(maskDocument("112223330001", "CNPJ")).toBe("11.222.333/0001");
+    });
+
+    test("should strip non-digits from CNPJ input", () => {
+      expect(maskDocument("abc11.222.333/0001-81xyz", "CNPJ")).toBe("11.222.333/0001-81");
+    });
+  });
+
+  describe("Empty and edge cases", () => {
+    test("should return empty string for empty input", () => {
+      expect(maskDocument("", "CPF")).toBe("");
+      expect(maskDocument("", "CNPJ")).toBe("");
+    });
+
+    test("should return empty string for only non-digits", () => {
+      expect(maskDocument("abc", "CPF")).toBe("");
+      expect(maskDocument("abc./-", "CNPJ")).toBe("");
+    });
+  });
+});

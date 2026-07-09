@@ -161,24 +161,52 @@ export default function CustomerForm({
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
                 Transportes Autorizados <span className="text-red-500">*</span>
               </label>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-2 grid grid-cols-2 gap-2">
                 {transports.map((t) => {
-                  const isActive = currentTransports.includes(t.id);
+                  const isSelected = currentTransports.includes(t.id);
                   return (
-                    <Button
-                      type="button"
+                    <label
                       key={t.id}
-                      onClick={() => toggleTransport(t.id)}
-                      className={`flex items-center gap-1 rounded-full px-3 py-1 text-xs font-medium border ${isActive ? "bg-indigo-50 border-indigo-300 text-indigo-700 dark:bg-indigo-950 dark:border-indigo-800 dark:text-indigo-300" : "bg-zinc-50 border-zinc-200 text-zinc-600 dark:bg-zinc-800 dark:border-zinc-700 dark:text-zinc-400"}`}
+                      className={`
+                        flex items-center gap-2.5 rounded-lg border-2 px-3 py-2.5 cursor-pointer transition-all text-sm
+                        ${
+                          isSelected
+                            ? "border-indigo-500 bg-indigo-50 text-indigo-700 dark:border-indigo-500 dark:bg-indigo-950/30 dark:text-indigo-300"
+                            : "border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-zinc-600"
+                        }
+                      `}
                     >
-                      {isActive && <Check className="h-3 w-3" />} {t.name}
-                    </Button>
+                      <input
+                        type="checkbox"
+                        checked={isSelected}
+                        onChange={() => toggleTransport(t.id)}
+                        className="sr-only"
+                      />
+                      <div
+                        className={`
+                          flex h-4.5 w-4.5 shrink-0 items-center justify-center rounded border-2 transition-all
+                          ${
+                            isSelected
+                              ? "border-indigo-500 bg-indigo-500 text-white"
+                              : "border-zinc-300 dark:border-zinc-600"
+                          }
+                        `}
+                      >
+                        {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
+                      </div>
+                      <span className="font-medium">{t.name}</span>
+                    </label>
                   );
                 })}
               </div>
               {errors.authorizedTransportTypeIds && (
-                <p className="mt-1 text-xs text-red-500">
+                <p className="mt-2 text-xs text-red-500">
                   {errors.authorizedTransportTypeIds.message}
+                </p>
+              )}
+              {transports.length === 0 && (
+                <p className="mt-2 text-xs text-zinc-400 italic">
+                  Nenhum tipo de transporte cadastrado.
                 </p>
               )}
             </div>

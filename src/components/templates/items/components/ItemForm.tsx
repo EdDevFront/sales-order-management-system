@@ -78,7 +78,7 @@ export default function ItemForm({
             </div>
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                Preço (USD) <span className="text-red-500">*</span>
+                Preço (R$) <span className="text-red-500">*</span>
               </label>
               <Input
                 type="number"

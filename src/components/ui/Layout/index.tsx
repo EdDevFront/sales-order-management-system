@@ -24,7 +24,7 @@ const navItems = [
   {
     id: "dashboard",
     href: "/dashboard",
-    label: "Dashboard",
+    label: "Monitoramento",
     icon: LayoutDashboard,
   },
   {

@@ -5,6 +5,7 @@ import { fetchAuditLogs } from "@/infrastructure/repositories/mockRepositories";
 import { AuditLog } from "@/types/AuditLog";
 import { Eye, EyeOff, Copy } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
+import { Button } from "@/components/ui/Button";
 import { AUDIT_COLUMNS, AUDIT_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
 import { auditActionVariant } from "./utils/auditActionVariant";
 
@@ -57,13 +58,14 @@ export default function AuditLogs() {
                   <DataTable.Cell mobileLabel="Entidade" className="font-medium text-zinc-500">{log.entityAffected}</DataTable.Cell>
                   <DataTable.Cell mobileLabel="ID Entidade" className="font-mono text-zinc-500">{log.entityId}</DataTable.Cell>
                   <DataTable.Cell mobileLabel="Detalhes" alignRight>
-                    <button
+                    <Button
+                      variant="ghost"
                       onClick={() => setExpandedLogId(isExpanded ? null : log.id)}
-                      className="flex items-center gap-1 sm:ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold w-full sm:w-auto justify-center"
+                      className="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
                     >
                       {isExpanded ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       {isExpanded ? "Ocultar" : "Inspecionar"}
-                    </button>
+                    </Button>
                   </DataTable.Cell>
                 </DataTable.Row>
                 {isExpanded && (

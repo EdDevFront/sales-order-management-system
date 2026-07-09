@@ -47,7 +47,7 @@ export default function TransportForm({
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-            <Button type="button" onClick={onClose} className="rounded-md border border-zinc-300 px-4 py-2 text-sm dark:border-zinc-700">Cancelar</Button>
+            <Button type="button" variant="outline" onClick={onClose}>Cancelar</Button>
             <Button type="submit" disabled={isPending} className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
               {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Salvar Transporte"}
             </Button>

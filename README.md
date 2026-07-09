@@ -90,12 +90,12 @@ Commit messages determine the next version:
 
 The marker can appear anywhere in the commit subject (e.g. `feat: [FEATURE] add customer export` or `[PATCH] fix pagination bug`):
 
-| Commit contains | Version |
-|---|---|
-| `[FEATURE]` | **Minor** (v1.0.0 → v1.1.0) |
-| `[PATCH]` | **Patch** (v1.0.0 → v1.0.1) |
-| `[BREAKING]` | **Major** (v1.0.0 → v2.0.0) |
-| *(none of the above)* | *No release generated* |
+| Commit contains       | Version                     |
+| --------------------- | --------------------------- |
+| `[FEATURE]`           | **Minor** (v1.0.0 → v1.1.0) |
+| `[PATCH]`             | **Patch** (v1.0.0 → v1.0.1) |
+| `[BREAKING]`          | **Major** (v1.0.0 → v2.0.0) |
+| _(none of the above)_ | _No release generated_      |
 
 The CI/CD pipeline runs on push to `main`:
 

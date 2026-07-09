@@ -193,7 +193,7 @@ export default function Orders() {
                     {formatCurrencyBR(calculateOrderTotal(order))}
                   </DataTable.Cell>
                   <DataTable.Cell mobileLabel="Ações" alignRight>
-                    <Button
+                    <Button variant="ghost"
                       onClick={() => setSelectedOrder(order)}
                       className="flex items-center gap-1 sm:ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold w-full sm:w-auto justify-center"
                     >

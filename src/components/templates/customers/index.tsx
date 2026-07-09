@@ -148,7 +148,7 @@ export default function Customers() {
                 </div>
               </DataTable.Cell>
               <DataTable.Cell mobileLabel="Ações" alignRight>
-                <Button
+                <Button variant="ghost"
                   onClick={() => handleEdit(c)}
                   className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
                 >

@@ -10,7 +10,7 @@ const button = tv({
       secondary:
         "bg-zinc-100 text-zinc-900 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700",
       outline:
-        "border-2 border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-100 hover:border-zinc-400 active:bg-zinc-200 dark:border-zinc-600 dark:bg-transparent dark:text-zinc-300 dark:hover:bg-zinc-800 dark:hover:border-zinc-500",
+        "border-2 border-indigo-200 bg-white text-indigo-600 hover:bg-indigo-50 hover:border-indigo-300 active:bg-indigo-100 dark:border-indigo-800 dark:bg-transparent dark:text-indigo-400 dark:hover:bg-indigo-950/30 dark:hover:border-indigo-700",
       ghost:
         "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-zinc-100",
       danger:

@@ -89,7 +89,7 @@ export default function Transports() {
               <DataTable.Cell mobileLabel="Nome" className="font-medium text-zinc-900 dark:text-white">{t.name}</DataTable.Cell>
               <DataTable.Cell mobileLabel="Descrição" className="text-zinc-500 dark:text-zinc-400">{t.description}</DataTable.Cell>
               <DataTable.Cell mobileLabel="Ações" alignRight>
-                <Button onClick={() => handleEdit(t)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Editar</Button>
+                <Button variant="ghost" onClick={() => handleEdit(t)} className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400">Editar</Button>
               </DataTable.Cell>
             </DataTable.Row>
           ))}

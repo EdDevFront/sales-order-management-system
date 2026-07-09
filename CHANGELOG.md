@@ -1,3 +1,11 @@
+## [2.0.2](https://github.com/EdDevFront/sales-order-management-system/compare/v2.0.1...v2.0.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* [PATCH] derive selectedOrder from selectedOrderId to fix real-time updates in details modal ([7e7d500](https://github.com/EdDevFront/sales-order-management-system/commit/7e7d5001d5f756f1744927e8bafc87bc07d14a95))
+* [PATCH] fix ESLint variable declaration order and remove unused imports ([2573525](https://github.com/EdDevFront/sales-order-management-system/commit/25735257010ed5adbdd959d59ca013941a3ff456))
+
 ## [2.0.1](https://github.com/EdDevFront/sales-order-management-system/compare/v2.0.0...v2.0.1) (2026-07-09)
 
 

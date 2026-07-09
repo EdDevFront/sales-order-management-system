@@ -34,15 +34,6 @@ export default function Orders() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
-  const selectedOrder = React.useMemo(() => {
-    if (!selectedOrderId) return null;
-    return orders.find((o) => o.id === selectedOrderId) || null;
-  }, [orders, selectedOrderId]);
-
-  const successMessage = useSelector(
-    (state: RootState) => state.orders.successMessage,
-  );
-
   const { data: orders = [], isLoading } = useQuery({
     queryKey: ["orders"],
     queryFn: fetchSalesOrders,
@@ -59,6 +50,15 @@ export default function Orders() {
     queryKey: ["items"],
     queryFn: fetchItems,
   });
+
+  const selectedOrder = React.useMemo(() => {
+    if (!selectedOrderId) return null;
+    return orders.find((o) => o.id === selectedOrderId) || null;
+  }, [orders, selectedOrderId]);
+
+  const successMessage = useSelector(
+    (state: RootState) => state.orders.successMessage,
+  );
 
   const [currentPage, setCurrentPage] = React.useState(1);
   const totalPages = Math.ceil(orders.length / ITEMS_PER_PAGE);

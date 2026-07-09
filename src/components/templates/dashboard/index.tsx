@@ -9,7 +9,6 @@ import { Filter } from "lucide-react";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { DataTable } from "@/components/ui/DataTable";
 import {
-  OrderStatusBadge,
   orderStatusVariant,
 } from "@/components/ui/OrderStatusBadge";
 import {

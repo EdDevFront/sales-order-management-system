@@ -5,7 +5,11 @@ import { useTransportCrud } from "./hooks/useTransportCrud";
 import { TransportType } from "@/types/TransportType";
 import { Plus } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-import { TRANSPORT_COLUMNS, TRANSPORT_SKELETON_WIDTHS } from "./constants";
+import {
+  TRANSPORT_COLUMNS,
+  TRANSPORT_SKELETON_WIDTHS,
+  ITEMS_PER_PAGE,
+} from "./constants";
 import TransportForm from "./components/TransportForm";
 
 export default function Transports() {

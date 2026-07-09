@@ -6,7 +6,11 @@ import { useItemCrud } from "./hooks/useItemCrud";
 import { Item } from "@/types/Item";
 import { Plus } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-import { ITEM_COLUMNS, ITEM_SKELETON_WIDTHS } from "./constants";
+import {
+  ITEM_COLUMNS,
+  ITEM_SKELETON_WIDTHS,
+  ITEMS_PER_PAGE,
+} from "./constants";
 import ItemForm from "./components/ItemForm";
 
 export default function Items() {

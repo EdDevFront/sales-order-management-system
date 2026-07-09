@@ -5,7 +5,11 @@ import { useCustomerCrud } from "./hooks/useCustomerCrud";
 import { Customer } from "@/types/Customer";
 import { Plus } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-import { CUSTOMER_COLUMNS, CUSTOMER_SKELETON_WIDTHS } from "./constants";
+import {
+  CUSTOMER_COLUMNS,
+  CUSTOMER_SKELETON_WIDTHS,
+  ITEMS_PER_PAGE,
+} from "./constants";
 import CustomerForm from "./components/CustomerForm";
 
 export default function Customers() {

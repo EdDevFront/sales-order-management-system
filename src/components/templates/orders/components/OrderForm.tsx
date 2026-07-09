@@ -75,7 +75,8 @@ export default function OrderForm({ onClose }: OrderFormProps) {
     label: t.name,
   }));
 
-  const selectedItemIds = watch("items")
+  const watchItems = watch("items");
+  const selectedItemIds = watchItems
     .map((i) => i.itemId)
     .filter(Boolean);
 
@@ -198,6 +199,23 @@ export default function OrderForm({ onClose }: OrderFormProps) {
             ))}
             {errors.items && (
               <p className="text-xs text-red-500">{errors.items.message}</p>
+            )}
+
+            {/* Total do pedido */}
+            {watchItems.some((i) => i.itemId) && (
+              <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-4 py-3 dark:bg-zinc-800/40">
+                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+                  Total do Pedido
+                </span>
+                <span className="text-lg font-bold text-zinc-900 dark:text-white">
+                  {formatCurrencyBR(
+                    watchItems.reduce((sum, item) => {
+                      const matched = allItems.find((i) => i.id === item.itemId);
+                      return sum + (matched?.price || 0) * (item.quantity || 0);
+                    }, 0),
+                  )}
+                </span>
+              </div>
             )}
           </div>
 

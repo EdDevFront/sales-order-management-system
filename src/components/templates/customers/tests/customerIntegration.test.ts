@@ -1,31 +1,71 @@
-import { saveCustomer, fetchCustomers } from "@/infrastructure/repositories/mockRepositories";
+import {
+  saveCustomer,
+  fetchCustomers,
+} from "@/infrastructure/repositories/mockRepositories";
 import { Customer } from "@/types/Customer";
 
 // Mock localStorage
 const store: Record<string, string> = {};
 const mockStorage: Storage = {
   getItem: jest.fn((key: string) => store[key] ?? null),
-  setItem: jest.fn((key: string, value: string) => { store[key] = value; }),
-  removeItem: jest.fn((key: string) => { delete store[key]; }),
-  clear: jest.fn(() => { Object.keys(store).forEach(k => delete store[k]); }),
-  get length() { return Object.keys(store).length; },
+  setItem: jest.fn((key: string, value: string) => {
+    store[key] = value;
+  }),
+  removeItem: jest.fn((key: string) => {
+    delete store[key];
+  }),
+  clear: jest.fn(() => {
+    Object.keys(store).forEach((k) => delete store[k]);
+  }),
+  get length() {
+    return Object.keys(store).length;
+  },
   key: jest.fn((index: number) => Object.keys(store)[index] ?? null),
 };
-Object.defineProperty(global, "localStorage", { value: mockStorage, writable: true });
+Object.defineProperty(global, "localStorage", {
+  value: mockStorage,
+  writable: true,
+});
 
 // Seed data (same as DEFAULT in mockDatabase)
 const SEED_CUSTOMERS: Customer[] = [
-  { id: "cust-1", name: "Acme Logistics SA", document: "12.345.678/0001-97", documentType: "CNPJ", authorizedTransportTypeIds: ["trans-1", "trans-2"] },
-  { id: "cust-2", name: "John Doe Distribution", document: "012.345.678-90", documentType: "CPF", authorizedTransportTypeIds: ["trans-1"] },
-  { id: "cust-3", name: "Global Freight Ltda", document: "45.678.901/0001-75", documentType: "CNPJ", authorizedTransportTypeIds: ["trans-2", "trans-3"] },
+  {
+    id: "cust-1",
+    name: "Acme Logistics SA",
+    document: "12.345.678/0001-97",
+    documentType: "CNPJ",
+    authorizedTransportTypeIds: ["trans-1", "trans-2"],
+  },
+  {
+    id: "cust-2",
+    name: "John Doe Distribution",
+    document: "012.345.678-90",
+    documentType: "CPF",
+    authorizedTransportTypeIds: ["trans-1"],
+  },
+  {
+    id: "cust-3",
+    name: "Global Freight Ltda",
+    document: "45.678.901/0001-75",
+    documentType: "CNPJ",
+    authorizedTransportTypeIds: ["trans-2", "trans-3"],
+  },
 ];
 const SEED_TRANSPORTS = [
   { id: "trans-1", name: "Caminhão", description: "Truck" },
   { id: "trans-2", name: "Carreta", description: "Semi-trailer" },
   { id: "trans-3", name: "Bi-truck", description: "Double axle" },
 ];
-const SEED_ITEMS = [{ id: "item-1", name: "Engine Part", sku: "HD-ENG-001", price: 1500 }];
-const SEED_DB = { customers: SEED_CUSTOMERS, transportTypes: SEED_TRANSPORTS, items: SEED_ITEMS, salesOrders: [], auditLogs: [] };
+const SEED_ITEMS = [
+  { id: "item-1", name: "Engine Part", sku: "HD-ENG-001", price: 1500 },
+];
+const SEED_DB = {
+  customers: SEED_CUSTOMERS,
+  transportTypes: SEED_TRANSPORTS,
+  items: SEED_ITEMS,
+  salesOrders: [],
+  auditLogs: [],
+};
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -46,7 +86,9 @@ describe("CT-INT-CUST-01: saveCustomer creates new customer", () => {
 
     const all = await fetchCustomers();
     expect(all.length).toBe(4);
-    expect(all.find((c) => c.id === "cust-new")?.name).toBe("Transportadora Beta Ltda");
+    expect(all.find((c) => c.id === "cust-new")?.name).toBe(
+      "Transportadora Beta Ltda",
+    );
   });
 });
 

@@ -1,23 +1,53 @@
-import { saveItem, fetchItems } from "@/infrastructure/repositories/mockRepositories";
+import {
+  saveItem,
+  fetchItems,
+} from "@/infrastructure/repositories/mockRepositories";
 import { Item } from "@/types/Item";
 
 // Mock localStorage
 const store: Record<string, string> = {};
 const mockStorage: Storage = {
   getItem: jest.fn((key: string) => store[key] ?? null),
-  setItem: jest.fn((key: string, value: string) => { store[key] = value; }),
-  removeItem: jest.fn((key: string) => { delete store[key]; }),
-  clear: jest.fn(() => { Object.keys(store).forEach(k => delete store[k]); }),
-  get length() { return Object.keys(store).length; },
+  setItem: jest.fn((key: string, value: string) => {
+    store[key] = value;
+  }),
+  removeItem: jest.fn((key: string) => {
+    delete store[key];
+  }),
+  clear: jest.fn(() => {
+    Object.keys(store).forEach((k) => delete store[k]);
+  }),
+  get length() {
+    return Object.keys(store).length;
+  },
   key: jest.fn((index: number) => Object.keys(store)[index] ?? null),
 };
-Object.defineProperty(global, "localStorage", { value: mockStorage, writable: true });
+Object.defineProperty(global, "localStorage", {
+  value: mockStorage,
+  writable: true,
+});
 
 const SEED_ITEMS: Item[] = [
-  { id: "item-1", name: "Heavy Duty Engine Part", sku: "HD-ENG-001", price: 1500.0 },
-  { id: "item-2", name: "Steel Support Beam 6m", sku: "STL-BEAM-6M", price: 450.0 },
+  {
+    id: "item-1",
+    name: "Heavy Duty Engine Part",
+    sku: "HD-ENG-001",
+    price: 1500.0,
+  },
+  {
+    id: "item-2",
+    name: "Steel Support Beam 6m",
+    sku: "STL-BEAM-6M",
+    price: 450.0,
+  },
 ];
-const SEED_DB = { customers: [], transportTypes: [], items: SEED_ITEMS, salesOrders: [], auditLogs: [] };
+const SEED_DB = {
+  customers: [],
+  transportTypes: [],
+  items: SEED_ITEMS,
+  salesOrders: [],
+  auditLogs: [],
+};
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -26,7 +56,12 @@ beforeEach(() => {
 
 describe("CT-INT-ITEM-01: saveItem adds new item", () => {
   test("should add a new item to the database", async () => {
-    const newItem: Item = { id: "item-new", name: "Motor Diesel V8", sku: "MTR-DSL-V8", price: 2500 };
+    const newItem: Item = {
+      id: "item-new",
+      name: "Motor Diesel V8",
+      sku: "MTR-DSL-V8",
+      price: 2500,
+    };
     await saveItem(newItem);
 
     const all = await fetchItems();
@@ -45,7 +80,12 @@ describe("CT-INT-ITEM-02: fetchItems returns all items", () => {
 
 describe("CT-INT-ITEM-03: saveItem persists price correctly", () => {
   test("should preserve price value", async () => {
-    const newItem: Item = { id: "item-price", name: "Item Preço", sku: "PRC-001", price: 99.99 };
+    const newItem: Item = {
+      id: "item-price",
+      name: "Item Preço",
+      sku: "PRC-001",
+      price: 99.99,
+    };
     await saveItem(newItem);
 
     const all = await fetchItems();

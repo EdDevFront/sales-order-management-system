@@ -1,42 +1,30 @@
 "use client";
-import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { fetchAuditLogs } from "@/infrastructure/repositories/mockRepositories";
-import { AuditLog } from "@/types/AuditLog";
+import React from "react";
 import { Eye, EyeOff, Copy } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
 import { Button } from "@/components/ui/Button";
+import { useAuditLogs } from "./hooks/useAuditLogs";
 import {
   AUDIT_COLUMNS,
   AUDIT_SKELETON_WIDTHS,
   ITEMS_PER_PAGE,
 } from "./constants";
 import { auditActionVariant } from "./utils/auditActionVariant";
+import { AuditLog } from "@/types/AuditLog";
 
 export default function AuditLogs() {
-  const { data: logs = [], isLoading } = useQuery({
-    queryKey: ["auditLogs"],
-    queryFn: fetchAuditLogs,
-  });
-  const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  const handleCopy = (text: string, id: string) => {
-    navigator.clipboard.writeText(text);
-    setCopiedId(id);
-    setTimeout(() => setCopiedId(null), 1500);
-  };
-
-  const totalPages = Math.ceil(logs.length / ITEMS_PER_PAGE);
-  const paginatedLogs = React.useMemo(
-    () =>
-      logs.slice(
-        (currentPage - 1) * ITEMS_PER_PAGE,
-        currentPage * ITEMS_PER_PAGE,
-      ),
-    [logs, currentPage],
-  );
+  const {
+    logs,
+    isLoading,
+    paginatedLogs,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    expandedLogId,
+    toggleExpand,
+    copiedId,
+    handleCopy,
+  } = useAuditLogs();
 
   return (
     <div className="space-y-6">
@@ -93,9 +81,7 @@ export default function AuditLogs() {
                   <DataTable.Cell mobileLabel="Detalhes" alignRight>
                     <Button
                       variant="ghost"
-                      onClick={() =>
-                        setExpandedLogId(isExpanded ? null : log.id)
-                      }
+                      onClick={() => toggleExpand(log.id)}
                       className="text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
                     >
                       {isExpanded ? (

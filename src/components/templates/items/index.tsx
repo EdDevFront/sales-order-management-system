@@ -1,61 +1,29 @@
 "use client";
 import { formatCurrencyBR } from "@/utils/formatCurrency";
 import { Button } from "@/components/ui/Button";
-import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { setNotification } from "@/stores/ordersSlice";
-import {
-  fetchItems,
-  saveItem,
-} from "@/infrastructure/repositories/mockRepositories";
+import React from "react";
+import { useItemCrud } from "./hooks/useItemCrud";
 import { Item } from "@/types/Item";
 import { Plus } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-import {
-  ITEM_COLUMNS,
-  ITEM_SKELETON_WIDTHS,
-  ITEMS_PER_PAGE,
-} from "./constants";
-import { ItemFormData } from "./schemas/itemSchema";
+import { ITEM_COLUMNS, ITEM_SKELETON_WIDTHS } from "./constants";
 import ItemForm from "./components/ItemForm";
 
 export default function Items() {
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<ItemFormData | null>(null);
-  const [currentPage, setCurrentPage] = React.useState(1);
-
-  const { data: items = [], isLoading } = useQuery({
-    queryKey: ["items"],
-    queryFn: fetchItems,
-  });
-
-  const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
-  const paginatedItems = React.useMemo(
-    () =>
-      items.slice(
-        (currentPage - 1) * ITEMS_PER_PAGE,
-        currentPage * ITEMS_PER_PAGE,
-      ),
-    [items, currentPage],
-  );
-
-  const mutation = useMutation({
-    mutationFn: saveItem,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] });
-      dispatch(setNotification({ success: "Item criado com sucesso!" }));
-      setIsFormOpen(false);
-      setEditingItem(null);
-    },
-  });
-
-  const onSubmit = (data: ItemFormData) => {
-    const id = `item-${Math.random().toString(36).substring(2, 9)}`;
-    mutation.mutate({ ...data, id });
-  };
+  const {
+    items,
+    isLoading,
+    paginatedItems,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    isFormOpen,
+    editingItem,
+    openNew,
+    closeForm,
+    onSubmit,
+    isPending,
+  } = useItemCrud();
 
   return (
     <div className="space-y-6">
@@ -67,10 +35,7 @@ export default function Items() {
           </p>
         </div>
         <Button
-          onClick={() => {
-            setEditingItem({ name: "", sku: "", price: 0 });
-            setIsFormOpen(true);
-          }}
+          onClick={openNew}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 w-full sm:w-auto justify-center"
         >
           <Plus className="h-4 w-4" /> Novo Item
@@ -79,10 +44,10 @@ export default function Items() {
 
       {isFormOpen && editingItem && (
         <ItemForm
-          onClose={() => setIsFormOpen(false)}
+          onClose={closeForm}
           onSubmit={onSubmit}
           defaultValues={editingItem}
-          isPending={mutation.isPending}
+          isPending={isPending}
         />
       )}
 

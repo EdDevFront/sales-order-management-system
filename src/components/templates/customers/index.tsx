@@ -1,74 +1,30 @@
 "use client";
 import { Button } from "@/components/ui/Button";
-import React, { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useDispatch } from "react-redux";
-import { setNotification } from "@/stores/ordersSlice";
-import {
-  fetchCustomers,
-  saveCustomer,
-  fetchTransportTypes,
-} from "@/infrastructure/repositories/mockRepositories";
+import React from "react";
+import { useCustomerCrud } from "./hooks/useCustomerCrud";
 import { Customer } from "@/types/Customer";
 import { Plus } from "lucide-react";
 import { DataTable } from "@/components/ui/DataTable";
-import {
-  CUSTOMER_COLUMNS,
-  CUSTOMER_SKELETON_WIDTHS,
-  ITEMS_PER_PAGE,
-} from "./constants";
-import { CustomerFormData } from "./schemas/customerSchema";
+import { CUSTOMER_COLUMNS, CUSTOMER_SKELETON_WIDTHS } from "./constants";
 import CustomerForm from "./components/CustomerForm";
 
 export default function Customers() {
-  const dispatch = useDispatch();
-  const queryClient = useQueryClient();
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingCustomer, setEditingCustomer] =
-    useState<CustomerFormData | null>(null);
-  const [currentPage, setCurrentPage] = React.useState(1);
-
-  const { data: customers = [], isLoading } = useQuery<Customer[]>({
-    queryKey: ["customers"],
-    queryFn: fetchCustomers,
-  });
-  const { data: transports = [] } = useQuery({
-    queryKey: ["transports"],
-    queryFn: fetchTransportTypes,
-  });
-
-  const totalPages = Math.ceil(customers.length / ITEMS_PER_PAGE);
-  const paginatedCustomers = React.useMemo(
-    () =>
-      customers.slice(
-        (currentPage - 1) * ITEMS_PER_PAGE,
-        currentPage * ITEMS_PER_PAGE,
-      ),
-    [customers, currentPage],
-  );
-
-  const mutation = useMutation({
-    mutationFn: saveCustomer,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["customers"] });
-      const message = editingCustomer?.id
-        ? "Cliente atualizado com sucesso!"
-        : "Cliente criado com sucesso!";
-      dispatch(setNotification({ success: message }));
-      setIsFormOpen(false);
-      setEditingCustomer(null);
-    },
-  });
-
-  const handleEdit = (customer: Customer) => {
-    setEditingCustomer(customer);
-    setIsFormOpen(true);
-  };
-
-  const onSubmit = (data: CustomerFormData) => {
-    const id = data.id || `cust-${Math.random().toString(36).substring(2, 9)}`;
-    mutation.mutate({ ...data, id });
-  };
+  const {
+    customers,
+    isLoading,
+    transports,
+    paginatedCustomers,
+    currentPage,
+    setCurrentPage,
+    totalPages,
+    isFormOpen,
+    editingCustomer,
+    openNew,
+    openEdit,
+    closeForm,
+    onSubmit,
+    isPending,
+  } = useCustomerCrud();
 
   return (
     <div className="space-y-6">
@@ -81,15 +37,7 @@ export default function Customers() {
           </p>
         </div>
         <Button
-          onClick={() => {
-            setEditingCustomer({
-              name: "",
-              document: "",
-              documentType: "CNPJ",
-              authorizedTransportTypeIds: [],
-            });
-            setIsFormOpen(true);
-          }}
+          onClick={openNew}
           className="flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 w-full sm:w-auto justify-center"
         >
           <Plus className="h-4 w-4" /> Novo Cliente
@@ -98,10 +46,10 @@ export default function Customers() {
 
       {isFormOpen && editingCustomer && (
         <CustomerForm
-          onClose={() => setIsFormOpen(false)}
+          onClose={closeForm}
           onSubmit={onSubmit}
           defaultValues={editingCustomer}
-          isPending={mutation.isPending}
+          isPending={isPending}
           transports={transports}
         />
       )}
@@ -150,7 +98,7 @@ export default function Customers() {
               <DataTable.Cell mobileLabel="Ações" alignRight>
                 <Button
                   variant="ghost"
-                  onClick={() => handleEdit(c)}
+                  onClick={() => openEdit(c)}
                   className="font-semibold text-indigo-600 hover:text-indigo-500 dark:text-indigo-400"
                 >
                   Editar

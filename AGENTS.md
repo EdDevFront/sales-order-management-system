@@ -122,13 +122,20 @@ The marker can appear anywhere in the commit subject (e.g. `feat: [FEATURE] add 
 
 This project uses **Semantic Release** to automate versioning via GitHub Actions.
 
-Commit messages determine the next version:
+**⚠️ Version tags are ONLY generated when the commit message contains one of these three markers ANYWHERE in the string:**
 
-- `feat:` → **Minor** (v0.2.0)
-- `fix:` → **Patch** (v0.1.1)
-- `BREAKING CHANGE:` in body → **Major** (v1.0.0)
+| Marker | Bump |
+| :--- | :--- |
+| `[PATCH]` | **Patch** (v0.1.1 → v0.1.2) |
+| `[FEATURE]` | **Minor** (v0.1.0 → v0.2.0) |
+| `[BREAKING]` | **Major** (v0.x.x → v1.0.0) |
+
+**Rules:**
+- The marker can appear anywhere in the commit subject or body (e.g. `feat: [FEATURE] add customer export`, `[PATCH] fix pagination bug`, `refactor: [BREAKING] change API signature`).
+- If **none** of the three markers is present, **no version tag is generated** and **no release is published** — regardless of whether the commit uses `feat:`, `fix:`, or any other conventional commit prefix.
+- Example: `docs: add test cases` → ❌ no release. `fix: [PATCH] resolve crash on login` → ✅ patch release.
 
 The CI/CD pipeline runs on push to `main`:
 
 1. **Quality** — lint, test, build
-2. **Release** — generate changelog, bump version, create Git tag, publish GitHub Release
+2. **Release** — only if a marker (`[PATCH]`, `[FEATURE]`, `[BREAKING]`) is found in the latest commit

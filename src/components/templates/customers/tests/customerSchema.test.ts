@@ -218,7 +218,9 @@ describe("Document Masking", () => {
     });
 
     test("should strip non-digits from CPF input", () => {
-      expect(maskDocument("abc529.982.247-25def", "CPF")).toBe("529.982.247-25");
+      expect(maskDocument("abc529.982.247-25def", "CPF")).toBe(
+        "529.982.247-25",
+      );
     });
   });
 
@@ -235,7 +237,9 @@ describe("Document Masking", () => {
     });
 
     test("should strip non-digits from CNPJ input", () => {
-      expect(maskDocument("abc11.222.333/0001-81xyz", "CNPJ")).toBe("11.222.333/0001-81");
+      expect(maskDocument("abc11.222.333/0001-81xyz", "CNPJ")).toBe(
+        "11.222.333/0001-81",
+      );
     });
   });
 

@@ -122,7 +122,7 @@ The marker can appear anywhere in the commit subject (e.g. `feat: [FEATURE] add 
 
 This project uses **Semantic Release** to automate versioning via GitHub Actions.
 
-**⚠️ Version tags are ONLY generated when the commit message contains one of these three markers ANYWHERE in the string:**
+**⚠️ Version tags are ONLY generated when the commit message contains one of these three markers ANYWHERE in the string (subject or body):**
 
 | Marker       | Bump                        |
 | :----------- | :-------------------------- |

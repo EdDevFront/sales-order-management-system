@@ -7,8 +7,11 @@
         "preset": false,
         "releaseRules": [
           { "subject": "*\\[BREAKING\\]*", "release": "major" },
+          { "body": "*\\[BREAKING\\]*", "release": "major" },
           { "subject": "*\\[FEATURE\\]*", "release": "minor" },
-          { "subject": "*\\[PATCH\\]*", "release": "patch" }
+          { "body": "*\\[FEATURE\\]*", "release": "minor" },
+          { "subject": "*\\[PATCH\\]*", "release": "patch" },
+          { "body": "*\\[PATCH\\]*", "release": "patch" }
         ]
       }
     ],
@@ -18,8 +21,11 @@
         "preset": false,
         "releaseRules": [
           { "subject": "*\\[BREAKING\\]*", "release": "major" },
+          { "body": "*\\[BREAKING\\]*", "release": "major" },
           { "subject": "*\\[FEATURE\\]*", "release": "minor" },
-          { "subject": "*\\[PATCH\\]*", "release": "patch" }
+          { "body": "*\\[FEATURE\\]*", "release": "minor" },
+          { "subject": "*\\[PATCH\\]*", "release": "patch" },
+          { "body": "*\\[PATCH\\]*", "release": "patch" }
         ]
       }
     ],

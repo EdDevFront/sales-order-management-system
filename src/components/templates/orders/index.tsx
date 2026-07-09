@@ -32,7 +32,12 @@ export default function Orders() {
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState<SalesOrder | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+
+  const selectedOrder = React.useMemo(() => {
+    if (!selectedOrderId) return null;
+    return orders.find((o) => o.id === selectedOrderId) || null;
+  }, [orders, selectedOrderId]);
 
   const successMessage = useSelector(
     (state: RootState) => state.orders.successMessage,
@@ -77,14 +82,14 @@ export default function Orders() {
   }, [isFormOpen, queryClient]);
 
   // Refetch when detail panel closes (status/transport/delivery may have changed)
-  const prevSelectedOrder = React.useRef(selectedOrder);
+  const prevSelectedOrderId = React.useRef(selectedOrderId);
   useEffect(() => {
-    if (prevSelectedOrder.current && !selectedOrder) {
+    if (prevSelectedOrderId.current && !selectedOrderId) {
       queryClient.invalidateQueries({ queryKey: ["orders"] });
       queryClient.invalidateQueries({ queryKey: ["auditLogs"] });
     }
-    prevSelectedOrder.current = selectedOrder;
-  }, [selectedOrder, queryClient]);
+    prevSelectedOrderId.current = selectedOrderId;
+  }, [selectedOrderId, queryClient]);
 
   useEffect(() => {
     if (successMessage) {
@@ -195,7 +200,7 @@ export default function Orders() {
                   <DataTable.Cell mobileLabel="Ações" alignRight>
                     <Button
                       variant="ghost"
-                      onClick={() => setSelectedOrder(order)}
+                      onClick={() => setSelectedOrderId(order.id)}
                       className="flex items-center gap-1 sm:ml-auto text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 font-semibold w-full sm:w-auto justify-center"
                     >
                       <Info className="h-4 w-4" /> Gerenciar
@@ -220,7 +225,7 @@ export default function Orders() {
             customers={customers}
             transports={transports}
             items={items}
-            onClose={() => setSelectedOrder(null)}
+            onClose={() => setSelectedOrderId(null)}
             handleTransportChange={handleTransportChange}
             handleStatusChange={handleStatusChange}
             getNextStatus={getNextStatus}

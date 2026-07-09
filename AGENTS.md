@@ -147,11 +147,11 @@ The CI/CD pipeline runs on push to `main`:
 
 Cada página/domínio possui 3 arquivos de documentação de teste em `docs/<page>/tests/`:
 
-| Arquivo | Conteúdo | Formato |
-| :--- | :--- | :--- |
-| `e2e-test-cases.md` | Cenários E2E simulando fluxo do usuário | Tabela com ID, Objetivo, Pré-condições, Passos, Resultado Esperado |
-| `unit-test-cases.md` | Testes unitários de funções puras, schemas e regras de domínio | Tabela com ID, Objetivo, Entrada, Saída Esperada, Arquivo, Status |
-| `integration-test-cases.md` | Testes de integração entre camadas (sagas, repositórios, componentes) | Tabela com ID, Objetivo, Entrada, Saída Esperada, Arquivo, Status |
+| Arquivo                     | Conteúdo                                                              | Formato                                                            |
+| :-------------------------- | :-------------------------------------------------------------------- | :----------------------------------------------------------------- |
+| `e2e-test-cases.md`         | Cenários E2E simulando fluxo do usuário                               | Tabela com ID, Objetivo, Pré-condições, Passos, Resultado Esperado |
+| `unit-test-cases.md`        | Testes unitários de funções puras, schemas e regras de domínio        | Tabela com ID, Objetivo, Entrada, Saída Esperada, Arquivo, Status  |
+| `integration-test-cases.md` | Testes de integração entre camadas (sagas, repositórios, componentes) | Tabela com ID, Objetivo, Entrada, Saída Esperada, Arquivo, Status  |
 
 ### Hierarquia de Cenários
 

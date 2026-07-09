@@ -75,11 +75,11 @@ Estrutura do projeto seguindo **DDD** e **Clean Architecture**:
 
 Cada domínio possui documentação de cenários em `docs/<page>/tests/`:
 
-| Arquivo | Descrição |
-| :--- | :--- |
-| `e2e-test-cases.md` | Cenários de ponta a ponta com Pré-condições, Passos e Resultado Esperado |
-| `unit-test-cases.md` | Testes unitários com Entrada e Saída Esperada |
-| `integration-test-cases.md` | Testes de integração entre camadas |
+| Arquivo                     | Descrição                                                                |
+| :-------------------------- | :----------------------------------------------------------------------- |
+| `e2e-test-cases.md`         | Cenários de ponta a ponta com Pré-condições, Passos e Resultado Esperado |
+| `unit-test-cases.md`        | Testes unitários com Entrada e Saída Esperada                            |
+| `integration-test-cases.md` | Testes de integração entre camadas                                       |
 
 ### Cobertura de Testes
 
@@ -98,14 +98,15 @@ Versionamento automático via **Semantic Release** e GitHub Actions.
 
 **⚠️ Versões são geradas SOMENTE quando o commit contém um dos marcadores:**
 
-| Marcador | Versão |
-| :--- | :--- |
-| `[FEATURE]` | **Minor** (v1.0.0 → v1.1.0) |
-| `[PATCH]` | **Patch** (v1.0.0 → v1.0.1) |
+| Marcador     | Versão                      |
+| :----------- | :-------------------------- |
+| `[FEATURE]`  | **Minor** (v1.0.0 → v1.1.0) |
+| `[PATCH]`    | **Patch** (v1.0.0 → v1.0.1) |
 | `[BREAKING]` | **Major** (v1.0.0 → v2.0.0) |
-| _(nenhum)_ | _Nenhuma versão gerada_ |
+| _(nenhum)_   | _Nenhuma versão gerada_     |
 
 Exemplos:
+
 - `feat: [FEATURE] add customer export` → ✅ Minor
 - `fix: [PATCH] resolve pagination bug` → ✅ Patch
 - `docs: update readme` → ❌ sem release

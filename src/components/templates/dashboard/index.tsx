@@ -8,8 +8,15 @@ import { SalesOrder, STATUS_LABEL } from "@/types/SalesOrder";
 import { Filter } from "lucide-react";
 import { Skeleton } from "@/components/ui/Skeleton";
 import { DataTable } from "@/components/ui/DataTable";
-import { OrderStatusBadge, orderStatusVariant } from "@/components/ui/OrderStatusBadge";
-import { DASHBOARD_COLUMNS, DASHBOARD_SKELETON_WIDTHS, ITEMS_PER_PAGE } from "./constants";
+import {
+  OrderStatusBadge,
+  orderStatusVariant,
+} from "@/components/ui/OrderStatusBadge";
+import {
+  DASHBOARD_COLUMNS,
+  DASHBOARD_SKELETON_WIDTHS,
+  ITEMS_PER_PAGE,
+} from "./constants";
 
 export default function Dashboard() {
   const {

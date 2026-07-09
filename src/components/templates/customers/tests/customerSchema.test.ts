@@ -1,4 +1,3 @@
-import * as z from "zod";
 import { customerSchema, CustomerFormData } from "../schemas/customerSchema";
 
 // ─── CPF helper (replicated for direct algorithm testing) ─────────────────────

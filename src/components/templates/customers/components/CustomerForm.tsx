@@ -74,13 +74,6 @@ export default function CustomerForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedType, setValue]);
 
-  const toggleTransport = (id: string) => {
-    const next = currentTransports.includes(id)
-      ? currentTransports.filter((tId) => tId !== id)
-      : [...currentTransports, id];
-    setValue("authorizedTransportTypeIds", next);
-  };
-
   const isEdit = !!defaultValues.id;
 
   return (

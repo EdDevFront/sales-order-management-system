@@ -9,7 +9,7 @@ import {
   fetchCustomers,
   fetchTransportTypes,
 } from "@/infrastructure/repositories/mockRepositories";
-import { SalesOrder, SalesOrderStatus, STATUS_LABEL } from "@/types/SalesOrder";
+import { SalesOrderStatus, STATUS_LABEL } from "@/types/SalesOrder";
 import { SelectOption } from "@/components/ui/Select";
 import { usePagination } from "@/hooks/usePagination";
 import { ITEMS_PER_PAGE } from "../constants";

@@ -6,9 +6,9 @@
       {
         "preset": false,
         "releaseRules": [
-          { "subject": "*[BREAKING]*", "release": "major" },
-          { "subject": "*[FEATURE]*", "release": "minor" },
-          { "subject": "*[PATCH]*", "release": "patch" }
+          { "subject": "*\\[BREAKING\\]*", "release": "major" },
+          { "subject": "*\\[FEATURE\\]*", "release": "minor" },
+          { "subject": "*\\[PATCH\\]*", "release": "patch" }
         ]
       }
     ],
@@ -17,9 +17,9 @@
       {
         "preset": false,
         "releaseRules": [
-          { "subject": "*[BREAKING]*", "release": "major" },
-          { "subject": "*[FEATURE]*", "release": "minor" },
-          { "subject": "*[PATCH]*", "release": "patch" }
+          { "subject": "*\\[BREAKING\\]*", "release": "major" },
+          { "subject": "*\\[FEATURE\\]*", "release": "minor" },
+          { "subject": "*\\[PATCH\\]*", "release": "patch" }
         ]
       }
     ],

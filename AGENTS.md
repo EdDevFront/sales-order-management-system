@@ -124,13 +124,14 @@ This project uses **Semantic Release** to automate versioning via GitHub Actions
 
 **⚠️ Version tags are ONLY generated when the commit message contains one of these three markers ANYWHERE in the string:**
 
-| Marker | Bump |
-| :--- | :--- |
-| `[PATCH]` | **Patch** (v0.1.1 → v0.1.2) |
-| `[FEATURE]` | **Minor** (v0.1.0 → v0.2.0) |
+| Marker       | Bump                        |
+| :----------- | :-------------------------- |
+| `[PATCH]`    | **Patch** (v0.1.1 → v0.1.2) |
+| `[FEATURE]`  | **Minor** (v0.1.0 → v0.2.0) |
 | `[BREAKING]` | **Major** (v0.x.x → v1.0.0) |
 
 **Rules:**
+
 - The marker can appear anywhere in the commit subject or body (e.g. `feat: [FEATURE] add customer export`, `[PATCH] fix pagination bug`, `refactor: [BREAKING] change API signature`).
 - If **none** of the three markers is present, **no version tag is generated** and **no release is published** — regardless of whether the commit uses `feat:`, `fix:`, or any other conventional commit prefix.
 - Example: `docs: add test cases` → ❌ no release. `fix: [PATCH] resolve crash on login` → ✅ patch release.
@@ -139,3 +140,41 @@ The CI/CD pipeline runs on push to `main`:
 
 1. **Quality** — lint, test, build
 2. **Release** — only if a marker (`[PATCH]`, `[FEATURE]`, `[BREAKING]`) is found in the latest commit
+
+## 12. Documentação & Testes
+
+### Documentação de Casos de Teste
+
+Cada página/domínio possui 3 arquivos de documentação de teste em `docs/<page>/tests/`:
+
+| Arquivo | Conteúdo | Formato |
+| :--- | :--- | :--- |
+| `e2e-test-cases.md` | Cenários E2E simulando fluxo do usuário | Tabela com ID, Objetivo, Pré-condições, Passos, Resultado Esperado |
+| `unit-test-cases.md` | Testes unitários de funções puras, schemas e regras de domínio | Tabela com ID, Objetivo, Entrada, Saída Esperada, Arquivo, Status |
+| `integration-test-cases.md` | Testes de integração entre camadas (sagas, repositórios, componentes) | Tabela com ID, Objetivo, Entrada, Saída Esperada, Arquivo, Status |
+
+### Hierarquia de Cenários
+
+- 🔴 **Críticos** — Devem SEMPRE ter implementação automatizada correspondente em `src/components/templates/<page>/tests/`
+- 🟡 **Importantes** — Documentados, implementação opcional
+- 🔵 **Complementares** — Apenas documentados
+
+### Estrutura de Testes Automatizados
+
+Os testes automatizados ficam em `src/components/templates/<page>/tests/`:
+
+```
+src/components/templates/<page>/tests/
+├── <nome>Schema.test.ts       # Testes de schemas Zod (unit)
+├── <nome>Entities.test.ts     # Testes de regras de domínio (unit)
+├── <nome>Integration.test.ts  # Testes de integração com repositórios mock
+├── <nome>.test.tsx             # Testes de componente (DOM + Redux + React Query)
+└── <utils>.test.ts            # Testes de funções utilitárias (unit)
+```
+
+### Regras
+
+- **Nomes de arquivo**: Sempre em camelCase com sufixo `.test.ts` ou `.test.tsx`
+- **Imports**: Usar alias `@/` (ex: `@/types/Customer`) — nunca caminhos relativos profundos
+- **Mocks**: Para testes de componente, mockar `@/infrastructure/repositories/mockRepositories`; para testes de saga, mockar `@/infrastructure/mock/mockDatabase`
+- **localStorage**: Para testes de integração com repositórios, mockar o `localStorage` global com `Object.defineProperty`

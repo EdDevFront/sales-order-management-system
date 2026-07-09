@@ -1,34 +1,28 @@
-# Sales Order Management System (OVGS) - Frontend Portal
+# Portal de Gestão de Ordens de Venda (OVGS)
 
-This is the frontend implementation of the **Sales Order Management System (OVGS)**, designed as a Senior Frontend Developer technical challenge.
+Implementação frontend do **Sistema de Gestão de Ordens de Venda (OVGS)**, desenvolvida como desafio técnico para Senior Frontend Developer.
 
-The project is implemented in **English** using modern React/Next.js practices, prioritizing **Clean Code**, **SOLID**, **Domain-Driven Design (DDD)**, and strict modularization constraints (functions $\le$ 20 lines, components $\le$ 200 lines).
+Projeto construído com React/Next.js priorizando **Clean Code**, **SOLID**, **Domain-Driven Design (DDD)** e restrições de modularização (funções ≤ 20 linhas, componentes ≤ 200 linhas).
 
 ---
 
-## 🚀 Execution Instructions
+## 🚀 Instruções de Execução
 
-### Local Development Server
-
-To launch the hot-reloading development server locally:
+### Servidor de Desenvolvimento Local
 
 ```bash
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Acesse [http://localhost:3000](http://localhost:3000) no navegador.
 
-### Running Test Suites
-
-To run unit and integration tests (Jest + React Testing Library):
+### Executar Testes
 
 ```bash
 npm run test
 ```
 
-### Production Build
-
-To test the production build compilation and static optimization output:
+### Build de Produção
 
 ```bash
 npm run build
@@ -36,68 +30,91 @@ npm run build
 
 ---
 
-## 🛠️ Technologies Used
+## 🛠️ Tecnologias Utilizadas
 
-- **Framework**: Next.js 16 (App Router, Client-side view providers)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS
-- **Global State / Workflows**: Redux Toolkit & Redux Saga
-- **Server Caching**: React Query (TanStack Query)
-- **Forms**: React Hook Form with Zod schema validation
-- **Icons**: Lucide React
-- **Testing**: Jest & React Testing Library (ts-jest)
-
----
-
-## 🏛️ Architectural Decisions & Domain Modeling (DDD)
-
-The project structure is organized following **DDD** and **Clean Architecture** patterns:
-
-1. **Domain Layer** (`src/domain`):
-   - Pure business rules and entities (`Customer`, `SalesOrder`, `Item`, `TransportType`, `AuditLog`).
-   - Transition rules of order status workflow (`isValidStatusTransition`) and customer transport type authorization rules (`isTransportTypeAuthorizedForCustomer`).
-2. **Infrastructure Layer** (`src/infrastructure`):
-   - Simulated REST API database in-memory utilizing `localStorage` persistence (`mockDatabase.ts`) so page reloads do not wipe data.
-   - Delay-mocked repository functions (`mockRepositories.ts`) to emulate server network requests.
-3. **Application Layer** (`src/application`):
-   - Redux store slices for UI active filters/tabs and transaction banners.
-   - **Redux Saga middleware** coordinates transactional multi-step operations (e.g. updating order state and appending audit log details atomically).
-4. **Presentation Layer** (`src/presentation`):
-   - React components and custom styling. All components adhere to the `< 200 lines` rule, splitting functions into helper files when required.
+- **Framework**: Next.js 16 (App Router)
+- **Linguagem**: TypeScript
+- **Estilização**: Tailwind CSS
+- **Estado Global**: Redux Toolkit & Redux Saga
+- **Cache de Dados**: React Query (TanStack Query)
+- **Formulários**: React Hook Form + Zod
+- **Ícones**: Lucide React
+- **Testes**: Jest & React Testing Library (ts-jest)
 
 ---
 
-## ⚙️ Persistence & Audit Log Strategy
+## 🏛️ Arquitetura e Modelagem (DDD)
 
-- **Persistence**: Emulated using a `localStorage` database sync mechanism.
-- **Audit Logs**: Any modification (creation, status update, scheduling change, transport mode change) is intercepted by **Redux Saga** which compiles the previous/next state snapshots, generates an audit entry, and saves it. The portal includes a detail panel to inspect raw payload changes.
+Estrutura do projeto seguindo **DDD** e **Clean Architecture**:
+
+1. **Camada de Domínio** (`src/types/`):
+   - Regras de negócio puras (`Customer`, `SalesOrder`, `Item`, `TransportType`, `AuditLog`).
+   - Validação de transições de status (`isValidStatusTransition`) e autorização de transporte por cliente (`isTransportTypeAuthorizedForCustomer`).
+2. **Camada de Infraestrutura** (`src/infrastructure/`):
+   - Banco de dados simulado em memória com persistência em `localStorage` (`mockDatabase.ts`).
+   - Repositórios com delay simulado (`mockRepositories.ts`) para emular requisições de rede.
+3. **Camada de Aplicação** (`src/stores/`):
+   - Redux slices para estado de UI (filtros, abas ativas) e notificações.
+   - **Redux Saga** coordena operações transacionais multi-step (ex: atualizar pedido + registrar auditoria atomicamente).
+4. **Camada de Apresentação** (`src/components/`):
+   - Componentes React com composition pattern (`DataTable`, `DataTable.Head`, `DataTable.Body`).
+   - Todos os componentes respeitam o limite de < 200 linhas.
 
 ---
 
-## 📈 Scalability, Performance & Trade-offs
+## ⚙️ Persistência & Auditoria
 
-- **State Separation**: We separated UI state (Redux) from cached backend data (React Query). React Query avoids over-fetching through automatic cache management, while Redux Saga manages asynchronous workflows.
-- **Micro-Animations**: Uses hover transforms, active tab indicator transitions, and bouncing toast messages.
-- **Trade-offs**: LocalStorage is used for fast prototyping, but in a real-world system, it would be replaced by an actual REST client. Domain validation is executed client-side, but is designed to match backend constraints.
+- **Persistência**: Banco simulado via `localStorage`.
+- **Audit Logs**: Qualquer modificação (criação, transição de status, agendamento, troca de transporte) é interceptada pelo **Redux Saga**, que captura os snapshots anterior/próximo estado, gera um registro de auditoria e persiste. O portal inclui painel de inspeção para visualizar os payloads lado a lado.
+
+---
+
+## 🧪 Testes
+
+### Documentação de Testes
+
+Cada domínio possui documentação de cenários em `docs/<page>/tests/`:
+
+| Arquivo | Descrição |
+| :--- | :--- |
+| `e2e-test-cases.md` | Cenários de ponta a ponta com Pré-condições, Passos e Resultado Esperado |
+| `unit-test-cases.md` | Testes unitários com Entrada e Saída Esperada |
+| `integration-test-cases.md` | Testes de integração entre camadas |
+
+### Cobertura de Testes
+
+Os testes automatizados estão em `src/components/templates/<page>/tests/`:
+
+- **14 suites de teste**, **123 testes** no total
+- Testes unitários: schemas Zod, regras de domínio, formatação, funções utilitárias
+- Testes de integração: sagas Redux, repositórios mock
+- Testes de componente: Dashboard, Audit com Redux + React Query
 
 ---
 
 ## 🔄 Release Flow (CI/CD)
 
-This project uses **Semantic Release** to automate versioning via GitHub Actions.
+Versionamento automático via **Semantic Release** e GitHub Actions.
 
-Commit messages determine the next version:
+**⚠️ Versões são geradas SOMENTE quando o commit contém um dos marcadores:**
 
-The marker can appear anywhere in the commit subject (e.g. `feat: [FEATURE] add customer export` or `[PATCH] fix pagination bug`):
+| Marcador | Versão |
+| :--- | :--- |
+| `[FEATURE]` | **Minor** (v1.0.0 → v1.1.0) |
+| `[PATCH]` | **Patch** (v1.0.0 → v1.0.1) |
+| `[BREAKING]` | **Major** (v1.0.0 → v2.0.0) |
+| _(nenhum)_ | _Nenhuma versão gerada_ |
 
-| Commit contains       | Version                     |
-| --------------------- | --------------------------- |
-| `[FEATURE]`           | **Minor** (v1.0.0 → v1.1.0) |
-| `[PATCH]`             | **Patch** (v1.0.0 → v1.0.1) |
-| `[BREAKING]`          | **Major** (v1.0.0 → v2.0.0) |
-| _(none of the above)_ | _No release generated_      |
+Exemplos:
+- `feat: [FEATURE] add customer export` → ✅ Minor
+- `fix: [PATCH] resolve pagination bug` → ✅ Patch
+- `docs: update readme` → ❌ sem release
 
-The CI/CD pipeline runs on push to `main`:
+## 📈 Escalabilidade & Trade-offs
+
+- **Separação de Estado**: Estado de UI (Redux) separado de dados cacheados (React Query).
+- **Micro-animações**: Hover transforms, indicadores de aba ativa, toast com bounce.
+- **Trade-offs**: localStorage para prototipação rápida; em produção seria substituído por API REST.
 
 1. **Quality** — lint, test, build
 2. **Release** — generate changelog, bump version, create Git tag, publish GitHub Release

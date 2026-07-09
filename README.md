@@ -1,5 +1,10 @@
 # Portal de Gestão de Ordens de Venda (OVGS)
 
+### 🔗 Link de Produção (Vercel)
+Acesse a aplicação online: **[https://desafio-tecnico-bay.vercel.app](https://desafio-tecnico-bay.vercel.app)**
+
+---
+
 Implementação frontend do **Sistema de Gestão de Ordens de Venda (OVGS)**, desenvolvida como desafio técnico para Senior Frontend Developer.
 
 Projeto construído com React/Next.js priorizando **Clean Code**, **SOLID**, **Domain-Driven Design (DDD)** e restrições de modularização (funções ≤ 20 linhas, componentes ≤ 200 linhas).

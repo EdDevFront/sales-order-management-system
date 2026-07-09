@@ -76,9 +76,7 @@ export default function OrderForm({ onClose }: OrderFormProps) {
   }));
 
   const watchItems = watch("items");
-  const selectedItemIds = watchItems
-    .map((i) => i.itemId)
-    .filter(Boolean);
+  const selectedItemIds = watchItems.map((i) => i.itemId).filter(Boolean);
 
   const getItemOptions = (currentIndex: number) => {
     const takenIds = selectedItemIds.filter((_, idx) => idx !== currentIndex);
@@ -210,7 +208,9 @@ export default function OrderForm({ onClose }: OrderFormProps) {
                 <span className="text-lg font-bold text-zinc-900 dark:text-white">
                   {formatCurrencyBR(
                     watchItems.reduce((sum, item) => {
-                      const matched = allItems.find((i) => i.id === item.itemId);
+                      const matched = allItems.find(
+                        (i) => i.id === item.itemId,
+                      );
                       return sum + (matched?.price || 0) * (item.quantity || 0);
                     }, 0),
                   )}

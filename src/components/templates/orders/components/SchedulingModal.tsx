@@ -98,11 +98,7 @@ export default function SchedulingModal({
           </div>
 
           <div className="flex justify-end gap-3 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-            <Button
-              type="button"
-              onClick={onClose}
-              variant="outline"
-            >
+            <Button type="button" onClick={onClose} variant="outline">
               Cancelar
             </Button>
             <Button
